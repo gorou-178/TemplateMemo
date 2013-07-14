@@ -6,17 +6,21 @@
 //  Copyright (c) 2013年 gurimmer. All rights reserved.
 //
 
+#import "TMTagTableViewController.h"
 #import "TMEditViewController.h"
 #import "TMMemoTableViewController.h"
 #import "TMAppContext.h"
 #import "Memo.h"
-
-@class TMTagTableViewController;
-@class TMMemoTableViewController;
+#import "TagDao.h"
+#import "Tag.h"
+#import "TagLink.h"
 
 @interface TMEditViewController ()
 {
     id<MemoDao> memoDao;
+    id<TagDao> tagDao;
+    id<UITextInput> activeTextInput;
+    UITableViewController *activeSideView;
 }
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
 - (void)configureView;
@@ -28,33 +32,15 @@
 {
     self = [super initWithStyle:style];
     if (self) {
-        // Custom initialization
+        
     }
     return self;
 }
 
-- (void)viewDidLoad
+- (void)awakeFromNib
 {
-    [super viewDidLoad];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
+    tagDao = [TagDaoImpl new];
     memoDao = [MemoDaoImpl new];
-    
-    // textField設定
-    self.tagTextField.delegate = self;
-    self.tagTextField.returnKeyType = UIReturnKeyDone;
-    
-    // textFieldのラベル化
-//    self.tagTextField.text = @"テスト";
-    NSDictionary *stringAttributes1 = @{NSStrokeColorAttributeName : [UIColor blueColor],
-                                        NSStrokeWidthAttributeName : @2.0};
-    NSAttributedString *string1 = [[NSAttributedString alloc] initWithString:@"テスト"
-                                                                  attributes:stringAttributes1];
-    NSMutableAttributedString *mutableAttributedString = [[NSMutableAttributedString alloc] init];
-    [mutableAttributedString appendAttributedString:string1];
-    self.tagTextField.attributedText = mutableAttributedString;
     
     // textView設定
     [self registerForKeyboardNotifications];
@@ -67,10 +53,44 @@
     [self configureView];
 }
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    // Uncomment the following line to preserve selection between presentations.
+    // self.clearsSelectionOnViewWillAppear = NO;
+    
+    // textField設定
+    self.tagTextField.delegate = self;
+    self.tagTextField.returnKeyType = UIReturnKeyDone;
+    
+    // textFieldのラベル化
+//    self.tagTextField.text = @"テスト";
+//    NSDictionary *stringAttributes1 = @{NSStrokeColorAttributeName : [UIColor blueColor],
+//                                        NSStrokeWidthAttributeName : @2.0};
+//    NSAttributedString *string1 = [[NSAttributedString alloc] initWithString:@"テスト"
+//                                                                  attributes:stringAttributes1];
+//    NSMutableAttributedString *mutableAttributedString = [[NSMutableAttributedString alloc] init];
+//    [mutableAttributedString appendAttributedString:string1];
+//    self.tagTextField.attributedText = mutableAttributedString;
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)setActiveSideView:(UITableViewController*)tableViewController
+{
+    activeSideView = tableViewController;
+    if (self.navigationItem.leftBarButtonItem != nil) {
+        if ([activeSideView.title isEqualToString:self.tagTableViewController.title]) {
+            self.navigationItem.leftBarButtonItem.title = self.tagTableViewController.navigationItem.title;
+        } else {
+            self.navigationItem.leftBarButtonItem.title = self.memoTableViewController.navigationItem.title;
+        }
+    }
 }
 
 #pragma mark - Custom UI
@@ -108,6 +128,16 @@
 - (void)configureView
 {
     if (_detailItem) {
+        
+        NSMutableString *tagText = [[NSMutableString alloc] init];
+        NSArray *tags = [tagDao tagForMemo:_detailItem];
+        for (int i = 0; i < tags.count; i++) {
+            if (i != 0) {
+                [tagText appendString:@" "];
+            }
+            [tagText appendString:((Tag*)tags[i]).name];
+        }
+        self.tagTextField.text = tagText;
         self.bodyTextView.text = _detailItem.body;
     }
 }
@@ -186,6 +216,7 @@
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView
 {
     NSLog(@"call textViewShouldBeginEditing");
+    activeTextInput = self.bodyTextView;
     return YES;
 }
 
@@ -202,6 +233,7 @@
 
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
+    activeTextInput = nil;
     NSLog(@"call textViewDidEndEditing");
 }
 
@@ -216,21 +248,107 @@
 - (void)onPushDone:(id)sender {
     // 意図的にキーボードを閉じる場合
     NSLog(@"onPushDone");
-    [self.bodyTextView resignFirstResponder];
+    // 現在アクティブなtextInputによって閉じるキーボードを変更
+    if (activeTextInput == self.tagTextField) {
+        [self.tagTextField resignFirstResponder];
+        [self saveTag];
+    } else {
+        [self.bodyTextView resignFirstResponder];
+    }
+    activeTextInput = nil;
+}
+
+// tagTextFieldの内容でTag/TagLinkを保存
+- (void)saveTag
+{
+    if (self.tagTextField.text.length > 0) {
+        // 入力タグから重複を消す
+        NSArray *tagNames = [self.tagTextField.text componentsSeparatedByString:@" "];
+        NSSet *uniqOriginalTagNameSet = [[NSSet alloc] initWithArray:tagNames];
+        NSString *uniqTagNameText = [[uniqOriginalTagNameSet allObjects] componentsJoinedByString:@" "];
+        self.tagTextField.text = uniqTagNameText;
+        
+        /*
+         1 入力されたタグ名半角空白で区切る
+         2 現在登録されているタグ一覧を取得
+         3 タグ名が一致するタグを全て取り出す
+         4 タグ名が一致しないタグは新規登録
+         5 保存対象のメモのtagLinkから全てのtagを取得
+         6 5と3でtagが一致しなかったtagをメモのtagLinkを削除
+         7 4のtagLinkを新規登録
+         */
+        
+        // 現在登録されているtagを追加
+        NSMutableArray *tags = [tagDao.tags mutableCopy];
+        NSMutableSet *tagNameSet = [[NSMutableSet alloc] init];
+        for (Tag *tag in tags) {
+            [tagNameSet addObject:tag.name];
+        }
+        
+        // 新しく設定されたtagを調べる
+        for (NSString *tagName in tagNames) {
+            // 現在登録されているタグにはないタグ名の場合、新規追加する
+            if (![tagNameSet containsObject:tagName]) {
+                Tag *tag = [Tag new];
+                tag.name = tagName;
+                tag.deleteFlag = 0;
+                [tagDao add:tag];
+            }
+        }
+        
+        // 再度タグを全て取得(tagIdの取得がしたいため)
+        tags = [tagDao.tags mutableCopy];
+        
+        // 元々のtagLinkのタグが入力タグに存在しない場合、リンクを削除する
+        NSMutableArray *copyTagNames = [tagNames mutableCopy];
+        NSMutableArray *memoTags = [[tagDao tagForMemo:_detailItem] mutableCopy];
+        for (Tag *tag in memoTags) {
+            if (![tagNames containsObject:tag.name]) {
+                [tagDao removeTagLink:_detailItem forLinkTag:tag];
+            } else {
+                [copyTagNames removeObject:tag.name];
+            }
+        }
+        
+        // 新しく追加したTagのTagLinkを追加
+        for (NSString *tagName in copyTagNames) {
+            for (Tag *tag in tags) {
+                if ([tag.name isEqualToString:tagName]) {
+                    [tagDao addTagLink:_detailItem forLinkTag:tag];
+                }
+            }
+        }
+    }
 }
 
 #pragma mark - tagTextField delegate
 
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    NSLog(@"tagTextField shouldBeginEditing");
+    activeTextInput = self.tagTextField;
+    return YES;
+}
+
 // tagTextFieldでreturnキータップでキーボードを閉じる
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    NSLog(@"tagTextField shouldReturn");
     [textField resignFirstResponder];
+    activeTextInput = nil;
     return YES;
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    NSLog(@"tagTextField DidEndEditing");
+    activeTextInput = nil;
 }
 
 #pragma mark - tagTextField Actions
 
 - (IBAction)onDidEndOnExitForTagTextField:(id)sender {
-    NSLog(@"end tag edit");
+    NSLog(@"tagTextField EndTagEdit");
+    activeTextInput = nil;
 }
 
 #pragma mark - Split view
@@ -244,7 +362,11 @@
 //    } else if ([popoverViewController.title isEqual:NSLocalizedString(@"memoTableViewTitle", nil)]) {
 //        barButtonItem.title = NSLocalizedString(@"memoTableViewTitle", nil);
 //    }
-    barButtonItem.title = @"メモ";
+    if ([activeSideView.title isEqualToString:self.tagTableViewController.title]) {
+        barButtonItem.title = @"タグ";
+    } else {
+        barButtonItem.title = @"メモ";
+    }
     [self.navigationItem setLeftBarButtonItem:barButtonItem animated:YES];
     self.masterPopoverController = popoverController;
     

@@ -183,13 +183,15 @@
 
 - (int)count
 {
-    FMResultSet* result = [db executeQuery:@"select count(id) from memo;"];
+    FMResultSet* result = [db executeQuery:@"select count(id) memoCount from memo where deleteFlag = 0;"];
     if ([db hadError]) {
         NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        [result close];
         return 0;
     }
-    
-    return [result intForColumn:@"count"];
+    int count = [result intForColumn:@"memoCount"];
+    [result close];
+    return count;
 }
 
 - (BOOL)add:(Memo*)memo

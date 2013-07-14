@@ -41,6 +41,8 @@
         self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
     }
     
+    self.title = @"memoView";
+    
     memoDao = [MemoDaoImpl new];
     
     [super awakeFromNib];
@@ -61,6 +63,13 @@
     // 左ペインのトップのビューコントローラを取得(今回の場合はTMEditViewController)
     self.tmEditViewController = (TMEditViewController*)navigationController.topViewController;
     self.tmEditViewController.memoTableViewController = self;
+    
+    [self.tmEditViewController setActiveSideView:self];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [self.tmEditViewController setActiveSideView:self];
 }
 
 - (void)didReceiveMemoryWarning

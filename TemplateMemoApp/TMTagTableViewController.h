@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@class MemoDaoImpl;
 @class TMEditViewController;
 
 @interface TMTagTableViewController : UITableViewController
+
+@property (strong, nonatomic) TMEditViewController *tmEditViewController;
 
 // セルの更新
 - (void)updateVisibleCells;

@@ -8,6 +8,7 @@
 
 #import "Tag.h"
 #import "TagDao.h"
+#import "Memo.h"
 #import "FMDatabase.h"
 #import "DateUtil.h"
 
@@ -90,21 +91,131 @@
     return tags;
 }
 
-- (int)count
+- (NSArray*)tagForMemo:(Memo*)memo
 {
-    FMResultSet* result = [db executeQuery:@"select count(id) from tag where deleteFlag = 0;"];
+    // メモに関連付けされているタグを取得
+    NSString *tagIdsSql = [[NSString alloc] initWithFormat:@"select tagId from tagLink where memoId = %d;", memo.memoid];
+    FMResultSet* result = [db executeQuery:tagIdsSql];
     if ([db hadError]) {
         NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         [result close];
-        return -1;
+        return nil;
     }
     
+    // タグIDでsqlを作成
+    NSMutableString *sql = [[NSMutableString alloc] initWithString:@"select id, name, posision, datetime(createDate, 'localtime') cDate, datetime(modifiedDate,'localtime') mDate from tag where deleteFlag = 0 "];
+    BOOL bFirst = YES;
+    while ([result next]) {
+        if (bFirst) {
+            bFirst = NO;
+            [sql appendString:@"and id in("];
+        } else {
+            [sql appendString:@","];
+        }
+        [sql appendFormat:@"%d", [result intForColumn:@"tagId"]];
+    }
+    [sql appendString:@") order by posision;"];
+    [result close];
     
+    NSLog(@"tagForMemo sql: %@", sql);
+    
+    // 対象のタグを全て取得
+    result = [db executeQuery:sql];
+    if ([db hadError]) {
+        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        [result close];
+        return nil;
+    }
+    
+    NSMutableArray *tags = [[NSMutableArray alloc] init];
+    while ([result next]) {
+        Tag *tag = [Tag new];
+        tag.tagId = [result intForColumn:@"id"];
+        tag.name = [result stringForColumn:@"name"];
+        tag.posision = [result intForColumn:@"posision"];
+        
+        NSString *cDate = [result stringForColumn:@"cDate"];
+        NSString *mDate = [result stringForColumn:@"mDate"];
+        
+        tag.createDate = [DateUtil dateStringToDate:cDate atDateFormat:@"yyyy-MM-dd hh:mm:ss"];
+        tag.modifiedDate = [DateUtil dateStringToDate:mDate atDateFormat:@"yyyy-MM-dd hh:mm:ss"];
+        
+        tag.deleteFlag = 0;
+        [tags addObject:tag];
+    }
+    
+    [result close];
+    return tags;
+}
+
+- (int)count
+{
+    FMResultSet* result = [db executeQuery:@"select count(id) tagCount from tag where deleteFlag = 0;"];
+    if ([db hadError]) {
+        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        [result close];
+        return 0;
+    }
+
+    int count = [result intForColumn:@"tagCount"];
+    [result close];
+    return count;
 }
 
 - (BOOL)add:(Tag*)tag
 {
-    return NO;
+    // 現在時刻を文字列で取得
+    NSDate *nowDateForGMT = [NSDate date];
+    NSTimeZone *timeZoneUTC = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
+    NSString *strDate = [DateUtil dateToString:nowDateForGMT atDateFormat:@"yyyy-MM-dd hh:mm:ss" setTimeZone:timeZoneUTC];
+    
+    [db beginTransaction];
+    
+    NSString *selectSql = [[NSString alloc] initWithFormat:@"select max(posision) maxPosision from tag where deleteFlag = 0;"];
+    FMResultSet *result = [db executeQuery:selectSql];
+    if ([db hadError]) {
+        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        [db rollback];
+        return NO;
+    }
+    
+    // posisionの最大値 + 1を取得
+    int newPosision = [result intForColumn:@"maxPosision"] + 1;
+    [result close];
+    
+    // posisionを更新してinsert
+    tag.posision = newPosision;
+    NSString *insertSql = [[NSString alloc] initWithFormat:@"insert into tag(name, posision, createDate, modifiedDate, deleteFlag) values('%@', %d, julianday('%@'), julianday('%@'), 0)", tag.name, tag.posision, strDate, strDate];
+    BOOL bResult = [db executeUpdate:insertSql];
+    if ([db hadError]) {
+        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        [db rollback];
+        return NO;
+    }
+    
+    [db commit];
+    return bResult;
+}
+
+- (BOOL)addTagLink:(Memo*)memo forLinkTag:(Tag*)tag
+{
+    // 現在時刻を文字列で取得
+    NSDate *nowDateForGMT = [NSDate date];
+    NSTimeZone *timeZoneUTC = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
+    NSString *strDate = [DateUtil dateToString:nowDateForGMT atDateFormat:@"yyyy-MM-dd hh:mm:ss" setTimeZone:timeZoneUTC];
+    
+    [db beginTransaction];
+    
+    NSString *insertSql = [[NSString alloc] initWithFormat:@"insert into tagLink(tagId, memoId, createDate, modifiedDate) values(%d, %d, julianday('%@'), julianday('%@'))", tag.tagId, memo.memoid, strDate, strDate];
+    BOOL bResult = [db executeUpdate:insertSql];
+    if ([db hadError]) {
+        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        [db rollback];
+        return NO;
+    }
+    
+    [db commit];
+    return bResult;
 }
 
 - (BOOL)update:(Tag*)tag
@@ -119,7 +230,49 @@
 
 - (BOOL)remove:(Tag*)tag
 {
-    return NO;
+    // 現在時刻を文字列で取得
+    NSDate *nowDateForGMT = [NSDate date];
+    NSTimeZone *timeZoneUTC = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
+    NSString *strDate = [DateUtil dateToString:nowDateForGMT atDateFormat:@"yyyy-MM-dd hh:mm:ss" setTimeZone:timeZoneUTC];
+    
+    [db beginTransaction];
+    
+    // タグリンクを削除
+    NSString *removeTagLinkSql = [[NSString alloc] initWithFormat:@"delete from tagLink where tagId = %d", tag.tagId];
+    BOOL bResult = [db executeUpdate:removeTagLinkSql];
+    if ([db hadError]) {
+        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        [db rollback];
+        return NO;
+    }
+    
+    // タグを削除
+    NSString *deleteTagSql = [[NSString alloc] initWithFormat:@"update tag set deleteFlag = 1, modifiedDate = julianday('%@') where id = %d", strDate, tag.tagId];
+    bResult = [db executeUpdate:deleteTagSql];
+    if ([db hadError]) {
+        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        [db rollback];
+        return NO;
+    }
+    
+    [db commit];
+    return bResult;
+}
+
+- (BOOL)removeTagLink:(Memo*)memo forLinkTag:(Tag*)tag
+{
+    [db beginTransaction];
+    // タグリンクを削除
+    NSString *removeTagLinkSql = [[NSString alloc] initWithFormat:@"delete from tagLink where tagId = %d and memoId = %d;", tag.tagId, memo.memoid];
+    BOOL bResult = [db executeUpdate:removeTagLinkSql];
+    if ([db hadError]) {
+        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        [db rollback];
+        return NO;
+    }
+    
+    [db commit];
+    return bResult;
 }
 
 @end

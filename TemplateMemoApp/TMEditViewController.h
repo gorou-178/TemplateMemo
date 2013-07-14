@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Common/MemoDao.h"
 
+@class TMTagTableViewController;
 @class TMMemoTableViewController;
 
 @interface TMEditViewController : UITableViewController
@@ -22,6 +23,7 @@
 @property (strong, nonatomic) UIBarButtonItem *addMemoButton;
 @property (strong, nonatomic) UIBarButtonItem *editDoneButton;
 
+@property (strong, nonatomic) TMTagTableViewController* tagTableViewController;
 @property (strong, nonatomic) TMMemoTableViewController* memoTableViewController;
 
 // member
@@ -30,5 +32,8 @@
 
 // Action
 - (IBAction)onDidEndOnExitForTagTextField:(id)sender;
+
+// Public Selector
+- (void)setActiveSideView:(UITableViewController*)tableViewController;
 
 @end

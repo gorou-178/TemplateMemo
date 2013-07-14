@@ -8,8 +8,10 @@
 
 #import "TMTagTableViewController.h"
 #import "TMMemoTableViewController.h"
+#import "TMEditViewController.h"
 #import "Common/Tag.h"
 #import "Common/TagDao.h"
+#import "AppDelegate.h"
 
 @interface TMTagTableViewController ()
 {
@@ -27,6 +29,8 @@
         self.clearsSelectionOnViewWillAppear = NO;
         self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
     }
+    
+    self.title = @"tagView";
     
     // タグ一覧を取得
     tagDao = [TagDaoImpl new];
@@ -53,6 +57,21 @@
     
     // タイトル
     self.navigationItem.title = @"タグ";
+    
+    // AppデリゲートのwindowからSplitViewを取得
+    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    UISplitViewController *splitViewController = (UISplitViewController*)[appDelegate.window rootViewController];
+    // 左ペインのナビゲーションコントローラを取得
+    // TODO: 右→左の順番でviewControllerが登録されているためlastObject？
+    UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
+    // 左ペインのトップのビューコントローラを取得(今回の場合はTMEditViewController)
+    self.tmEditViewController = (TMEditViewController*)navigationController.topViewController;
+    self.tmEditViewController.tagTableViewController = self;
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [self.tmEditViewController setActiveSideView:self];
 }
 
 - (void)didReceiveMemoryWarning
