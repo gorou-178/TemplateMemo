@@ -1,0 +1,18 @@
+
+/* Class = "IBUITableViewController"; title = "Master"; ObjectID = "12"; */
+"12.title" = "Master1";
+
+/* Class = "IBUIViewController"; title = "Detail"; ObjectID = "21"; */
+"21.title" = "Detail1";
+
+/* Class = "IBUINavigationItem"; title = "Detail"; ObjectID = "26"; */
+"26.title" = "Detail1";
+
+/* Class = "IBUILabel"; text = "Detail view content goes here"; ObjectID = "27"; */
+"27.text" = "Detail view content goes here1";
+
+/* Class = "IBUINavigationItem"; title = "Master"; ObjectID = "36"; */
+"36.title" = "Master1";
+
+/* Class = "IBUILabel"; text = "Title"; ObjectID = "phq-AM-6qj"; */
+"phq-AM-6qj.text" = "Title1";

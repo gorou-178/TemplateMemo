@@ -1,0 +1,18 @@
+
+/* Class = "IBUIViewController"; title = "Detail"; ObjectID = "4"; */
+"4.title" = "ボックス";
+
+/* Class = "IBUITableViewController"; title = "Master"; ObjectID = "19"; */
+"19.title" = "メモ";
+
+/* Class = "IBUILabel"; text = "Detail view content goes here"; ObjectID = "27"; */
+"27.text" = "メモが表示される";
+
+/* Class = "IBUINavigationItem"; title = "Master"; ObjectID = "40"; */
+"40.title" = "ボックス";
+
+/* Class = "IBUINavigationItem"; title = "Detail"; ObjectID = "53"; */
+"53.title" = "ボックス";
+
+/* Class = "IBUILabel"; text = "Title"; ObjectID = "tIi-5l-S0i"; */
+"tIi-5l-S0i.text" = "タイトル";
