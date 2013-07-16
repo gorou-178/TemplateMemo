@@ -20,5 +20,6 @@
 - (void)dealloc;
 
 - (BOOL)open;
+- (BOOL)vacuum;
 
 @end

@@ -59,4 +59,20 @@
     return [db open];
 }
 
+// databaseファイルを最適化
+- (BOOL)vacuum
+{
+    [db beginTransaction];
+    
+    BOOL bResult = [db executeUpdate:@"vacuum"];
+    if ([db hadError]) {
+        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        [db rollback];
+        return NO;
+    }
+    
+    [db commit];
+    return bResult;
+}
+
 @end
