@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "FMDBWrapper.h"
 
 @implementation AppDelegate
 
@@ -46,6 +47,12 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    FMDBWrapper *fmdbWrapper = [[FMDBWrapper alloc] init];
+    if ([fmdbWrapper open]) {
+        if ([fmdbWrapper vacuum]) {
+            NSLog(@"SQLite: 最適化完了");
+        }
+    }
 }
 
 @end
