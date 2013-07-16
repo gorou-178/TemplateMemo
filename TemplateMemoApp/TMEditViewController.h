@@ -23,9 +23,6 @@
 @property (strong, nonatomic) UIBarButtonItem *addMemoButton;
 @property (strong, nonatomic) UIBarButtonItem *editDoneButton;
 
-@property (strong, nonatomic) TMTagTableViewController* tagTableViewController;
-@property (strong, nonatomic) TMMemoTableViewController* memoTableViewController;
-
 // member
 @property (strong, nonatomic) Memo* detailItem;
 @property (assign, nonatomic) bool editMode;

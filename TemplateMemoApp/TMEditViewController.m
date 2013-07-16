@@ -6,14 +6,13 @@
 //  Copyright (c) 2013年 gurimmer. All rights reserved.
 //
 
+#import "AppDelegate.h"
 #import "TMTagTableViewController.h"
 #import "TMEditViewController.h"
 #import "TMMemoTableViewController.h"
 #import "TMAppContext.h"
-#import "Memo.h"
+#import "MemoDao.h"
 #import "TagDao.h"
-#import "Tag.h"
-#import "TagLink.h"
 
 @interface TMEditViewController ()
 {
@@ -64,15 +63,8 @@
     self.tagTextField.delegate = self;
     self.tagTextField.returnKeyType = UIReturnKeyDone;
     
-    // textFieldのラベル化
-//    self.tagTextField.text = @"テスト";
-//    NSDictionary *stringAttributes1 = @{NSStrokeColorAttributeName : [UIColor blueColor],
-//                                        NSStrokeWidthAttributeName : @2.0};
-//    NSAttributedString *string1 = [[NSAttributedString alloc] initWithString:@"テスト"
-//                                                                  attributes:stringAttributes1];
-//    NSMutableAttributedString *mutableAttributedString = [[NSMutableAttributedString alloc] init];
-//    [mutableAttributedString appendAttributedString:string1];
-//    self.tagTextField.attributedText = mutableAttributedString;
+    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    appDelegate.editViewController = self;
 }
 
 - (void)didReceiveMemoryWarning
@@ -85,10 +77,11 @@
 {
     activeSideView = tableViewController;
     if (self.navigationItem.leftBarButtonItem != nil) {
-        if ([activeSideView.title isEqualToString:self.tagTableViewController.title]) {
-            self.navigationItem.leftBarButtonItem.title = self.tagTableViewController.navigationItem.title;
+        AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+        if ([activeSideView.title isEqualToString:appDelegate.tagTableViewController.title]) {
+            self.navigationItem.leftBarButtonItem.title = appDelegate.tagTableViewController.navigationItem.title;
         } else {
-            self.navigationItem.leftBarButtonItem.title = self.memoTableViewController.navigationItem.title;
+            self.navigationItem.leftBarButtonItem.title = appDelegate.memoTableViewController.navigationItem.title;
         }
     }
 }
@@ -98,7 +91,7 @@
 - (void)createAddMemoButton
 {
     if (self.addMemoButton == nil) {
-        self.addMemoButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(onPushDone:)];
+        self.addMemoButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(onPushAdd:)];
     }
 }
 
@@ -211,15 +204,11 @@
     [self createAddMemoButton];
     self.navigationItem.rightBarButtonItem = self.addMemoButton;
     
-    // 選択したMemoを保存
-    if (_detailItem && _memoTableViewController) {
-        _detailItem.body = self.bodyTextView.text;
-        
-        BOOL bResult = [memoDao update:_detailItem];
-        if (bResult) {
-            [_memoTableViewController updateVisibleCells];
-        }
-    }
+    // メモを保存
+    [self saveMemo];
+    
+    // タグを保存
+    [self saveTag];
 }
 
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView
@@ -251,7 +240,8 @@
 - (void)onPushAdd:(id)sender {
     // メモコントローラのメモ追加処理をコール
     NSLog(@"onPushAdd");
-    [self.memoTableViewController insertNewObject:sender];
+    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    [appDelegate.memoTableViewController insertNewObject:sender];
 }
 
 - (void)onPushDone:(id)sender {
@@ -260,11 +250,31 @@
     // 現在アクティブなtextInputによって閉じるキーボードを変更
     if (activeTextInput == self.tagTextField) {
         [self.tagTextField resignFirstResponder];
-        [self saveTag];
     } else {
         [self.bodyTextView resignFirstResponder];
     }
     activeTextInput = nil;
+    
+    // メモを保存
+    [self saveMemo];
+    
+    // タグを保存
+    [self saveTag];
+}
+
+// メモを保存
+- (void)saveMemo
+{
+    // 選択したMemoを保存
+    if (_detailItem) {
+        _detailItem.body = self.bodyTextView.text;
+        
+        BOOL bResult = [memoDao update:_detailItem];
+        if (bResult) {
+            AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+            [appDelegate.memoTableViewController updateVisibleCells];
+        }
+    }
 }
 
 // tagTextFieldの内容でTag/TagLinkを保存
@@ -330,7 +340,8 @@
         }
         
         // タグTableViewを更新
-        [self.tagTableViewController updateVisibleCells];
+        AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+        [appDelegate.tagTableViewController updateVisibleCells];
     }
 }
 
@@ -369,10 +380,11 @@
 - (void)splitViewController:(UISplitViewController *)splitController willHideViewController:(UIViewController *)viewController withBarButtonItem:(UIBarButtonItem *)barButtonItem forPopoverController:(UIPopoverController *)popoverController
 {
     // popoverのviewによってボタンの文言を変更(アクティブなViewのタイトルで判別)
-    if ([activeSideView.title isEqualToString:self.tagTableViewController.title]) {
-        barButtonItem.title = self.tagTableViewController.navigationItem.title;
+    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    if ([activeSideView.title isEqualToString:appDelegate.tagTableViewController.title]) {
+        barButtonItem.title = appDelegate.tagTableViewController.navigationItem.title;
     } else {
-        barButtonItem.title = self.memoTableViewController.navigationItem.title;
+        barButtonItem.title = appDelegate.memoTableViewController.navigationItem.title;
     }
     [self.navigationItem setLeftBarButtonItem:barButtonItem animated:YES];
     self.masterPopoverController = popoverController;
