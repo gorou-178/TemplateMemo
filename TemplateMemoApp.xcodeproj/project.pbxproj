@@ -29,6 +29,7 @@
 		E2734E401786A7E5008272CB /* TMAppContext.m in Sources */ = {isa = PBXBuildFile; fileRef = E2734E3E1786A7E5008272CB /* TMAppContext.m */; };
 		E2734E431786B770008272CB /* TMPopoverManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E2734E421786B770008272CB /* TMPopoverManager.m */; };
 		E2734E441786B770008272CB /* TMPopoverManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E2734E421786B770008272CB /* TMPopoverManager.m */; };
+		E279A027179435EE0099104D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E279A026179435EE0099104D /* QuartzCore.framework */; };
 		E28590311791088C00E9EF48 /* memo.png in Resources */ = {isa = PBXBuildFile; fileRef = E28590301791088C00E9EF48 /* memo.png */; };
 		E28590321791088C00E9EF48 /* memo.png in Resources */ = {isa = PBXBuildFile; fileRef = E28590301791088C00E9EF48 /* memo.png */; };
 		E2859034179108B100E9EF48 /* tag.png in Resources */ = {isa = PBXBuildFile; fileRef = E2859033179108B100E9EF48 /* tag.png */; };
@@ -100,6 +101,7 @@
 		E2734E3E1786A7E5008272CB /* TMAppContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMAppContext.m; sourceTree = "<group>"; };
 		E2734E411786B76F008272CB /* TMPopoverManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMPopoverManager.h; sourceTree = "<group>"; };
 		E2734E421786B770008272CB /* TMPopoverManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMPopoverManager.m; sourceTree = "<group>"; };
+		E279A026179435EE0099104D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		E28590301791088C00E9EF48 /* memo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = memo.png; sourceTree = "<group>"; };
 		E2859033179108B100E9EF48 /* tag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tag.png; sourceTree = "<group>"; };
 		E28590361791090A00E9EF48 /* home.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home.png; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 				E2EE364D175B4D580055D723 /* UIKit.framework in Frameworks */,
 				E2EE364F175B4D580055D723 /* Foundation.framework in Frameworks */,
 				E2EE3651175B4D580055D723 /* CoreGraphics.framework in Frameworks */,
+				E279A027179435EE0099104D /* QuartzCore.framework in Frameworks */,
 				E2B0272A175CDD7200FBA056 /* libsqlite3.0.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -214,6 +217,7 @@
 		E2EE3640175B4D580055D723 = {
 			isa = PBXGroup;
 			children = (
+				E279A026179435EE0099104D /* QuartzCore.framework */,
 				E2B02729175CDD7200FBA056 /* libsqlite3.0.dylib */,
 				E2EE3652175B4D580055D723 /* TemplateMemoApp */,
 				E2EE367C175B4D590055D723 /* TemplateMemoAppTests */,

@@ -11,11 +11,13 @@
 #import "TMEditViewController.h"
 #import "Common/Tag.h"
 #import "Common/TagDao.h"
+#import "MemoDao.h"
 #import "AppDelegate.h"
 
 @interface TMTagTableViewController ()
 {
     id<TagDao> tagDao;
+    id<MemoDao> memoDao;
     NSMutableArray *tagCache;
 }
 
@@ -31,6 +33,8 @@
     }
     
     self.title = @"tagView";
+    
+    memoDao = [MemoDaoImpl new];
     
     // タグ一覧を取得
     tagDao = [TagDaoImpl new];
@@ -71,6 +75,7 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    // アクティブなViewとしてeditViewに通知
     [self.tmEditViewController setActiveSideView:self];
 }
 
@@ -102,22 +107,22 @@
     if (indexPath.row == 0) {
         // 一番最初は「All Memo」
         cell.textLabel.text = @"All Memo";
-        // TODO: セルを使いまわした場合問題になりそう
-        if (cell.imageView.image == nil) {
-            cell.imageView.image = [UIImage imageNamed:@"home.png"];
-        }
+        cell.imageView.image = [UIImage imageNamed:@"home.png"];
+        cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%d", [memoDao count]];
     } else {
         Tag *tag = tagCache[indexPath.row - 1];
         cell.textLabel.text = tag.name;
-        // TODO: セルを使いまわした場合問題になりそう
-        if (cell.imageView.image == nil) {
-            cell.imageView.image = [UIImage imageNamed:@"tag.png"];
-        }
+        cell.imageView.image = [UIImage imageNamed:@"tag.png"];
+        cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%d", [tagDao countOfMemo:tag]];
     }
 }
 
 // 画面上に見えているセルの表示更新
 - (void)updateVisibleCells {
+    
+    // キャッシュを更新
+    tagCache = [tagDao.tags mutableCopy];
+    
     for (UITableViewCell *cell in [self.tableView visibleCells]){
         [self updateCell:cell forTableView:self.tableView atIndexPath:[self.tableView indexPathForCell:cell]];
     }
@@ -129,6 +134,9 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        
+        
+        
     }
     [self updateCell:cell forTableView:tableView atIndexPath:indexPath];
     return cell;
@@ -149,8 +157,7 @@
             return;
         }
         
-        // タグを削除
-        // TODO: タグリンクも削除する必要がある
+        // タグを削除(tagLinkも削除する)
         BOOL bResult = [tagDao remove:tagCache[indexPath.row - 1]];
         if (bResult) {
             [tagCache removeObjectAtIndex:indexPath.row - 1];
