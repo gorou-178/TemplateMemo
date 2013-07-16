@@ -128,7 +128,6 @@
 - (void)configureView
 {
     if (_detailItem) {
-        
         NSMutableString *tagText = [[NSMutableString alloc] init];
         NSArray *tags = [tagDao tagForMemo:_detailItem];
         for (int i = 0; i < tags.count; i++) {
@@ -139,6 +138,16 @@
         }
         self.tagTextField.text = tagText;
         self.bodyTextView.text = _detailItem.body;
+        
+        // 改行までをタイトルとして設定
+        NSMutableArray *lines = [NSMutableArray array];
+        [_detailItem.body enumerateLinesUsingBlock:^(NSString *line, BOOL *stop) {
+            [lines addObject:line];
+            //        *stop = YES;
+        }];
+        
+        // タイトルは本文の一行目
+        self.navigationItem.title = [lines objectAtIndex:0];
     }
 }
 
@@ -262,11 +271,6 @@
 - (void)saveTag
 {
     if (self.tagTextField.text.length > 0) {
-        // 入力タグから重複を消す
-        NSArray *tagNames = [self.tagTextField.text componentsSeparatedByString:@" "];
-        NSSet *uniqOriginalTagNameSet = [[NSSet alloc] initWithArray:tagNames];
-        NSString *uniqTagNameText = [[uniqOriginalTagNameSet allObjects] componentsJoinedByString:@" "];
-        self.tagTextField.text = uniqTagNameText;
         
         /*
          1 入力されたタグ名半角空白で区切る
@@ -277,6 +281,12 @@
          6 5と3でtagが一致しなかったtagをメモのtagLinkを削除
          7 4のtagLinkを新規登録
          */
+        
+        // 入力タグから重複を消す
+        NSArray *tagNames = [self.tagTextField.text componentsSeparatedByString:@" "];
+        NSSet *uniqOriginalTagNameSet = [[NSSet alloc] initWithArray:tagNames];
+        NSString *uniqTagNameText = [[uniqOriginalTagNameSet allObjects] componentsJoinedByString:@" "];
+        self.tagTextField.text = uniqTagNameText;
         
         // 現在登録されているtagを追加
         NSMutableArray *tags = [tagDao.tags mutableCopy];
@@ -318,6 +328,9 @@
                 }
             }
         }
+        
+        // タグTableViewを更新
+        [self.tagTableViewController updateVisibleCells];
     }
 }
 
@@ -355,17 +368,11 @@
 
 - (void)splitViewController:(UISplitViewController *)splitController willHideViewController:(UIViewController *)viewController withBarButtonItem:(UIBarButtonItem *)barButtonItem forPopoverController:(UIPopoverController *)popoverController
 {
-    // popoverのviewによってボタンの文言を変更
-//    UIViewController *popoverViewController = popoverController.contentViewController;
-//    if ([popoverViewController.title isEqual:NSLocalizedString(@"tagTableViewTitle", nil)]) {
-//        barButtonItem.title = NSLocalizedString(@"tagTableViewTitle", nil);
-//    } else if ([popoverViewController.title isEqual:NSLocalizedString(@"memoTableViewTitle", nil)]) {
-//        barButtonItem.title = NSLocalizedString(@"memoTableViewTitle", nil);
-//    }
+    // popoverのviewによってボタンの文言を変更(アクティブなViewのタイトルで判別)
     if ([activeSideView.title isEqualToString:self.tagTableViewController.title]) {
-        barButtonItem.title = @"タグ";
+        barButtonItem.title = self.tagTableViewController.navigationItem.title;
     } else {
-        barButtonItem.title = @"メモ";
+        barButtonItem.title = self.memoTableViewController.navigationItem.title;
     }
     [self.navigationItem setLeftBarButtonItem:barButtonItem animated:YES];
     self.masterPopoverController = popoverController;

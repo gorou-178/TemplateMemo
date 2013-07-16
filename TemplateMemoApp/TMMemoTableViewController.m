@@ -13,11 +13,14 @@
 #import "Common/MemoDao.h"
 #import "AppDelegate.h"
 #import "Memo.h"
+#import "TagDao.h"
 #import "Tag.h"
 
 @interface TMMemoTableViewController ()
 {
     id<MemoDao> memoDao;
+    id<TagDao> tagDao;
+    Tag *activeFilterTag;
 }
 - (void)updateCell:(UITableViewCell *)cell forTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
@@ -43,7 +46,9 @@
     
     self.title = @"memoView";
     
+    activeFilterTag = nil;
     memoDao = [MemoDaoImpl new];
+    tagDao = [TagDaoImpl new];
     
     [super awakeFromNib];
 }
@@ -69,6 +74,7 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    // アクティブなViewとしてeditViewに通知
     [self.tmEditViewController setActiveSideView:self];
 }
 
@@ -89,8 +95,19 @@
     // DBに登録
     BOOL bResult = [memoDao add:memo];
     if (bResult) {
+        // 最新のmemoidを取得
+        int maxRefCount = [memoDao maxRefCount];
+        memo.memoid = maxRefCount;
+        
         // キャッシュの一番上に追加
         [_memoCache insertObject:memo atIndex:0];
+        if (activeFilterTag) {
+            // メモにタグを関連付けする
+            [tagDao addTagLink:memo forLinkTag:activeFilterTag];
+            _memoCache = [[memoDao tagMemos:activeFilterTag].memos mutableCopy];
+        } else {
+            _memoCache = [memoDao.memos mutableCopy];
+        }
         
         // セルを一番上に追加
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
@@ -103,10 +120,12 @@
 {
     // タグが指定されていない場合は全メモを取得
     if (tag == nil) {
+        activeFilterTag = nil;
         self.navigationItem.title = @"すべてのメモ";
         _memoCache = [memoDao.memos mutableCopy];
     } else {
-        self.navigationItem.title = [[NSString alloc] initWithFormat:@"タグ[%@]のメモ", tag.name];
+        activeFilterTag = tag;
+        self.navigationItem.title = [[NSString alloc] initWithFormat:@"%@のメモ", tag.name];
         
         // 指定タグがついたメモの一覧を取得
         TagLink *tagLink = [memoDao tagMemos:tag];
