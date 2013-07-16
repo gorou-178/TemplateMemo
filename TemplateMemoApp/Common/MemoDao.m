@@ -22,7 +22,6 @@
 
 @implementation MemoDaoImpl
 
-// イニシャライザ
 - (id)init
 {
     NSLog(@"MemoDaoImpl init");
@@ -31,7 +30,6 @@
     return self;
 }
 
-// 指定イニシャライザ
 - (id)initWithDataBaseFileName:(NSString *)fileName
 {
     self = [super initWithDataBaseFileName:fileName];
@@ -61,52 +59,14 @@
     return bResult;
 }
 
-// デストラクタ
 - (void)dealloc
 {
     NSLog(@"MemoDaoImpl dealloc");
 }
 
-//- (void)clearCache
-//{
-//    cache = nil;
-//}
-
+// 全てのメモを取得(有効なメモ全件)
 - (NSArray*)memos
 {
-//    if (cache != nil) {
-//        return cache;
-//    }
-    
-//    // デフォルトのタイムゾーンを変更
-//    
-//    [NSTimeZone setDefaultTimeZone: [NSTimeZone timeZoneWithAbbreviation:@"GMT"]];
-//    
-//    // 現在時刻を取得(GMTの現在時刻を取得。Systemのタイムゾーンではない？)
-//    NSDate *now = [NSDate date];
-//    NSLog(@"NSDate: %@", now);
-//    
-//    // 設定されているタイムゾーンでの時刻を取得(結果のdateはGMTだったけど、Systemのタイムゾーン？)
-//    NSCalendar * cal = [NSCalendar currentCalendar];
-//    NSDateComponents *comps = [cal components:
-//                               NSYearCalendarUnit   |
-//                               NSMonthCalendarUnit  |
-//                               NSDayCalendarUnit    |
-//                               NSHourCalendarUnit   |
-//                               NSMinuteCalendarUnit |
-//                               NSSecondCalendarUnit
-//                                     fromDate:now];
-//    [comps setCalendar:cal];
-//    NSLog(@"DateComponents: %@",[comps date]);
-//    
-//    // GMT時刻を指定タイムゾーンでの時刻に変換
-//    // NSTimeZone systemTimeZone: システムのタイムゾーン
-//    // NSTimeZone localTimeZone: アプリ上の現在のタイムゾーン(NSTimeZone setDefaultTimeZoneを行うと変化する)
-//    // NSTimeZone defaultTimeZone: アプリ起動時のシステムのタイムゾーン(起動中にタイムゾーンが変わってもそのまま)
-//    NSDate *nowJST = [NSDate dateWithTimeIntervalSinceNow:[[NSTimeZone systemTimeZone] secondsFromGMTForDate:now]];
-//    NSLog(@"%@: %@", [[NSTimeZone systemTimeZone] name], nowJST);
-    
-    // TODO:参照渡しでわたすべき？
     NSMutableArray* memos = [[NSMutableArray alloc] init];
     
     FMResultSet* result = [db executeQuery:@"select id, body, datetime(createDate, 'localtime') cDate, datetime(modifiedDate,'localtime') mDate, modifiedDate from memo where deleteFlag = 0 order by modifiedDate desc;"];
@@ -138,6 +98,7 @@
     return memos;
 }
 
+// 指定タグが関連付けされたメモを返す
 - (TagLink*)tagMemos:(Tag*)tag
 {
     TagLink *tagLink = [TagLink new];
@@ -173,14 +134,12 @@
     
     [result close];
     
-    //    // キャッシュする
-    //    cache = memos.mutableCopy;
-    
     tagLink.tag = tag;
     tagLink.memos = memos;
     return tagLink;
 }
 
+// 登録されているメモの件数を返す(有効なメモの件数)
 - (int)count
 {
     FMResultSet* result = [db executeQuery:@"select count(id) memoCount from memo where deleteFlag = 0;"];
@@ -189,11 +148,13 @@
         [result close];
         return 0;
     }
+    [result next];
     int count = [result intForColumn:@"memoCount"];
     [result close];
     return count;
 }
 
+// メモを登録
 - (BOOL)add:(Memo*)memo
 {
     // 現在時刻を文字列で取得
@@ -213,12 +174,10 @@
     }
     
     [db commit];
-    
-//    // キャッシュをクリア
-//    [self clearCache];
     return bResult;
 }
 
+// メモを更新
 - (BOOL)update:(Memo*)memo
 {
     // 現在時刻を文字列で取得
@@ -229,9 +188,6 @@
     [db beginTransaction];
     
     NSString *sql = [[NSString alloc] initWithFormat:@"update memo set body = '%@', modifiedDate = julianday('%@') where id = %d", memo.body, strDate, memo.memoid];
-    
-    // TODO: プレースホルダーだと文字列の場合エラーになる？
-    //  →正しくsqlが作られない
     BOOL bResult = [db executeUpdate:sql];
     if ([db hadError]) {
         NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
@@ -240,12 +196,10 @@
     }
     
     [db commit];
-    
-    //    // キャッシュをクリア
-    //    [self clearCache];
     return bResult;
 }
 
+// メモを削除(論理削除)
 - (BOOL)remove:(Memo*)memo
 {
     // 現在時刻を文字列で取得
@@ -268,31 +222,23 @@
     }
     
     [db commit];
-    
-    //    // キャッシュをクリア
-    //    [self clearCache];
     return bResult;
 }
 
+// 自動インクリメントキーの現在の最大値を取得
 - (int)maxRefCount
 {
-    NSMutableArray* results = [[NSMutableArray alloc] init];
-    FMResultSet* rs = [db executeQuery:@"select MAX(id) as MAX_KEY_VALUE from memo"];
+    FMResultSet *result = [db executeQuery:@"select MAX(id) as maxRefCount from memo"];
     if ([db hadError]) {
         NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        [result close];
         return 0;
     }
     
-    while ([rs next]) {
-        [results addObject:[rs resultDictionary]];
-    }
-    
-    NSString* maxKeyValue = @"0";
-    if([results count]>0){
-        maxKeyValue = [[results objectAtIndex:0] objectForKey:@"MAX_KEY_VALUE"];
-    }
-    
-    return [maxKeyValue intValue];
+    [result next];
+    int maxRefCount = [result intForColumn:@"maxRefCount"];
+    [result close];
+    return maxRefCount;
 }
 
 @end

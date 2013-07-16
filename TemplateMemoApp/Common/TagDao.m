@@ -14,7 +14,6 @@
 
 @implementation TagDaoImpl
 
-// イニシャライザ
 - (id)init
 {
     NSLog(@"TagDaoImpl init");
@@ -23,7 +22,6 @@
     return self;
 }
 
-// 指定イニシャライザ
 - (id)initWithDataBaseFileName:(NSString *)fileName
 {
     self = [super initWithDataBaseFileName:fileName];
@@ -61,7 +59,6 @@
 
 - (NSArray*)tags
 {
-    // TODO:参照渡しでわたすべき？
     NSMutableArray* tags = [[NSMutableArray alloc] init];
     
     FMResultSet* result = [db executeQuery:@"select id, name, posision, datetime(createDate, 'localtime') cDate, datetime(modifiedDate,'localtime') mDate from tag where deleteFlag = 0 order by posision;"];
@@ -150,14 +147,31 @@
 
 - (int)count
 {
-    FMResultSet* result = [db executeQuery:@"select count(id) tagCount from tag where deleteFlag = 0;"];
+    FMResultSet* result = [db executeQuery:@"select count(id) countId from tag where deleteFlag = 0;"];
     if ([db hadError]) {
         NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         [result close];
         return 0;
     }
 
-    int count = [result intForColumn:@"tagCount"];
+    [result next];
+    int count = [result intForColumn:@"countId"];
+    [result close];
+    return count;
+}
+
+- (int)countOfMemo:(Tag*)tag
+{
+    NSString *sql = [[NSString alloc] initWithFormat:@"select count(id) countId from tagLink where tagId = %d;", tag.tagId];
+    FMResultSet* result = [db executeQuery:sql];
+    if ([db hadError]) {
+        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        [result close];
+        return 0;
+    }
+    
+    [result next];
+    int count = [result intForColumn:@"countId"];
     [result close];
     return count;
 }
@@ -175,11 +189,13 @@
     FMResultSet *result = [db executeQuery:selectSql];
     if ([db hadError]) {
         NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        [result close];
         [db rollback];
         return NO;
     }
     
     // posisionの最大値 + 1を取得
+    [result next];
     int newPosision = [result intForColumn:@"maxPosision"] + 1;
     [result close];
     
