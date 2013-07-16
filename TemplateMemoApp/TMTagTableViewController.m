@@ -6,13 +6,10 @@
 //  Copyright (c) 2013年 gurimmer. All rights reserved.
 //
 
-#import "TMTagTableViewController.h"
-#import "TMMemoTableViewController.h"
-#import "TMEditViewController.h"
-#import "Common/Tag.h"
-#import "Common/TagDao.h"
-#import "MemoDao.h"
 #import "AppDelegate.h"
+#import "TMTagTableViewController.h"
+#import "TagDao.h"
+#import "MemoDao.h"
 
 @interface TMTagTableViewController ()
 {
@@ -64,19 +61,21 @@
     
     // AppデリゲートのwindowからSplitViewを取得
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    appDelegate.tagTableViewController = self;
+    
     UISplitViewController *splitViewController = (UISplitViewController*)[appDelegate.window rootViewController];
     // 左ペインのナビゲーションコントローラを取得
     // TODO: 右→左の順番でviewControllerが登録されているためlastObject？
     UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
     // 左ペインのトップのビューコントローラを取得(今回の場合はTMEditViewController)
-    self.tmEditViewController = (TMEditViewController*)navigationController.topViewController;
-    self.tmEditViewController.tagTableViewController = self;
+    appDelegate.editViewController = (TMEditViewController*)navigationController.topViewController;
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     // アクティブなViewとしてeditViewに通知
-    [self.tmEditViewController setActiveSideView:self];
+    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    [appDelegate.editViewController setActiveSideView:self];
 }
 
 - (void)didReceiveMemoryWarning
@@ -122,10 +121,8 @@
     
     // キャッシュを更新
     tagCache = [tagDao.tags mutableCopy];
-    
-    for (UITableViewCell *cell in [self.tableView visibleCells]){
-        [self updateCell:cell forTableView:self.tableView atIndexPath:[self.tableView indexPathForCell:cell]];
-    }
+    // テーブルを全更新
+    [self.tableView reloadData];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -134,9 +131,6 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
-        
-        
-        
     }
     [self updateCell:cell forTableView:tableView atIndexPath:indexPath];
     return cell;

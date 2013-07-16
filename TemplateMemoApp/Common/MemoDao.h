@@ -8,11 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "FMDBWrapper.h"
-#import "MemoDao.h"
-
-@class TagLink;
-@class Tag;
-@class Memo;
+#import "Memo.h"
+#import "Tag.h"
+#import "TagLink.h"
 
 @protocol MemoDao
 

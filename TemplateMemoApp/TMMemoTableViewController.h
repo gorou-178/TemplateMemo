@@ -9,12 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "Common/MemoDao.h"
 
-@class TMEditViewController;
-
 @interface TMMemoTableViewController : UITableViewController
 
 @property (strong, nonatomic) NSMutableArray *memoCache;
-@property (strong, nonatomic) TMEditViewController *tmEditViewController;
 
 // メモの追加
 - (void)insertNewObject:(id)sender;

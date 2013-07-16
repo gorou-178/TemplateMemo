@@ -6,9 +6,7 @@
 //  Copyright (c) 2013年 gurimmer. All rights reserved.
 //
 
-#import "Tag.h"
 #import "TagDao.h"
-#import "Memo.h"
 #import "FMDatabase.h"
 #import "DateUtil.h"
 

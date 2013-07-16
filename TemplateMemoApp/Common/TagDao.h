@@ -8,9 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import "FMDBWrapper.h"
-
-@class Memo;
-@class Tag;
+#import "Tag.h"
+#import "TagLink.h"
+#import "Memo.h"
 
 @protocol TagDao
 // タグ全件取得

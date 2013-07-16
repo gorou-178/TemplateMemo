@@ -6,15 +6,12 @@
 //  Copyright (c) 2013年 gurimmer. All rights reserved.
 //
 
+#import "AppDelegate.h"
 #import "TMMemoTableViewController.h"
 #import "TMEditViewController.h"
 #import "TMAppContext.h"
-#import "Common/TagLink.h"
-#import "Common/MemoDao.h"
-#import "AppDelegate.h"
-#import "Memo.h"
+#import "MemoDao.h"
 #import "TagDao.h"
-#import "Tag.h"
 
 @interface TMMemoTableViewController ()
 {
@@ -61,21 +58,22 @@
     
     // AppデリゲートのwindowからSplitViewを取得
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    appDelegate.memoTableViewController = self;
+    
     UISplitViewController *splitViewController = (UISplitViewController*)[appDelegate.window rootViewController];
     // 左ペインのナビゲーションコントローラを取得
     // TODO: 右→左の順番でviewControllerが登録されているためlastObject？
     UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
     // 左ペインのトップのビューコントローラを取得(今回の場合はTMEditViewController)
-    self.tmEditViewController = (TMEditViewController*)navigationController.topViewController;
-    self.tmEditViewController.memoTableViewController = self;
-    
-    [self.tmEditViewController setActiveSideView:self];
+    appDelegate.editViewController = (TMEditViewController*)navigationController.topViewController;
+    [appDelegate.editViewController setActiveSideView:self];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     // アクティブなViewとしてeditViewに通知
-    [self.tmEditViewController setActiveSideView:self];
+    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    [appDelegate.editViewController setActiveSideView:self];
 }
 
 - (void)didReceiveMemoryWarning
@@ -112,6 +110,9 @@
         // セルを一番上に追加
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
         [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        
+        // 追加したセルを選択 & 表示(トップにスクロールさせる)
+        [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionTop];
     }
 }
 
@@ -265,7 +266,8 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        [self.tmEditViewController setDetailItem:_memoCache[indexPath.row]];
+        AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+        [appDelegate.editViewController setDetailItem:_memoCache[indexPath.row]];
     }
 }
 

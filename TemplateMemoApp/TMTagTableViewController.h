@@ -12,8 +12,6 @@
 
 @interface TMTagTableViewController : UITableViewController
 
-@property (strong, nonatomic) TMEditViewController *tmEditViewController;
-@property (weak, nonatomic) IBOutlet UILabel *memoCountLabel;
 
 // セルの更新
 - (void)updateVisibleCells;

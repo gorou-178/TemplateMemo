@@ -12,9 +12,6 @@
 #import "FMDatabase.h"
 #import "DateUtil.h"
 #import "MemoDao.h"
-#import "Memo.h"
-#import "Tag.h"
-#import "TagLink.h"
 
 @interface MemoDaoImpl () 
 
