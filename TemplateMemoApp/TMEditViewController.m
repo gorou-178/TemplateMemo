@@ -45,11 +45,16 @@
     [self registerForKeyboardNotifications];
     
     // navigationItem UI作成
-    [self createAddMemoButton];
     [self createEditDoneButton];
-    self.navigationItem.rightBarButtonItem = self.addMemoButton;
     
-    [self configureView];
+    // textField設定
+    self.tagTextField.delegate = self;
+    self.tagTextField.returnKeyType = UIReturnKeyDone;
+    
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        [self createAddMemoButton];
+        self.navigationItem.rightBarButtonItem = self.addMemoButton;
+    }
 }
 
 - (void)viewDidLoad
@@ -58,10 +63,6 @@
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // textField設定
-    self.tagTextField.delegate = self;
-    self.tagTextField.returnKeyType = UIReturnKeyDone;
     
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     appDelegate.editViewController = self;
@@ -136,7 +137,7 @@
         NSMutableArray *lines = [NSMutableArray array];
         [_detailItem.body enumerateLinesUsingBlock:^(NSString *line, BOOL *stop) {
             [lines addObject:line];
-            //        *stop = YES;
+            *stop = YES;
         }];
         
         // タイトルは本文の一行目
@@ -148,8 +149,6 @@
 
 - (void)registerForKeyboardNotifications
 {
-    //TODO: 他UIのキーボードイベントの通知も来てしまうのでどうにかできないか(selector側での区別？)
-    
     // キーボードが表示される時に通知が来る
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWasShown:)
@@ -200,9 +199,11 @@
 {
     self.editMode = NO;
     NSLog(@"call keyboardWillBeHidden => editMode: %d", self.editMode);
-    // キーボードが閉じたタイミングでボタンを「メモ追加ボタン」に変更
-    [self createAddMemoButton];
-    self.navigationItem.rightBarButtonItem = self.addMemoButton;
+    // キーボードが閉じたタイミングでボタンを「メモ追加ボタン」に変更(iPadのみ)
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        [self createAddMemoButton];
+        self.navigationItem.rightBarButtonItem = self.addMemoButton;
+    }
     
     // メモを保存
     [self saveMemo];

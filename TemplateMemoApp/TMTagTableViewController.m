@@ -63,12 +63,12 @@
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     appDelegate.tagTableViewController = self;
     
-    UISplitViewController *splitViewController = (UISplitViewController*)[appDelegate.window rootViewController];
-    // 左ペインのナビゲーションコントローラを取得
-    // TODO: 右→左の順番でviewControllerが登録されているためlastObject？
-    UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
-    // 左ペインのトップのビューコントローラを取得(今回の場合はTMEditViewController)
-    appDelegate.editViewController = (TMEditViewController*)navigationController.topViewController;
+//    UISplitViewController *splitViewController = (UISplitViewController*)[appDelegate.window rootViewController];
+//    // 左ペインのナビゲーションコントローラを取得
+//    // TODO: 右→左の順番でviewControllerが登録されているためlastObject？
+//    UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
+//    // 左ペインのトップのビューコントローラを取得(今回の場合はTMEditViewController)
+//    appDelegate.editViewController = (TMEditViewController*)navigationController.topViewController;
 }
 
 - (void)viewDidAppear:(BOOL)animated

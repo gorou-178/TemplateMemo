@@ -60,13 +60,12 @@
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     appDelegate.memoTableViewController = self;
     
-    UISplitViewController *splitViewController = (UISplitViewController*)[appDelegate.window rootViewController];
-    // 左ペインのナビゲーションコントローラを取得
-    // TODO: 右→左の順番でviewControllerが登録されているためlastObject？
-    UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
-    // 左ペインのトップのビューコントローラを取得(今回の場合はTMEditViewController)
-    appDelegate.editViewController = (TMEditViewController*)navigationController.topViewController;
-    [appDelegate.editViewController setActiveSideView:self];
+//    UISplitViewController *splitViewController = (UISplitViewController*)[appDelegate.window rootViewController];
+//    // 左ペインのナビゲーションコントローラを取得
+//    // TODO: 右→左の順番でviewControllerが登録されているためlastObject？
+//    UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
+//    // 左ペインのトップのビューコントローラを取得(今回の場合はTMEditViewController)
+//    appDelegate.editViewController = (TMEditViewController*)navigationController.topViewController;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -265,18 +264,18 @@
 // iPadの場合、セルの選択イベントで処理(iPhoneでもセグエイベント処理後にイベント発生するので注意)
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-        [appDelegate.editViewController setDetailItem:_memoCache[indexPath.row]];
-    }
+    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    [appDelegate.editViewController setDetailItem:_memoCache[indexPath.row]];
 }
 
 // iPhoneの場合、セル選択時のセグエイベントで処理
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([[segue identifier] isEqualToString:@"showMemo"]) {
-        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        [[segue destinationViewController] setDetailItem:_memoCache[indexPath.row]];
-    }
+    // 遷移先のコントローラのviewDidLoadより先にメソッドを実行してしまうため
+    // Storyboardのインスタンスがまだ出来ていない。didSelectRowAtIndexPathで実施するように変更
+//    if ([[segue identifier] isEqualToString:@"showMemo"]) {
+//        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+//        [[segue destinationViewController] setDetailItem:_memoCache[indexPath.row]];
+//    }
 }
 @end
