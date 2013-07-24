@@ -22,8 +22,21 @@
 
 @implementation TMTagTableViewController
 
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    NSLog(@"initWithNibName");
+    return [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+}
+
+- (void)loadView
+{
+    [super loadView];
+    NSLog(@"loadView");
+}
+
 - (void)awakeFromNib
 {
+    NSLog(@"awakeFromNib");
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         self.clearsSelectionOnViewWillAppear = NO;
         self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
@@ -40,8 +53,15 @@
     [super awakeFromNib];
 }
 
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    NSLog(@"initWithCodar");
+    return [super initWithCoder:aDecoder];
+}
+
 - (id)initWithStyle:(UITableViewStyle)style
 {
+    NSLog(@"initWithStyle");
     self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
@@ -52,6 +72,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    NSLog(@"viewDidLoad");
     
     // 編集ボタン
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
@@ -62,6 +83,7 @@
     // AppデリゲートのwindowからSplitViewを取得
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     appDelegate.tagTableViewController = self;
+    [appDelegate.editViewController setActiveSideView:self];
     
 //    UISplitViewController *splitViewController = (UISplitViewController*)[appDelegate.window rootViewController];
 //    // 左ペインのナビゲーションコントローラを取得
@@ -73,13 +95,35 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    NSLog(@"viewDidAppear");
     // アクティブなViewとしてeditViewに通知
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     [appDelegate.editViewController setActiveSideView:self];
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+    NSLog(@"viewDidDisappear");
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    NSLog(@"viewWillDisappear");
+}
+
+- (void)viewWillLayoutSubviews
+{
+    NSLog(@"viewWillLayoutSubviews");
+}
+
+- (void)viewDidLayoutSubviews
+{
+    NSLog(@"viewDidLayoutSubviews");
+}
+
 - (void)didReceiveMemoryWarning
 {
+    NSLog(@"didReceiveMemoryWarning");
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -197,11 +241,13 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     // 選択ハイライトをフェードアウトさせる
+    NSLog(@"viewWillAppear");
     [self.tableView deselectRowAtIndexPath:self.tableView.indexPathForSelectedRow animated:YES];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    NSLog(@"prepareForSegue");
     if ([[segue identifier] isEqualToString:@"showTagMemo"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         TMMemoTableViewController *memoTableViewController = [segue destinationViewController];

@@ -25,6 +25,12 @@
 
 @implementation TMMemoTableViewController
 
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    NSLog(@"memo: initWithCoder");
+    return [super initWithCoder:aDecoder];
+}
+
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -36,6 +42,7 @@
 
 - (void)awakeFromNib
 {
+    NSLog(@"memo: awakeFromNib");
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         self.clearsSelectionOnViewWillAppear = NO;
         self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
@@ -50,8 +57,15 @@
     [super awakeFromNib];
 }
 
+- (void)loadView
+{
+    NSLog(@"memo: loadView");
+    [super loadView];
+}
+
 - (void)viewDidLoad
 {
+    NSLog(@"memo: viewDidLoad");
     [super viewDidLoad];
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
@@ -71,6 +85,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     // アクティブなViewとしてeditViewに通知
+    NSLog(@"memo: viewDidAppear");
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     [appDelegate.editViewController setActiveSideView:self];
 }
@@ -171,10 +186,7 @@
         return;
     }
     
-    // TODO: セルを使いまわした場合問題になりそう
-    if (cell.imageView.image == nil) {
-        cell.imageView.image = [UIImage imageNamed:@"memo.png"];
-    }
+    cell.imageView.image = [UIImage imageNamed:@"memo.png"];
     
     // 改行までをタイトルとして設定
     NSMutableArray *lines = [NSMutableArray array];

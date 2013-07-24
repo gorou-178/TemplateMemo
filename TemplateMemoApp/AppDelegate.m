@@ -9,6 +9,8 @@
 #import "AppDelegate.h"
 #import "FMDBWrapper.h"
 
+#import "TMAppContext.h"
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -19,6 +21,8 @@
         UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
         splitViewController.delegate = (id)navigationController.topViewController;
     }
+    
+    [TMAppContext sharedManager];    
     return YES;
 }
 							
