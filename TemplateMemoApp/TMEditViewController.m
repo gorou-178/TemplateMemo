@@ -13,6 +13,11 @@
 #import "TMAppContext.h"
 #import "MemoDao.h"
 #import "TagDao.h"
+#import "Font.h"
+#import "FontSize.h"
+#import "FontSettingInfo.h"
+#import "FontSizeSettingInfo.h"
+#import "UserDefaultsWrapper.h"
 
 @interface TMEditViewController ()
 {
@@ -122,6 +127,12 @@
 - (void)configureView
 {
     if (_detailItem) {
+        
+        // TODO: フォントが切り替わらない？
+        FontSettingInfo *fontSettingInfo = [[FontSettingInfo alloc] init];
+        Font *font = [UserDefaultsWrapper loadToObject:fontSettingInfo.key];
+        [self.bodyTextView setFont:font.uiFont];
+        
         NSMutableString *tagText = [[NSMutableString alloc] init];
         NSArray *tags = [tagDao tagForMemo:_detailItem];
         for (int i = 0; i < tags.count; i++) {
@@ -389,7 +400,6 @@
     }
     [self.navigationItem setLeftBarButtonItem:barButtonItem animated:YES];
     self.masterPopoverController = popoverController;
-    
 }
 
 - (void)splitViewController:(UISplitViewController *)splitController willShowViewController:(UIViewController *)viewController invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem

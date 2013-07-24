@@ -21,6 +21,8 @@
 		E25A51B8178DA1130022223C /* FMDBWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = E25A51B6178DA1130022223C /* FMDBWrapper.m */; };
 		E262ED31178D306D00E39D70 /* DateUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = E262ED30178D306D00E39D70 /* DateUtil.m */; };
 		E262ED32178D306D00E39D70 /* DateUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = E262ED30178D306D00E39D70 /* DateUtil.m */; };
+		E26C1D25179EB64700988906 /* UserDefaultsWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = E26C1D24179EB64700988906 /* UserDefaultsWrapper.m */; };
+		E26C1D26179EB64700988906 /* UserDefaultsWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = E26C1D24179EB64700988906 /* UserDefaultsWrapper.m */; };
 		E2734E3617869C6B008272CB /* TMTagTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2734E3517869C6B008272CB /* TMTagTableViewController.m */; };
 		E2734E3717869C6B008272CB /* TMTagTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2734E3517869C6B008272CB /* TMTagTableViewController.m */; };
 		E2734E3A1786A250008272CB /* TMMemoTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2734E391786A250008272CB /* TMMemoTableViewController.m */; };
@@ -30,6 +32,34 @@
 		E2734E431786B770008272CB /* TMPopoverManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E2734E421786B770008272CB /* TMPopoverManager.m */; };
 		E2734E441786B770008272CB /* TMPopoverManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E2734E421786B770008272CB /* TMPopoverManager.m */; };
 		E279A027179435EE0099104D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E279A026179435EE0099104D /* QuartzCore.framework */; };
+		E2832E87179BBCC3009E9660 /* FontSizeDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = E2832E86179BBCC3009E9660 /* FontSizeDataSource.m */; };
+		E2832E88179BBCC3009E9660 /* FontSizeDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = E2832E86179BBCC3009E9660 /* FontSizeDataSource.m */; };
+		E2832E8F179BC8FA009E9660 /* SettingDetailTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2832E8E179BC8FA009E9660 /* SettingDetailTableViewController.m */; };
+		E2832E90179BC8FA009E9660 /* SettingDetailTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2832E8E179BC8FA009E9660 /* SettingDetailTableViewController.m */; };
+		E2832E97179BCA8E009E9660 /* TemplateMemo.m in Sources */ = {isa = PBXBuildFile; fileRef = E2832E96179BCA8E009E9660 /* TemplateMemo.m */; };
+		E2832E98179BCA8E009E9660 /* TemplateMemo.m in Sources */ = {isa = PBXBuildFile; fileRef = E2832E96179BCA8E009E9660 /* TemplateMemo.m */; };
+		E2832E9B179BCB84009E9660 /* OAuthUser.m in Sources */ = {isa = PBXBuildFile; fileRef = E2832E9A179BCB84009E9660 /* OAuthUser.m */; };
+		E2832E9C179BCB84009E9660 /* OAuthUser.m in Sources */ = {isa = PBXBuildFile; fileRef = E2832E9A179BCB84009E9660 /* OAuthUser.m */; };
+		E2832E9F179BCC28009E9660 /* EvernoteSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = E2832E9E179BCC28009E9660 /* EvernoteSetting.m */; };
+		E2832EA0179BCC28009E9660 /* EvernoteSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = E2832E9E179BCC28009E9660 /* EvernoteSetting.m */; };
+		E2832EA3179BCC6C009E9660 /* SimpleNoteSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = E2832EA2179BCC6C009E9660 /* SimpleNoteSetting.m */; };
+		E2832EA4179BCC6C009E9660 /* SimpleNoteSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = E2832EA2179BCC6C009E9660 /* SimpleNoteSetting.m */; };
+		E2832EAC179BE276009E9660 /* SettingInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = E2832EAB179BE276009E9660 /* SettingInfo.m */; };
+		E2832EAD179BE276009E9660 /* SettingInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = E2832EAB179BE276009E9660 /* SettingInfo.m */; };
+		E2832EB0179BE4F3009E9660 /* FontSize.m in Sources */ = {isa = PBXBuildFile; fileRef = E2832EAF179BE4F3009E9660 /* FontSize.m */; };
+		E2832EB1179BE4F3009E9660 /* FontSize.m in Sources */ = {isa = PBXBuildFile; fileRef = E2832EAF179BE4F3009E9660 /* FontSize.m */; };
+		E2832EB4179BE8F5009E9660 /* Font.m in Sources */ = {isa = PBXBuildFile; fileRef = E2832EB3179BE8F5009E9660 /* Font.m */; };
+		E2832EB5179BE8F5009E9660 /* Font.m in Sources */ = {isa = PBXBuildFile; fileRef = E2832EB3179BE8F5009E9660 /* Font.m */; };
+		E2832EB8179BF1B7009E9660 /* FontSizeSettingInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = E2832EB7179BF1B6009E9660 /* FontSizeSettingInfo.m */; };
+		E2832EB9179BF1B7009E9660 /* FontSizeSettingInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = E2832EB7179BF1B6009E9660 /* FontSizeSettingInfo.m */; };
+		E2832EBC179BF22E009E9660 /* FontSettingInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = E2832EBB179BF22D009E9660 /* FontSettingInfo.m */; };
+		E2832EBD179BF22E009E9660 /* FontSettingInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = E2832EBB179BF22D009E9660 /* FontSettingInfo.m */; };
+		E2832EC0179C13DA009E9660 /* FontDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = E2832EBF179C13D8009E9660 /* FontDataSource.m */; };
+		E2832EC1179C13DA009E9660 /* FontDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = E2832EBF179C13D8009E9660 /* FontDataSource.m */; };
+		E2832EC4179C1978009E9660 /* TMSettingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2832EC3179C1976009E9660 /* TMSettingTableViewController.m */; };
+		E2832EC5179C1978009E9660 /* TMSettingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2832EC3179C1976009E9660 /* TMSettingTableViewController.m */; };
+		E2832EC8179C253B009E9660 /* SettingDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = E2832EC7179C2539009E9660 /* SettingDataSource.m */; };
+		E2832EC9179C253B009E9660 /* SettingDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = E2832EC7179C2539009E9660 /* SettingDataSource.m */; };
 		E28590311791088C00E9EF48 /* memo.png in Resources */ = {isa = PBXBuildFile; fileRef = E28590301791088C00E9EF48 /* memo.png */; };
 		E28590321791088C00E9EF48 /* memo.png in Resources */ = {isa = PBXBuildFile; fileRef = E28590301791088C00E9EF48 /* memo.png */; };
 		E2859034179108B100E9EF48 /* tag.png in Resources */ = {isa = PBXBuildFile; fileRef = E2859033179108B100E9EF48 /* tag.png */; };
@@ -93,6 +123,8 @@
 		E25A51B6178DA1130022223C /* FMDBWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDBWrapper.m; sourceTree = "<group>"; };
 		E262ED2F178D306D00E39D70 /* DateUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateUtil.h; sourceTree = "<group>"; };
 		E262ED30178D306D00E39D70 /* DateUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateUtil.m; sourceTree = "<group>"; };
+		E26C1D23179EB64700988906 /* UserDefaultsWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDefaultsWrapper.h; sourceTree = "<group>"; };
+		E26C1D24179EB64700988906 /* UserDefaultsWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserDefaultsWrapper.m; sourceTree = "<group>"; };
 		E2734E3417869C6B008272CB /* TMTagTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMTagTableViewController.h; sourceTree = "<group>"; };
 		E2734E3517869C6B008272CB /* TMTagTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMTagTableViewController.m; sourceTree = "<group>"; };
 		E2734E381786A250008272CB /* TMMemoTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMMemoTableViewController.h; sourceTree = "<group>"; };
@@ -102,6 +134,34 @@
 		E2734E411786B76F008272CB /* TMPopoverManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMPopoverManager.h; sourceTree = "<group>"; };
 		E2734E421786B770008272CB /* TMPopoverManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMPopoverManager.m; sourceTree = "<group>"; };
 		E279A026179435EE0099104D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		E2832E85179BBCC3009E9660 /* FontSizeDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontSizeDataSource.h; sourceTree = "<group>"; };
+		E2832E86179BBCC3009E9660 /* FontSizeDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FontSizeDataSource.m; sourceTree = "<group>"; };
+		E2832E8D179BC8FA009E9660 /* SettingDetailTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingDetailTableViewController.h; sourceTree = "<group>"; };
+		E2832E8E179BC8FA009E9660 /* SettingDetailTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingDetailTableViewController.m; sourceTree = "<group>"; };
+		E2832E95179BCA8E009E9660 /* TemplateMemo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateMemo.h; sourceTree = "<group>"; };
+		E2832E96179BCA8E009E9660 /* TemplateMemo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TemplateMemo.m; sourceTree = "<group>"; };
+		E2832E99179BCB84009E9660 /* OAuthUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAuthUser.h; sourceTree = "<group>"; };
+		E2832E9A179BCB84009E9660 /* OAuthUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAuthUser.m; sourceTree = "<group>"; };
+		E2832E9D179BCC28009E9660 /* EvernoteSetting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EvernoteSetting.h; sourceTree = "<group>"; };
+		E2832E9E179BCC28009E9660 /* EvernoteSetting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EvernoteSetting.m; sourceTree = "<group>"; };
+		E2832EA1179BCC6C009E9660 /* SimpleNoteSetting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleNoteSetting.h; sourceTree = "<group>"; };
+		E2832EA2179BCC6C009E9660 /* SimpleNoteSetting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleNoteSetting.m; sourceTree = "<group>"; };
+		E2832EAA179BE275009E9660 /* SettingInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingInfo.h; sourceTree = "<group>"; };
+		E2832EAB179BE276009E9660 /* SettingInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingInfo.m; sourceTree = "<group>"; };
+		E2832EAE179BE4F2009E9660 /* FontSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontSize.h; sourceTree = "<group>"; };
+		E2832EAF179BE4F3009E9660 /* FontSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FontSize.m; sourceTree = "<group>"; };
+		E2832EB2179BE8F4009E9660 /* Font.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Font.h; sourceTree = "<group>"; };
+		E2832EB3179BE8F5009E9660 /* Font.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Font.m; sourceTree = "<group>"; };
+		E2832EB6179BF1B5009E9660 /* FontSizeSettingInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontSizeSettingInfo.h; sourceTree = "<group>"; };
+		E2832EB7179BF1B6009E9660 /* FontSizeSettingInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FontSizeSettingInfo.m; sourceTree = "<group>"; };
+		E2832EBA179BF22D009E9660 /* FontSettingInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontSettingInfo.h; sourceTree = "<group>"; };
+		E2832EBB179BF22D009E9660 /* FontSettingInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FontSettingInfo.m; sourceTree = "<group>"; };
+		E2832EBE179C13D6009E9660 /* FontDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontDataSource.h; sourceTree = "<group>"; };
+		E2832EBF179C13D8009E9660 /* FontDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FontDataSource.m; sourceTree = "<group>"; };
+		E2832EC2179C1974009E9660 /* TMSettingTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMSettingTableViewController.h; sourceTree = "<group>"; };
+		E2832EC3179C1976009E9660 /* TMSettingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMSettingTableViewController.m; sourceTree = "<group>"; };
+		E2832EC6179C2538009E9660 /* SettingDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingDataSource.h; sourceTree = "<group>"; };
+		E2832EC7179C2539009E9660 /* SettingDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingDataSource.m; sourceTree = "<group>"; };
 		E28590301791088C00E9EF48 /* memo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = memo.png; sourceTree = "<group>"; };
 		E2859033179108B100E9EF48 /* tag.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tag.png; sourceTree = "<group>"; };
 		E28590361791090A00E9EF48 /* home.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home.png; sourceTree = "<group>"; };
@@ -180,6 +240,18 @@
 				E25A51AA178D95570022223C /* Tag.m */,
 				E25A51AD178D98540022223C /* TagLink.h */,
 				E25A51AE178D98540022223C /* TagLink.m */,
+				E2832E95179BCA8E009E9660 /* TemplateMemo.h */,
+				E2832E96179BCA8E009E9660 /* TemplateMemo.m */,
+				E2832E99179BCB84009E9660 /* OAuthUser.h */,
+				E2832E9A179BCB84009E9660 /* OAuthUser.m */,
+				E2832E9D179BCC28009E9660 /* EvernoteSetting.h */,
+				E2832E9E179BCC28009E9660 /* EvernoteSetting.m */,
+				E2832EA1179BCC6C009E9660 /* SimpleNoteSetting.h */,
+				E2832EA2179BCC6C009E9660 /* SimpleNoteSetting.m */,
+				E2832EAE179BE4F2009E9660 /* FontSize.h */,
+				E2832EAF179BE4F3009E9660 /* FontSize.m */,
+				E2832EB2179BE8F4009E9660 /* Font.h */,
+				E2832EB3179BE8F5009E9660 /* Font.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -259,6 +331,16 @@
 				E2734E391786A250008272CB /* TMMemoTableViewController.m */,
 				E24497A317854B2600B84A9A /* TMEditViewController.h */,
 				E24497A417854B2600B84A9A /* TMEditViewController.m */,
+				E2832EC2179C1974009E9660 /* TMSettingTableViewController.h */,
+				E2832EC3179C1976009E9660 /* TMSettingTableViewController.m */,
+				E2832E85179BBCC3009E9660 /* FontSizeDataSource.h */,
+				E2832E86179BBCC3009E9660 /* FontSizeDataSource.m */,
+				E2832EBE179C13D6009E9660 /* FontDataSource.h */,
+				E2832EBF179C13D8009E9660 /* FontDataSource.m */,
+				E2832E8D179BC8FA009E9660 /* SettingDetailTableViewController.h */,
+				E2832E8E179BC8FA009E9660 /* SettingDetailTableViewController.m */,
+				E2832EC6179C2538009E9660 /* SettingDataSource.h */,
+				E2832EC7179C2539009E9660 /* SettingDataSource.m */,
 				E2EE3667175B4D580055D723 /* MainStoryboard_iPad.storyboard */,
 				E2EE3664175B4D580055D723 /* MainStoryboard_iPhone.storyboard */,
 				E2EE368F175B655A0055D723 /* iPhone */,
@@ -333,6 +415,8 @@
 			children = (
 				E262ED2F178D306D00E39D70 /* DateUtil.h */,
 				E262ED30178D306D00E39D70 /* DateUtil.m */,
+				E26C1D23179EB64700988906 /* UserDefaultsWrapper.h */,
+				E26C1D24179EB64700988906 /* UserDefaultsWrapper.m */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -343,6 +427,12 @@
 				E23C7B8B175E3E3900F6848F /* Dao */,
 				E23C7B87175E3A4100F6848F /* Model */,
 				E2B02714175CDD0E00FBA056 /* FMDB */,
+				E2832EAA179BE275009E9660 /* SettingInfo.h */,
+				E2832EAB179BE276009E9660 /* SettingInfo.m */,
+				E2832EB6179BF1B5009E9660 /* FontSizeSettingInfo.h */,
+				E2832EB7179BF1B6009E9660 /* FontSizeSettingInfo.m */,
+				E2832EBA179BF22D009E9660 /* FontSettingInfo.h */,
+				E2832EBB179BF22D009E9660 /* FontSettingInfo.m */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -528,6 +618,21 @@
 				E25A51AF178D98550022223C /* TagLink.m in Sources */,
 				E25A51B3178D9B3A0022223C /* TagDao.m in Sources */,
 				E25A51B7178DA1130022223C /* FMDBWrapper.m in Sources */,
+				E2832E87179BBCC3009E9660 /* FontSizeDataSource.m in Sources */,
+				E2832E8F179BC8FA009E9660 /* SettingDetailTableViewController.m in Sources */,
+				E2832E97179BCA8E009E9660 /* TemplateMemo.m in Sources */,
+				E2832E9B179BCB84009E9660 /* OAuthUser.m in Sources */,
+				E2832E9F179BCC28009E9660 /* EvernoteSetting.m in Sources */,
+				E2832EA3179BCC6C009E9660 /* SimpleNoteSetting.m in Sources */,
+				E2832EAC179BE276009E9660 /* SettingInfo.m in Sources */,
+				E2832EB0179BE4F3009E9660 /* FontSize.m in Sources */,
+				E2832EB4179BE8F5009E9660 /* Font.m in Sources */,
+				E2832EB8179BF1B7009E9660 /* FontSizeSettingInfo.m in Sources */,
+				E2832EBC179BF22E009E9660 /* FontSettingInfo.m in Sources */,
+				E2832EC0179C13DA009E9660 /* FontDataSource.m in Sources */,
+				E2832EC4179C1978009E9660 /* TMSettingTableViewController.m in Sources */,
+				E2832EC8179C253B009E9660 /* SettingDataSource.m in Sources */,
+				E26C1D25179EB64700988906 /* UserDefaultsWrapper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -551,6 +656,21 @@
 				E25A51B0178D98550022223C /* TagLink.m in Sources */,
 				E25A51B4178D9B3A0022223C /* TagDao.m in Sources */,
 				E25A51B8178DA1130022223C /* FMDBWrapper.m in Sources */,
+				E2832E88179BBCC3009E9660 /* FontSizeDataSource.m in Sources */,
+				E2832E90179BC8FA009E9660 /* SettingDetailTableViewController.m in Sources */,
+				E2832E98179BCA8E009E9660 /* TemplateMemo.m in Sources */,
+				E2832E9C179BCB84009E9660 /* OAuthUser.m in Sources */,
+				E2832EA0179BCC28009E9660 /* EvernoteSetting.m in Sources */,
+				E2832EA4179BCC6C009E9660 /* SimpleNoteSetting.m in Sources */,
+				E2832EAD179BE276009E9660 /* SettingInfo.m in Sources */,
+				E2832EB1179BE4F3009E9660 /* FontSize.m in Sources */,
+				E2832EB5179BE8F5009E9660 /* Font.m in Sources */,
+				E2832EB9179BF1B7009E9660 /* FontSizeSettingInfo.m in Sources */,
+				E2832EBD179BF22E009E9660 /* FontSettingInfo.m in Sources */,
+				E2832EC1179C13DA009E9660 /* FontDataSource.m in Sources */,
+				E2832EC5179C1978009E9660 /* TMSettingTableViewController.m in Sources */,
+				E2832EC9179C253B009E9660 /* SettingDataSource.m in Sources */,
+				E26C1D26179EB64700988906 /* UserDefaultsWrapper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

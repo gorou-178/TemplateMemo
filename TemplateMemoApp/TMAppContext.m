@@ -31,8 +31,8 @@
 - (id)initSharedInstance {
     self = [super init];
     if (self) {
-        // 初期化処理
-        //_memoDao = [MemoDaoImpl new];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationDidChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
+        [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
     }
     return self;
 }
@@ -44,6 +44,27 @@
     // see: http://cocoaapi.hatenablog.com/entry/00020106/NSObject_doesNotRecognizeSelector_
     [self doesNotRecognizeSelector:_cmd];
     return nil;
+}
+
+- (void)deviceOrientationDidChange:(NSNotification*)notification {
+//    UIDeviceOrientation orientation;
+//    orientation = [UIDevice currentDevice].orientation;
+    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+    if(orientation == UIDeviceOrientationUnknown) {
+        NSLog(@"デバイス方向: 不明");
+    }
+    if(orientation == UIDeviceOrientationPortrait) {
+        NSLog(@"デバイス方向: 縦(ホームボタン下)");
+    }
+    if(orientation == UIDeviceOrientationPortraitUpsideDown) {
+        NSLog(@"デバイス方向: 縦(ホームボタン上)");
+    }
+    if(orientation == UIDeviceOrientationLandscapeLeft) {
+        NSLog(@"デバイス方向: 横(ホームボタン右)");
+    }
+    if(orientation == UIDeviceOrientationLandscapeRight) {
+        NSLog(@"デバイス方向: 横(ホームボタン左)");
+    }
 }
 
 @end

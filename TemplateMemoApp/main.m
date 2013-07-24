@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 
 #import "AppDelegate.h"
+#import "Font.h"
+#import "FontSize.h"
+#import "UserDefaultsWrapper.h"
 
 int main(int argc, char *argv[])
 {

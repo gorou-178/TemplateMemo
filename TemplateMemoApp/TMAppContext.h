@@ -19,6 +19,6 @@
 //@property (atomic, strong, readonly) id<MemoDao> memoDao;
 
 // アクティブキーボード
-@property (atomic, strong, readonly) id activeTextField;
+@property (atomic, strong) id activeTextField;
 
 @end
