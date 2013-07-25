@@ -128,10 +128,9 @@
 {
     if (_detailItem) {
         
-        // TODO: フォントが切り替わらない？
         FontSettingInfo *fontSettingInfo = [[FontSettingInfo alloc] init];
         Font *font = [UserDefaultsWrapper loadToObject:fontSettingInfo.key];
-        [self.bodyTextView setFont:font.uiFont];
+        self.bodyTextView.font = font.uiFont;
         
         NSMutableString *tagText = [[NSMutableString alloc] init];
         NSArray *tags = [tagDao tagForMemo:_detailItem];

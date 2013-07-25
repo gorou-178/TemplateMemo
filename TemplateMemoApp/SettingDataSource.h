@@ -11,4 +11,5 @@
 
 @interface SettingDataSource : NSObject <UITableViewDataSource,SettingUpdater,NSMutableCopying>
 @property (strong, nonatomic) NSMutableArray *dataList;
+- (void)updateCellData:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath tableViewCell:(UITableViewCell *)cell;
 @end

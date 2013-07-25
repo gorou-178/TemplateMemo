@@ -16,6 +16,8 @@
 #import "FontSizeSettingInfo.h"
 #import "SettingDetailTableViewController.h"
 #import "UserDefaultsWrapper.h"
+#import "TemplateMemoDataSource.h"
+#import "TemplateMemoSettingInfo.h"
 
 @interface TMSettingTableViewController ()
 
@@ -154,6 +156,10 @@
     } else if ([[segue identifier] isEqualToString:@"settingFontSize"]) {
         SettingInfo *settingInfo = [[FontSizeSettingInfo alloc] init];
         settingInfo.dataSource = [[FontSizeDataSource alloc] init];
+        [viewController setSettingInfo:settingInfo withDataList:settingInfo.dataSource.dataList];
+    } else if ([[segue identifier] isEqualToString:@"showTemplate"]) {
+        SettingInfo *settingInfo = [[TemplateMemoSettingInfo alloc] init];
+        settingInfo.dataSource = [[TemplateMemoDataSource alloc] init];
         [viewController setSettingInfo:settingInfo withDataList:settingInfo.dataSource.dataList];
     }
 }

@@ -24,7 +24,32 @@
     
     FontSizeSettingInfo *fontSizeSettingInfo = [[FontSizeSettingInfo alloc] init];
     FontSize *fontSize = [UserDefaultsWrapper loadToObject:fontSizeSettingInfo.key];
+
+    // システムフォント(Helvetica)
+    Font *systemFont = [[Font alloc] init];
+    systemFont.uiFont = [UIFont systemFontOfSize:fontSize.size];
+    systemFont.row = 0;
+    systemFont.name = [systemFont.uiFont fontName];
+    systemFont.labelText = [systemFont.uiFont familyName];
+    [self.dataList addObject:systemFont];
+
+    // ヒラギノ角ゴ ProN W3
+    Font *hiraginoKakuGothic = [[Font alloc] init];
+    hiraginoKakuGothic.uiFont = [UIFont fontWithName:@"HiraKakuProN-W3" size:fontSize.size];
+    hiraginoKakuGothic.row = 1;
+    hiraginoKakuGothic.name = [hiraginoKakuGothic.uiFont fontName];
+    hiraginoKakuGothic.labelText = [hiraginoKakuGothic.uiFont familyName];
+    [self.dataList addObject:hiraginoKakuGothic];
     
+    // Helvetica NeueUI
+    Font *helvetica = [[Font alloc] init];
+    helvetica.uiFont = [UIFont fontWithName:@".HelveticaNeueUI" size:fontSize.size];
+    helvetica.row = 2;
+    helvetica.name = [helvetica.uiFont fontName];
+    helvetica.labelText = [helvetica.uiFont familyName];
+    [self.dataList addObject:helvetica];
+    
+/*
     NSEnumerator *familyNames = [[UIFont familyNames] objectEnumerator];
     NSString *familyName;
     int index = 0;
@@ -38,7 +63,7 @@
             ++index;
         }
     }
-    
+*/
     return self;
 }
 
@@ -55,32 +80,34 @@
     }
     
     cell.textLabel.text = ((Font *)self.dataList[indexPath.row]).labelText;
+//    cell.detailTextLabel.font = ((Font *)self.dataList[indexPath.row]).uiFont;
+//    cell.detailTextLabel.text = [((Font *)self.dataList[indexPath.row]).uiFont familyName];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *identifer = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifer];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifer];
-    }
-    [self updateCellData:tableView cellForRowAtIndexPath:indexPath tableViewCell:cell];
-    return cell;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return self.dataList.count;
-}
-
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return NO;
-}
-
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return NO;
-}
+//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    static NSString *identifer = @"Cell";
+//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifer];
+//    if (!cell) {
+//        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifer];
+//    }
+//    [self updateCellData:tableView cellForRowAtIndexPath:indexPath tableViewCell:cell];
+//    return cell;
+//}
+//
+//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+//{
+//    return self.dataList.count;
+//}
+//
+//- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    return NO;
+//}
+//
+//- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    return NO;
+//}
 
 @end
