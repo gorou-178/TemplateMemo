@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E20DC0FE17A11E8200139CC1 /* TemplateMemoDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = E20DC0FD17A11E8200139CC1 /* TemplateMemoDataSource.m */; };
+		E20DC0FF17A11E8200139CC1 /* TemplateMemoDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = E20DC0FD17A11E8200139CC1 /* TemplateMemoDataSource.m */; };
+		E20DC10217A1207900139CC1 /* TemplateDao.m in Sources */ = {isa = PBXBuildFile; fileRef = E20DC10117A1207900139CC1 /* TemplateDao.m */; };
+		E20DC10317A1207900139CC1 /* TemplateDao.m in Sources */ = {isa = PBXBuildFile; fileRef = E20DC10117A1207900139CC1 /* TemplateDao.m */; };
+		E20DC10617A1286C00139CC1 /* TMTemplateMemoTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E20DC10517A1286B00139CC1 /* TMTemplateMemoTableViewController.m */; };
+		E20DC10717A1286C00139CC1 /* TMTemplateMemoTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E20DC10517A1286B00139CC1 /* TMTemplateMemoTableViewController.m */; };
+		E20DC10A17A1611800139CC1 /* TemplateMemoSettingInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = E20DC10917A1611700139CC1 /* TemplateMemoSettingInfo.m */; };
+		E20DC10B17A1611800139CC1 /* TemplateMemoSettingInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = E20DC10917A1611700139CC1 /* TemplateMemoSettingInfo.m */; };
 		E23C7B8A175E3A7D00F6848F /* Memo.m in Sources */ = {isa = PBXBuildFile; fileRef = E23C7B89175E3A7D00F6848F /* Memo.m */; };
 		E23C7B8E175E3E5400F6848F /* MemoDao.m in Sources */ = {isa = PBXBuildFile; fileRef = E23C7B8D175E3E5400F6848F /* MemoDao.m */; };
 		E24497A517854B2600B84A9A /* TMEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E24497A417854B2600B84A9A /* TMEditViewController.m */; };
@@ -107,6 +115,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E20DC0FC17A11E8100139CC1 /* TemplateMemoDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateMemoDataSource.h; sourceTree = "<group>"; };
+		E20DC0FD17A11E8200139CC1 /* TemplateMemoDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TemplateMemoDataSource.m; sourceTree = "<group>"; };
+		E20DC10017A1207900139CC1 /* TemplateDao.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateDao.h; sourceTree = "<group>"; };
+		E20DC10117A1207900139CC1 /* TemplateDao.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TemplateDao.m; sourceTree = "<group>"; };
+		E20DC10417A1286A00139CC1 /* TMTemplateMemoTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMTemplateMemoTableViewController.h; sourceTree = "<group>"; };
+		E20DC10517A1286B00139CC1 /* TMTemplateMemoTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMTemplateMemoTableViewController.m; sourceTree = "<group>"; };
+		E20DC10817A1611600139CC1 /* TemplateMemoSettingInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateMemoSettingInfo.h; sourceTree = "<group>"; };
+		E20DC10917A1611700139CC1 /* TemplateMemoSettingInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TemplateMemoSettingInfo.m; sourceTree = "<group>"; };
 		E23C7B88175E3A7D00F6848F /* Memo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Memo.h; sourceTree = "<group>"; };
 		E23C7B89175E3A7D00F6848F /* Memo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Memo.m; sourceTree = "<group>"; };
 		E23C7B8C175E3E5400F6848F /* MemoDao.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoDao.h; sourceTree = "<group>"; };
@@ -263,6 +279,8 @@
 				E23C7B8D175E3E5400F6848F /* MemoDao.m */,
 				E25A51B1178D9B3A0022223C /* TagDao.h */,
 				E25A51B2178D9B3A0022223C /* TagDao.m */,
+				E20DC10017A1207900139CC1 /* TemplateDao.h */,
+				E20DC10117A1207900139CC1 /* TemplateDao.m */,
 				E25A51B5178DA1130022223C /* FMDBWrapper.h */,
 				E25A51B6178DA1130022223C /* FMDBWrapper.m */,
 			);
@@ -333,10 +351,14 @@
 				E24497A417854B2600B84A9A /* TMEditViewController.m */,
 				E2832EC2179C1974009E9660 /* TMSettingTableViewController.h */,
 				E2832EC3179C1976009E9660 /* TMSettingTableViewController.m */,
-				E2832E85179BBCC3009E9660 /* FontSizeDataSource.h */,
-				E2832E86179BBCC3009E9660 /* FontSizeDataSource.m */,
+				E20DC10417A1286A00139CC1 /* TMTemplateMemoTableViewController.h */,
+				E20DC10517A1286B00139CC1 /* TMTemplateMemoTableViewController.m */,
 				E2832EBE179C13D6009E9660 /* FontDataSource.h */,
 				E2832EBF179C13D8009E9660 /* FontDataSource.m */,
+				E2832E85179BBCC3009E9660 /* FontSizeDataSource.h */,
+				E2832E86179BBCC3009E9660 /* FontSizeDataSource.m */,
+				E20DC0FC17A11E8100139CC1 /* TemplateMemoDataSource.h */,
+				E20DC0FD17A11E8200139CC1 /* TemplateMemoDataSource.m */,
 				E2832E8D179BC8FA009E9660 /* SettingDetailTableViewController.h */,
 				E2832E8E179BC8FA009E9660 /* SettingDetailTableViewController.m */,
 				E2832EC6179C2538009E9660 /* SettingDataSource.h */,
@@ -433,6 +455,8 @@
 				E2832EB7179BF1B6009E9660 /* FontSizeSettingInfo.m */,
 				E2832EBA179BF22D009E9660 /* FontSettingInfo.h */,
 				E2832EBB179BF22D009E9660 /* FontSettingInfo.m */,
+				E20DC10817A1611600139CC1 /* TemplateMemoSettingInfo.h */,
+				E20DC10917A1611700139CC1 /* TemplateMemoSettingInfo.m */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -633,6 +657,10 @@
 				E2832EC4179C1978009E9660 /* TMSettingTableViewController.m in Sources */,
 				E2832EC8179C253B009E9660 /* SettingDataSource.m in Sources */,
 				E26C1D25179EB64700988906 /* UserDefaultsWrapper.m in Sources */,
+				E20DC0FE17A11E8200139CC1 /* TemplateMemoDataSource.m in Sources */,
+				E20DC10217A1207900139CC1 /* TemplateDao.m in Sources */,
+				E20DC10617A1286C00139CC1 /* TMTemplateMemoTableViewController.m in Sources */,
+				E20DC10A17A1611800139CC1 /* TemplateMemoSettingInfo.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -671,6 +699,10 @@
 				E2832EC5179C1978009E9660 /* TMSettingTableViewController.m in Sources */,
 				E2832EC9179C253B009E9660 /* SettingDataSource.m in Sources */,
 				E26C1D26179EB64700988906 /* UserDefaultsWrapper.m in Sources */,
+				E20DC0FF17A11E8200139CC1 /* TemplateMemoDataSource.m in Sources */,
+				E20DC10317A1207900139CC1 /* TemplateDao.m in Sources */,
+				E20DC10717A1286C00139CC1 /* TMTemplateMemoTableViewController.m in Sources */,
+				E20DC10B17A1611800139CC1 /* TemplateMemoSettingInfo.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

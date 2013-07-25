@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "SettingInfo.h"
 
-@interface TemplateMemo : SettingData
+@interface TemplateMemo : SettingData <NSCoding, NSMutableCopying>
 @property (assign, nonatomic) NSInteger templateId;
 @property (strong, nonatomic) NSString *name;
 @property (strong, nonatomic) NSString *body;
