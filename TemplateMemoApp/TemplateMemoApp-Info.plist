@@ -9,7 +9,7 @@
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIdentifier</key>
-	<string>jp.lolipop.gurimmer.${PRODUCT_NAME:rfc1034identifier}</string>
+	<string>jp.lolipop.gurimmer.test1.template-memo</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>

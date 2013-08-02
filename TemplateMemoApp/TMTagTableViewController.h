@@ -12,8 +12,10 @@
 
 @interface TMTagTableViewController : UITableViewController
 
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *addTagButton;
 
 // セルの更新
 - (void)updateVisibleCells;
+- (IBAction)insertTag:(id)sender;
 
 @end

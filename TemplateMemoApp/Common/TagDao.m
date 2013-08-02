@@ -58,8 +58,8 @@
 - (NSArray*)tags
 {
     NSMutableArray* tags = [[NSMutableArray alloc] init];
-    
-    FMResultSet* result = [db executeQuery:@"select id, name, posision, datetime(createDate, 'localtime') cDate, datetime(modifiedDate,'localtime') mDate from tag where deleteFlag = 0 order by posision;"];
+    NSString *sql = @"select id, name, posision, datetime(createDate, 'localtime') cDate, datetime(modifiedDate,'localtime') mDate from tag where deleteFlag = 0 order by posision desc;";
+    FMResultSet* result = [db executeQuery:sql];
     if ([db hadError]) {
         NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         [result close];
@@ -88,6 +88,8 @@
 
 - (NSArray*)tagForMemo:(Memo*)memo
 {
+    NSMutableArray *tags = [[NSMutableArray alloc] init];
+    
     // メモに関連付けされているタグを取得
     NSString *tagIdsSql = [[NSString alloc] initWithFormat:@"select tagId from tagLink where memoId = %d;", memo.memoid];
     FMResultSet* result = [db executeQuery:tagIdsSql];
@@ -96,6 +98,7 @@
         [result close];
         return nil;
     }
+    
     
     // タグIDでsqlを作成
     NSMutableString *sql = [[NSMutableString alloc] initWithString:@"select id, name, posision, datetime(createDate, 'localtime') cDate, datetime(modifiedDate,'localtime') mDate from tag where deleteFlag = 0 "];
@@ -109,7 +112,13 @@
         }
         [sql appendFormat:@"%d", [result intForColumn:@"tagId"]];
     }
-    [sql appendString:@") order by posision;"];
+    
+    // 対象のタグがtagLinkに無いため空リストを返す
+    if (bFirst) {
+        return tags;
+    }
+    
+    [sql appendString:@") order by posision desc;"];
     [result close];
     
     NSLog(@"tagForMemo sql: %@", sql);
@@ -122,7 +131,6 @@
         return nil;
     }
     
-    NSMutableArray *tags = [[NSMutableArray alloc] init];
     while ([result next]) {
         Tag *tag = [Tag new];
         tag.tagId = [result intForColumn:@"id"];
@@ -288,5 +296,22 @@
     [db commit];
     return bResult;
 }
+
+// 自動インクリメントキーの現在の最大値を取得
+- (int)maxRefCount
+{
+    FMResultSet *result = [db executeQuery:@"select MAX(id) as maxRefCount from tag"];
+    if ([db hadError]) {
+        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+        [result close];
+        return 0;
+    }
+    
+    [result next];
+    int maxRefCount = [result intForColumn:@"maxRefCount"];
+    [result close];
+    return maxRefCount;
+}
+
 
 @end

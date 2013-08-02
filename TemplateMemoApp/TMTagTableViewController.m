@@ -83,7 +83,7 @@
     // AppデリゲートのwindowからSplitViewを取得
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     appDelegate.tagTableViewController = self;
-    [appDelegate.editViewController setActiveSideView:self];
+    [appDelegate.editMemoViewController setActiveSideView:self];
     
 //    UISplitViewController *splitViewController = (UISplitViewController*)[appDelegate.window rootViewController];
 //    // 左ペインのナビゲーションコントローラを取得
@@ -98,7 +98,7 @@
     NSLog(@"viewDidAppear");
     // アクティブなViewとしてeditViewに通知
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-    [appDelegate.editViewController setActiveSideView:self];
+    [appDelegate.editMemoViewController setActiveSideView:self];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -167,6 +167,73 @@
     tagCache = [tagDao.tags mutableCopy];
     // テーブルを全更新
     [self.tableView reloadData];
+}
+
+- (IBAction)insertTag:(id)sender {
+    // テキスト付きアラートダイアログ
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"タグ名前を入力"
+                                                    message:@"\n"
+                                                   delegate:self
+                                          cancelButtonTitle:@"キャンセル"
+                                          otherButtonTitles:@"OK", nil];
+    [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
+    [alert show];
+}
+
+- (BOOL)alertViewShouldEnableFirstOtherButton:(UIAlertView *)alertView
+{
+    NSString *inputText = [[alertView textFieldAtIndex:0] text];
+    if( [inputText length] >= 1 )
+    {
+        return YES;
+    }
+    else
+    {
+        return NO;
+    }
+}
+
+//OKボタンが押されたときのメソッド
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    // OKボタンの処理（Cancelボタンの処理は標準でAlertを終了する処理が設定されている）
+    NSString *inputText = [[alertView textFieldAtIndex:0] text];
+    if (buttonIndex == 1) {
+        for (Tag* tag in tagCache) {
+            // 同名タグが存在した場合警告を表示
+            if ([tag.name isEqualToString:inputText]) {
+                UIAlertView *alert = [[UIAlertView alloc]
+                                      initWithTitle:@"警告"
+                                      message:@"同名のタグが存在します"
+                                      delegate:nil
+                                      cancelButtonTitle:nil
+                                      otherButtonTitles:@"OK", nil
+                                      ];
+                [alert show];
+                
+                // TODO: タグ追加処理の再実行の方が親切？
+                
+                return;
+            }
+        }
+        
+        // タグを追加
+        Tag *newTag = [[Tag alloc] init];
+        newTag.name = inputText;
+        if ([tagDao add:newTag]) {
+            newTag.tagId = [tagDao maxRefCount];
+            [tagCache insertObject:newTag atIndex:0];
+            
+            // セルを二番目に追加
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
+            [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            
+            // 追加したセルを選択 & 表示(トップにスクロールさせる)
+            [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionTop];
+            
+            // 選択ハイライトをフェードアウトさせる
+            [self.tableView deselectRowAtIndexPath:self.tableView.indexPathForSelectedRow animated:YES];
+        }
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

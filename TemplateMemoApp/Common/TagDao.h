@@ -25,6 +25,9 @@
 // タグに関連付けされているメモの件数を取得
 - (int)countOfMemo:(Tag*)tag;
 
+// 自動インクリメントキーの現在の最大値を取得
+- (int)maxRefCount;
+
 // タグを追加
 - (BOOL)add:(Tag*)tag;
 
