@@ -1,22 +1,20 @@
 //
-//  TMEditViewController.h
+//  TMEditMemoViewController.h
 //  TemplateMemoApp
 //
-//  Created by gurimmer on 2013/07/04.
+//  Created by gurimmer on 2013/07/26.
 //  Copyright (c) 2013年 gurimmer. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
-#import "Common/MemoDao.h"
 
-@class TMTagTableViewController;
-@class TMMemoTableViewController;
+@class Memo;
+@class TemplateMemo;
 
-@interface TMEditViewController : UITableViewController
-    <UISplitViewControllerDelegate, UITextFieldDelegate, UITextViewDelegate>
+@interface TMEditMemoViewController : UIViewController
+    <UISplitViewControllerDelegate, UITextViewDelegate>
 
 // IBOutlet
-@property (weak, nonatomic) IBOutlet UITextField *tagTextField;
 @property (weak, nonatomic) IBOutlet UITextView *bodyTextView;
 
 // Custom UI
@@ -25,12 +23,11 @@
 
 // member
 @property (strong, nonatomic) Memo* detailItem;
+@property (strong, nonatomic) TemplateMemo* templateMemo;
 @property (assign, nonatomic) bool editMode;
 
-// Action
-- (IBAction)onDidEndOnExitForTagTextField:(id)sender;
-
 // Public Selector
+- (Memo *)currentMemo;
+- (TemplateMemo *)currentTemplateMemo;
 - (void)setActiveSideView:(UITableViewController*)tableViewController;
-
 @end

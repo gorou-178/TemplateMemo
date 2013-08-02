@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "TMTagTableViewController.h"
 #import "TMMemoTableViewController.h"
-#import "TMEditViewController.h"
+#import "TMEditMemoViewController.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -17,6 +17,6 @@
 
 @property (strong, nonatomic) TMTagTableViewController *tagTableViewController;
 @property (strong, nonatomic) TMMemoTableViewController *memoTableViewController;
-@property (strong, nonatomic) TMEditViewController *editViewController;
+@property (strong, nonatomic) TMEditMemoViewController *editMemoViewController;
 
 @end

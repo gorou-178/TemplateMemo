@@ -8,7 +8,6 @@
 
 #import "AppDelegate.h"
 #import "TMMemoTableViewController.h"
-#import "TMEditViewController.h"
 #import "TMAppContext.h"
 #import "MemoDao.h"
 #import "TagDao.h"
@@ -87,7 +86,7 @@
     // アクティブなViewとしてeditViewに通知
     NSLog(@"memo: viewDidAppear");
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-    [appDelegate.editViewController setActiveSideView:self];
+    [appDelegate.editMemoViewController setActiveSideView:self];
 }
 
 - (void)didReceiveMemoryWarning
@@ -97,7 +96,7 @@
 }
 
 // メモの新規作成
-- (void)insertNewObject:(id)sender
+- (IBAction)insertNewObject:(id)sender
 {
     // メモを仮登録
     // TODO: 何も入力せずに別のメモを選択 または 画面を戻った場合に、新規追加をなかったことにしたい
@@ -277,7 +276,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-    [appDelegate.editViewController setDetailItem:_memoCache[indexPath.row]];
+    [appDelegate.editMemoViewController setDetailItem:_memoCache[indexPath.row]];
 }
 
 // iPhoneの場合、セル選択時のセグエイベントで処理

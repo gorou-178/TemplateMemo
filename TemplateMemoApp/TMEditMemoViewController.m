@@ -1,16 +1,13 @@
 //
-//  TMEditViewController.m
+//  TMEditMemoViewController.m
 //  TemplateMemoApp
 //
-//  Created by gurimmer on 2013/07/04.
+//  Created by gurimmer on 2013/07/26.
 //  Copyright (c) 2013年 gurimmer. All rights reserved.
 //
 
 #import "AppDelegate.h"
-#import "TMTagTableViewController.h"
-#import "TMEditViewController.h"
-#import "TMMemoTableViewController.h"
-#import "TMAppContext.h"
+#import "TMEditMemoViewController.h"
 #import "MemoDao.h"
 #import "TagDao.h"
 #import "Font.h"
@@ -19,7 +16,10 @@
 #import "FontSizeSettingInfo.h"
 #import "UserDefaultsWrapper.h"
 
-@interface TMEditViewController ()
+#import "TMTagSettingTableViewController.h"
+#import "TMMemoInfoTableViewController.h"
+
+@interface TMEditMemoViewController ()
 {
     id<MemoDao> memoDao;
     id<TagDao> tagDao;
@@ -30,13 +30,13 @@
 - (void)configureView;
 @end
 
-@implementation TMEditViewController
+@implementation TMEditMemoViewController
 
-- (id)initWithStyle:(UITableViewStyle)style
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-    self = [super initWithStyle:style];
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        
+        // Custom initialization
     }
     return self;
 }
@@ -52,10 +52,6 @@
     // navigationItem UI作成
     [self createEditDoneButton];
     
-    // textField設定
-    self.tagTextField.delegate = self;
-    self.tagTextField.returnKeyType = UIReturnKeyDone;
-    
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         [self createAddMemoButton];
         self.navigationItem.rightBarButtonItem = self.addMemoButton;
@@ -65,12 +61,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
+	// Do any additional setup after loading the view.
     
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-    appDelegate.editViewController = self;
+    appDelegate.editMemoViewController = self;
 }
 
 - (void)didReceiveMemoryWarning
@@ -90,6 +84,16 @@
             self.navigationItem.leftBarButtonItem.title = appDelegate.memoTableViewController.navigationItem.title;
         }
     }
+}
+
+- (Memo *)currentMemo
+{
+    return _detailItem;
+}
+
+- (TemplateMemo *)currentTemplateMemo
+{
+    return _templateMemo;
 }
 
 #pragma mark - Custom UI
@@ -113,6 +117,13 @@
 - (void)setDetailItem:(Memo *)newDetailItem
 {
     if (_detailItem != newDetailItem) {
+        
+//        // メモ選択で表示する
+//        if ([self.bodyTextView isHidden]) {
+//            [self.bodyTextView setHidden:NO];
+//            [self.tagTextField setHidden:NO];
+//        }
+        
         _detailItem = newDetailItem;
         
         // Update the view.
@@ -132,15 +143,15 @@
         Font *font = [UserDefaultsWrapper loadToObject:fontSettingInfo.key];
         self.bodyTextView.font = font.uiFont;
         
-        NSMutableString *tagText = [[NSMutableString alloc] init];
-        NSArray *tags = [tagDao tagForMemo:_detailItem];
-        for (int i = 0; i < tags.count; i++) {
-            if (i != 0) {
-                [tagText appendString:@" "];
-            }
-            [tagText appendString:((Tag*)tags[i]).name];
-        }
-        self.tagTextField.text = tagText;
+//        NSMutableString *tagText = [[NSMutableString alloc] init];
+//        NSArray *tags = [tagDao tagForMemo:_detailItem];
+//        for (int i = 0; i < tags.count; i++) {
+//            if (i != 0) {
+//                [tagText appendString:@" "];
+//            }
+//            [tagText appendString:((Tag*)tags[i]).name];
+//        }
+//        self.tagTextField.text = tagText;
         self.bodyTextView.text = _detailItem.body;
         
         // 改行までをタイトルとして設定
@@ -213,13 +224,15 @@
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         [self createAddMemoButton];
         self.navigationItem.rightBarButtonItem = self.addMemoButton;
+    } else {
+        self.navigationItem.rightBarButtonItem = nil;
     }
     
     // メモを保存
     [self saveMemo];
     
     // タグを保存
-    [self saveTag];
+//    [self saveTag];
 }
 
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView
@@ -259,18 +272,18 @@
     // 意図的にキーボードを閉じる場合
     NSLog(@"onPushDone");
     // 現在アクティブなtextInputによって閉じるキーボードを変更
-    if (activeTextInput == self.tagTextField) {
-        [self.tagTextField resignFirstResponder];
-    } else {
+//    if (activeTextInput == self.tagTextField) {
+//        [self.tagTextField resignFirstResponder];
+//    } else {
         [self.bodyTextView resignFirstResponder];
-    }
+//    }
     activeTextInput = nil;
     
     // メモを保存
     [self saveMemo];
     
     // タグを保存
-    [self saveTag];
+//    [self saveTag];
 }
 
 // メモを保存
@@ -289,102 +302,102 @@
 }
 
 // tagTextFieldの内容でTag/TagLinkを保存
-- (void)saveTag
-{
-    if (self.tagTextField.text.length > 0) {
-        
-        /*
-         1 入力されたタグ名半角空白で区切る
-         2 現在登録されているタグ一覧を取得
-         3 タグ名が一致するタグを全て取り出す
-         4 タグ名が一致しないタグは新規登録
-         5 保存対象のメモのtagLinkから全てのtagを取得
-         6 5と3でtagが一致しなかったtagをメモのtagLinkを削除
-         7 4のtagLinkを新規登録
-         */
-        
-        // 入力タグから重複を消す
-        NSArray *tagNames = [self.tagTextField.text componentsSeparatedByString:@" "];
-        NSSet *uniqOriginalTagNameSet = [[NSSet alloc] initWithArray:tagNames];
-        NSString *uniqTagNameText = [[uniqOriginalTagNameSet allObjects] componentsJoinedByString:@" "];
-        self.tagTextField.text = uniqTagNameText;
-        
-        // 現在登録されているtagを追加
-        NSMutableArray *tags = [tagDao.tags mutableCopy];
-        NSMutableSet *tagNameSet = [[NSMutableSet alloc] init];
-        for (Tag *tag in tags) {
-            [tagNameSet addObject:tag.name];
-        }
-        
-        // 新しく設定されたtagを調べる
-        for (NSString *tagName in tagNames) {
-            // 現在登録されているタグにはないタグ名の場合、新規追加する
-            if (![tagNameSet containsObject:tagName]) {
-                Tag *tag = [Tag new];
-                tag.name = tagName;
-                tag.deleteFlag = 0;
-                [tagDao add:tag];
-            }
-        }
-        
-        // 再度タグを全て取得(tagIdの取得がしたいため)
-        tags = [tagDao.tags mutableCopy];
-        
-        // 元々のtagLinkのタグが入力タグに存在しない場合、リンクを削除する
-        NSMutableArray *copyTagNames = [tagNames mutableCopy];
-        NSMutableArray *memoTags = [[tagDao tagForMemo:_detailItem] mutableCopy];
-        for (Tag *tag in memoTags) {
-            if (![tagNames containsObject:tag.name]) {
-                [tagDao removeTagLink:_detailItem forLinkTag:tag];
-            } else {
-                [copyTagNames removeObject:tag.name];
-            }
-        }
-        
-        // 新しく追加したTagのTagLinkを追加
-        for (NSString *tagName in copyTagNames) {
-            for (Tag *tag in tags) {
-                if ([tag.name isEqualToString:tagName]) {
-                    [tagDao addTagLink:_detailItem forLinkTag:tag];
-                }
-            }
-        }
-        
-        // タグTableViewを更新
-        AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-        [appDelegate.tagTableViewController updateVisibleCells];
-    }
-}
+//- (void)saveTag
+//{
+//    if (self.tagTextField.text.length > 0) {
+//        
+//        /*
+//         1 入力されたタグ名半角空白で区切る
+//         2 現在登録されているタグ一覧を取得
+//         3 タグ名が一致するタグを全て取り出す
+//         4 タグ名が一致しないタグは新規登録
+//         5 保存対象のメモのtagLinkから全てのtagを取得
+//         6 5と3でtagが一致しなかったtagをメモのtagLinkを削除
+//         7 4のtagLinkを新規登録
+//         */
+//        
+//        // 入力タグから重複を消す
+//        NSArray *tagNames = [self.tagTextField.text componentsSeparatedByString:@" "];
+//        NSSet *uniqOriginalTagNameSet = [[NSSet alloc] initWithArray:tagNames];
+//        NSString *uniqTagNameText = [[uniqOriginalTagNameSet allObjects] componentsJoinedByString:@" "];
+//        self.tagTextField.text = uniqTagNameText;
+//        
+//        // 現在登録されているtagを追加
+//        NSMutableArray *tags = [tagDao.tags mutableCopy];
+//        NSMutableSet *tagNameSet = [[NSMutableSet alloc] init];
+//        for (Tag *tag in tags) {
+//            [tagNameSet addObject:tag.name];
+//        }
+//        
+//        // 新しく設定されたtagを調べる
+//        for (NSString *tagName in tagNames) {
+//            // 現在登録されているタグにはないタグ名の場合、新規追加する
+//            if (![tagNameSet containsObject:tagName]) {
+//                Tag *tag = [Tag new];
+//                tag.name = tagName;
+//                tag.deleteFlag = 0;
+//                [tagDao add:tag];
+//            }
+//        }
+//        
+//        // 再度タグを全て取得(tagIdの取得がしたいため)
+//        tags = [tagDao.tags mutableCopy];
+//        
+//        // 元々のtagLinkのタグが入力タグに存在しない場合、リンクを削除する
+//        NSMutableArray *copyTagNames = [tagNames mutableCopy];
+//        NSMutableArray *memoTags = [[tagDao tagForMemo:_detailItem] mutableCopy];
+//        for (Tag *tag in memoTags) {
+//            if (![tagNames containsObject:tag.name]) {
+//                [tagDao removeTagLink:_detailItem forLinkTag:tag];
+//            } else {
+//                [copyTagNames removeObject:tag.name];
+//            }
+//        }
+//        
+//        // 新しく追加したTagのTagLinkを追加
+//        for (NSString *tagName in copyTagNames) {
+//            for (Tag *tag in tags) {
+//                if ([tag.name isEqualToString:tagName]) {
+//                    [tagDao addTagLink:_detailItem forLinkTag:tag];
+//                }
+//            }
+//        }
+//        
+//        // タグTableViewを更新
+//        AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+//        [appDelegate.tagTableViewController updateVisibleCells];
+//    }
+//}
 
-#pragma mark - tagTextField delegate
-
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
-{
-    NSLog(@"tagTextField shouldBeginEditing");
-    activeTextInput = self.tagTextField;
-    return YES;
-}
-
-// tagTextFieldでreturnキータップでキーボードを閉じる
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    NSLog(@"tagTextField shouldReturn");
-    [textField resignFirstResponder];
-    activeTextInput = nil;
-    return YES;
-}
-
-- (void)textFieldDidEndEditing:(UITextField *)textField
-{
-    NSLog(@"tagTextField DidEndEditing");
-    activeTextInput = nil;
-}
+//#pragma mark - tagTextField delegate
+//
+//- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+//{
+//    NSLog(@"tagTextField shouldBeginEditing");
+//    activeTextInput = self.tagTextField;
+//    return YES;
+//}
+//
+//// tagTextFieldでreturnキータップでキーボードを閉じる
+//- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+//    NSLog(@"tagTextField shouldReturn");
+//    [textField resignFirstResponder];
+//    activeTextInput = nil;
+//    return YES;
+//}
+//
+//- (void)textFieldDidEndEditing:(UITextField *)textField
+//{
+//    NSLog(@"tagTextField DidEndEditing");
+//    activeTextInput = nil;
+//}
 
 #pragma mark - tagTextField Actions
 
-- (IBAction)onDidEndOnExitForTagTextField:(id)sender {
-    NSLog(@"tagTextField EndTagEdit");
-    activeTextInput = nil;
-}
+//- (IBAction)onDidEndOnExitForTagTextField:(id)sender {
+//    NSLog(@"tagTextField EndTagEdit");
+//    activeTextInput = nil;
+//}
 
 #pragma mark - Split view
 
@@ -408,90 +421,15 @@
     self.masterPopoverController = nil;
 }
 
-#pragma mark - Table view data source
-
-/*
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-#warning Potentially incomplete method implementation.
-    // Return the number of sections.
-    return 0;
+    if ([[segue identifier] isEqualToString:@"showTagSetting"]) {
+        TMTagSettingTableViewController *destinationView = [segue destinationViewController];
+        [destinationView setActiveMemo:self];
+    } else if ([[segue identifier] isEqualToString:@"showMemoInfo"]){
+        TMMemoInfoTableViewController *destinationView = [segue destinationViewController];
+        [destinationView setActiveMemo:self];
+    }
 }
-*/
-
-/*
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-#warning Incomplete method implementation.
-    // Return the number of rows in the section.
-    return 0;
-}
-*/
-
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    
-    // Configure the cell...
-    
-    return cell;
-}
-*/
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-#pragma mark - Table view delegate
-
-/*
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Navigation logic may go here. Create and push another view controller.
- 
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
- 
-}
-*/
 
 @end

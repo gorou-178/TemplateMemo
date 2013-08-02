@@ -12,9 +12,11 @@
 @interface TMMemoTableViewController : UITableViewController
 
 @property (strong, nonatomic) NSMutableArray *memoCache;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *addMemoButton;
 
 // メモの追加
-- (void)insertNewObject:(id)sender;
+- (IBAction)insertNewObject:(id)sender;
+//- (void)insertNewObject:(id)sender;
 
 // タグのメモ一覧を表示
 - (void)showTagMemo:(Tag *)tag;
