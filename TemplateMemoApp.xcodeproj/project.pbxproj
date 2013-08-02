@@ -87,8 +87,6 @@
 		E2B02727175CDD3500FBA056 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = E2B0271E175CDD3500FBA056 /* FMResultSet.m */; };
 		E2B02728175CDD3500FBA056 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = E2B0271E175CDD3500FBA056 /* FMResultSet.m */; };
 		E2B0272A175CDD7200FBA056 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E2B02729175CDD7200FBA056 /* libsqlite3.0.dylib */; };
-		E2E2756F17A65B5600E89CA1 /* GCTagList.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E2756E17A65B5600E89CA1 /* GCTagList.m */; };
-		E2E2757017A65B5600E89CA1 /* GCTagList.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E2756E17A65B5600E89CA1 /* GCTagList.m */; };
 		E2EE364D175B4D580055D723 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2EE364C175B4D580055D723 /* UIKit.framework */; };
 		E2EE364F175B4D580055D723 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2EE364E175B4D580055D723 /* Foundation.framework */; };
 		E2EE3651175B4D580055D723 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2EE3650175B4D580055D723 /* CoreGraphics.framework */; };
@@ -200,8 +198,6 @@
 		E2B0271D175CDD3500FBA056 /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
 		E2B0271E175CDD3500FBA056 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
 		E2B02729175CDD7200FBA056 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
-		E2E2756D17A65B5600E89CA1 /* GCTagList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCTagList.h; sourceTree = "<group>"; };
-		E2E2756E17A65B5600E89CA1 /* GCTagList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCTagList.m; sourceTree = "<group>"; };
 		E2EE3649175B4D580055D723 /* TemplateMemoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TemplateMemoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2EE364C175B4D580055D723 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		E2EE364E175B4D580055D723 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -462,8 +458,6 @@
 		E2EE3692175B66630055D723 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				E2E2756D17A65B5600E89CA1 /* GCTagList.h */,
-				E2E2756E17A65B5600E89CA1 /* GCTagList.m */,
 				E23C7B8B175E3E3900F6848F /* Dao */,
 				E23C7B87175E3A4100F6848F /* Model */,
 				E2B02714175CDD0E00FBA056 /* FMDB */,
@@ -679,7 +673,6 @@
 				E20DC10617A1286C00139CC1 /* TMTemplateMemoTableViewController.m in Sources */,
 				E20DC10A17A1611800139CC1 /* TemplateMemoSettingInfo.m in Sources */,
 				E24CFCCC17A27FD500DD5562 /* TMEditMemoViewController.m in Sources */,
-				E2E2756F17A65B5600E89CA1 /* GCTagList.m in Sources */,
 				E23FDA8017A8DA7600370B8F /* TMTagSettingTableViewController.m in Sources */,
 				E2F2F7F517AA6A8E004AD742 /* TMMemoInfoTableViewController.m in Sources */,
 			);
@@ -724,7 +717,6 @@
 				E20DC10717A1286C00139CC1 /* TMTemplateMemoTableViewController.m in Sources */,
 				E20DC10B17A1611800139CC1 /* TemplateMemoSettingInfo.m in Sources */,
 				E24CFCCD17A27FD500DD5562 /* TMEditMemoViewController.m in Sources */,
-				E2E2757017A65B5600E89CA1 /* GCTagList.m in Sources */,
 				E23FDA8117A8DA7600370B8F /* TMTagSettingTableViewController.m in Sources */,
 				E2F2F7F617AA6A8E004AD742 /* TMMemoInfoTableViewController.m in Sources */,
 			);
