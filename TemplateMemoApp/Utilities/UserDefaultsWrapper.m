@@ -14,6 +14,7 @@
 {
     NSData *binaryData = [NSKeyedArchiver archivedDataWithRootObject:value];
     [[NSUserDefaults standardUserDefaults] setValue:binaryData forKey:key];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 + (id)loadToObject:(NSString *)key
