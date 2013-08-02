@@ -17,8 +17,10 @@
 		E20DC10B17A1611800139CC1 /* TemplateMemoSettingInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = E20DC10917A1611700139CC1 /* TemplateMemoSettingInfo.m */; };
 		E23C7B8A175E3A7D00F6848F /* Memo.m in Sources */ = {isa = PBXBuildFile; fileRef = E23C7B89175E3A7D00F6848F /* Memo.m */; };
 		E23C7B8E175E3E5400F6848F /* MemoDao.m in Sources */ = {isa = PBXBuildFile; fileRef = E23C7B8D175E3E5400F6848F /* MemoDao.m */; };
-		E24497A517854B2600B84A9A /* TMEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E24497A417854B2600B84A9A /* TMEditViewController.m */; };
-		E24497A617854B2600B84A9A /* TMEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E24497A417854B2600B84A9A /* TMEditViewController.m */; };
+		E23FDA8017A8DA7600370B8F /* TMTagSettingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E23FDA7F17A8DA7600370B8F /* TMTagSettingTableViewController.m */; };
+		E23FDA8117A8DA7600370B8F /* TMTagSettingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E23FDA7F17A8DA7600370B8F /* TMTagSettingTableViewController.m */; };
+		E24CFCCC17A27FD500DD5562 /* TMEditMemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E24CFCCB17A27FD500DD5562 /* TMEditMemoViewController.m */; };
+		E24CFCCD17A27FD500DD5562 /* TMEditMemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E24CFCCB17A27FD500DD5562 /* TMEditMemoViewController.m */; };
 		E25A51AB178D95570022223C /* Tag.m in Sources */ = {isa = PBXBuildFile; fileRef = E25A51AA178D95570022223C /* Tag.m */; };
 		E25A51AC178D95570022223C /* Tag.m in Sources */ = {isa = PBXBuildFile; fileRef = E25A51AA178D95570022223C /* Tag.m */; };
 		E25A51AF178D98550022223C /* TagLink.m in Sources */ = {isa = PBXBuildFile; fileRef = E25A51AE178D98540022223C /* TagLink.m */; };
@@ -85,6 +87,8 @@
 		E2B02727175CDD3500FBA056 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = E2B0271E175CDD3500FBA056 /* FMResultSet.m */; };
 		E2B02728175CDD3500FBA056 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = E2B0271E175CDD3500FBA056 /* FMResultSet.m */; };
 		E2B0272A175CDD7200FBA056 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E2B02729175CDD7200FBA056 /* libsqlite3.0.dylib */; };
+		E2E2756F17A65B5600E89CA1 /* GCTagList.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E2756E17A65B5600E89CA1 /* GCTagList.m */; };
+		E2E2757017A65B5600E89CA1 /* GCTagList.m in Sources */ = {isa = PBXBuildFile; fileRef = E2E2756E17A65B5600E89CA1 /* GCTagList.m */; };
 		E2EE364D175B4D580055D723 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2EE364C175B4D580055D723 /* UIKit.framework */; };
 		E2EE364F175B4D580055D723 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2EE364E175B4D580055D723 /* Foundation.framework */; };
 		E2EE3651175B4D580055D723 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2EE3650175B4D580055D723 /* CoreGraphics.framework */; };
@@ -102,6 +106,8 @@
 		E2EE3684175B4D590055D723 /* TemplateMemoAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2EE3683175B4D590055D723 /* TemplateMemoAppTests.m */; };
 		E2EE36B8175B94390055D723 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E2EE36B6175B94390055D723 /* InfoPlist.strings */; };
 		E2EE36B9175B94390055D723 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E2EE36B6175B94390055D723 /* InfoPlist.strings */; };
+		E2F2F7F517AA6A8E004AD742 /* TMMemoInfoTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2F2F7F417AA6A8E004AD742 /* TMMemoInfoTableViewController.m */; };
+		E2F2F7F617AA6A8E004AD742 /* TMMemoInfoTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2F2F7F417AA6A8E004AD742 /* TMMemoInfoTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -127,8 +133,10 @@
 		E23C7B89175E3A7D00F6848F /* Memo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Memo.m; sourceTree = "<group>"; };
 		E23C7B8C175E3E5400F6848F /* MemoDao.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoDao.h; sourceTree = "<group>"; };
 		E23C7B8D175E3E5400F6848F /* MemoDao.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MemoDao.m; sourceTree = "<group>"; };
-		E24497A317854B2600B84A9A /* TMEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMEditViewController.h; sourceTree = "<group>"; };
-		E24497A417854B2600B84A9A /* TMEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMEditViewController.m; sourceTree = "<group>"; };
+		E23FDA7E17A8DA7600370B8F /* TMTagSettingTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMTagSettingTableViewController.h; sourceTree = "<group>"; };
+		E23FDA7F17A8DA7600370B8F /* TMTagSettingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMTagSettingTableViewController.m; sourceTree = "<group>"; };
+		E24CFCCA17A27FD500DD5562 /* TMEditMemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMEditMemoViewController.h; sourceTree = "<group>"; };
+		E24CFCCB17A27FD500DD5562 /* TMEditMemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMEditMemoViewController.m; sourceTree = "<group>"; };
 		E25A51A9178D95570022223C /* Tag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tag.h; sourceTree = "<group>"; };
 		E25A51AA178D95570022223C /* Tag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tag.m; sourceTree = "<group>"; };
 		E25A51AD178D98540022223C /* TagLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagLink.h; sourceTree = "<group>"; };
@@ -192,6 +200,8 @@
 		E2B0271D175CDD3500FBA056 /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
 		E2B0271E175CDD3500FBA056 /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
 		E2B02729175CDD7200FBA056 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
+		E2E2756D17A65B5600E89CA1 /* GCTagList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCTagList.h; sourceTree = "<group>"; };
+		E2E2756E17A65B5600E89CA1 /* GCTagList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCTagList.m; sourceTree = "<group>"; };
 		E2EE3649175B4D580055D723 /* TemplateMemoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TemplateMemoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2EE364C175B4D580055D723 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		E2EE364E175B4D580055D723 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -219,6 +229,8 @@
 		E2EE36BD175B98AF0055D723 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/MainStoryboard_iPhone.strings; sourceTree = "<group>"; };
 		E2EE36BF175B98C90055D723 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/MainStoryboard_iPad.strings; sourceTree = "<group>"; };
 		E2EE36C1175B98CD0055D723 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/MainStoryboard_iPad.strings; sourceTree = "<group>"; };
+		E2F2F7F317AA6A8E004AD742 /* TMMemoInfoTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMMemoInfoTableViewController.h; sourceTree = "<group>"; };
+		E2F2F7F417AA6A8E004AD742 /* TMMemoInfoTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMMemoInfoTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -347,12 +359,16 @@
 				E2734E3517869C6B008272CB /* TMTagTableViewController.m */,
 				E2734E381786A250008272CB /* TMMemoTableViewController.h */,
 				E2734E391786A250008272CB /* TMMemoTableViewController.m */,
-				E24497A317854B2600B84A9A /* TMEditViewController.h */,
-				E24497A417854B2600B84A9A /* TMEditViewController.m */,
 				E2832EC2179C1974009E9660 /* TMSettingTableViewController.h */,
 				E2832EC3179C1976009E9660 /* TMSettingTableViewController.m */,
 				E20DC10417A1286A00139CC1 /* TMTemplateMemoTableViewController.h */,
 				E20DC10517A1286B00139CC1 /* TMTemplateMemoTableViewController.m */,
+				E24CFCCA17A27FD500DD5562 /* TMEditMemoViewController.h */,
+				E24CFCCB17A27FD500DD5562 /* TMEditMemoViewController.m */,
+				E23FDA7E17A8DA7600370B8F /* TMTagSettingTableViewController.h */,
+				E23FDA7F17A8DA7600370B8F /* TMTagSettingTableViewController.m */,
+				E2F2F7F317AA6A8E004AD742 /* TMMemoInfoTableViewController.h */,
+				E2F2F7F417AA6A8E004AD742 /* TMMemoInfoTableViewController.m */,
 				E2832EBE179C13D6009E9660 /* FontDataSource.h */,
 				E2832EBF179C13D8009E9660 /* FontDataSource.m */,
 				E2832E85179BBCC3009E9660 /* FontSizeDataSource.h */,
@@ -446,6 +462,8 @@
 		E2EE3692175B66630055D723 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				E2E2756D17A65B5600E89CA1 /* GCTagList.h */,
+				E2E2756E17A65B5600E89CA1 /* GCTagList.m */,
 				E23C7B8B175E3E3900F6848F /* Dao */,
 				E23C7B87175E3A4100F6848F /* Model */,
 				E2B02714175CDD0E00FBA056 /* FMDB */,
@@ -632,7 +650,6 @@
 				E2B02727175CDD3500FBA056 /* FMResultSet.m in Sources */,
 				E23C7B8A175E3A7D00F6848F /* Memo.m in Sources */,
 				E23C7B8E175E3E5400F6848F /* MemoDao.m in Sources */,
-				E24497A517854B2600B84A9A /* TMEditViewController.m in Sources */,
 				E2734E3617869C6B008272CB /* TMTagTableViewController.m in Sources */,
 				E2734E3A1786A250008272CB /* TMMemoTableViewController.m in Sources */,
 				E2734E3F1786A7E5008272CB /* TMAppContext.m in Sources */,
@@ -661,6 +678,10 @@
 				E20DC10217A1207900139CC1 /* TemplateDao.m in Sources */,
 				E20DC10617A1286C00139CC1 /* TMTemplateMemoTableViewController.m in Sources */,
 				E20DC10A17A1611800139CC1 /* TemplateMemoSettingInfo.m in Sources */,
+				E24CFCCC17A27FD500DD5562 /* TMEditMemoViewController.m in Sources */,
+				E2E2756F17A65B5600E89CA1 /* GCTagList.m in Sources */,
+				E23FDA8017A8DA7600370B8F /* TMTagSettingTableViewController.m in Sources */,
+				E2F2F7F517AA6A8E004AD742 /* TMMemoInfoTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -674,7 +695,6 @@
 				E2B02724175CDD3500FBA056 /* FMDatabasePool.m in Sources */,
 				E2B02726175CDD3500FBA056 /* FMDatabaseQueue.m in Sources */,
 				E2B02728175CDD3500FBA056 /* FMResultSet.m in Sources */,
-				E24497A617854B2600B84A9A /* TMEditViewController.m in Sources */,
 				E2734E3717869C6B008272CB /* TMTagTableViewController.m in Sources */,
 				E2734E3B1786A250008272CB /* TMMemoTableViewController.m in Sources */,
 				E2734E401786A7E5008272CB /* TMAppContext.m in Sources */,
@@ -703,6 +723,10 @@
 				E20DC10317A1207900139CC1 /* TemplateDao.m in Sources */,
 				E20DC10717A1286C00139CC1 /* TMTemplateMemoTableViewController.m in Sources */,
 				E20DC10B17A1611800139CC1 /* TemplateMemoSettingInfo.m in Sources */,
+				E24CFCCD17A27FD500DD5562 /* TMEditMemoViewController.m in Sources */,
+				E2E2757017A65B5600E89CA1 /* GCTagList.m in Sources */,
+				E23FDA8117A8DA7600370B8F /* TMTagSettingTableViewController.m in Sources */,
+				E2F2F7F617AA6A8E004AD742 /* TMMemoInfoTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -803,7 +827,7 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Satoshi Anai (V4PWK6ZVT5)";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -811,7 +835,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "38D8C4F5-CD78-4EB6-BA8C-3CF8ED330D2D";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
