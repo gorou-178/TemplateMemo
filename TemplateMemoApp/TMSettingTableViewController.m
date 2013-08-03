@@ -16,6 +16,7 @@
 #import "FontSizeSettingInfo.h"
 #import "SettingDetailTableViewController.h"
 #import "UserDefaultsWrapper.h"
+#import "TemplateMemo.h"
 #import "TemplateMemoDataSource.h"
 #import "TemplateMemoSettingInfo.h"
 
@@ -82,6 +83,12 @@
             default:
                 break;
         }
+    } else if (indexPath.section == 1) {
+        if (indexPath.row == 0) {
+            settingInfo = [[TemplateMemoSettingInfo alloc] init];
+            TemplateMemo *templateMemo = [UserDefaultsWrapper loadToObject:settingInfo.key];
+            cell.detailTextLabel.text = templateMemo.labelText;
+        }
     }
 }
 
@@ -137,13 +144,16 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
+    if (indexPath.section == 2) {
+        UIAlertView *alert = [[UIAlertView alloc]
+                              initWithTitle:@"サービス認証"
+                              message:@"申し訳ございません、ただ今外部サービス連携は調整中です。次のバージョンアップまでお待ちください。"
+                              delegate:nil
+                              cancelButtonTitle:nil
+                              otherButtonTitles:@"OK", nil
+                              ];
+        [alert show];
+    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

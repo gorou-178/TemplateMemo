@@ -10,6 +10,7 @@
 #import "TMEditMemoViewController.h"
 #import "Tag.h"
 #import "Memo.h"
+#import "TemplateMemo.h"
 #import "TagDao.h"
 #import "MemoDao.h"
 #import "DateUtil.h"
@@ -17,6 +18,7 @@
 @interface TMMemoInfoTableViewController ()
 {
     Memo *currentMemo;
+    TemplateMemo *currentTemplateMemo;
     id<TagDao> tagDao;
 }
 @end
@@ -56,49 +58,88 @@
 
 - (void)setActiveMemo:(TMEditMemoViewController *)editViewController
 {
-    // TODO: テンプレート編集時の対応
-    currentMemo = [editViewController currentMemo];
+    if (editViewController.editTarget == TMEditTargetMemo) {
+        currentMemo = [editViewController currentMemo];
+        currentTemplateMemo = nil;
+    } else if (editViewController.editTarget == TMEditTargetTemplate) {
+        currentMemo = nil;
+        currentTemplateMemo = [editViewController currentTemplateMemo];
+    }
 }
 
 - (void)updateCell:(UITableViewCell *)cell forTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
+        
+        NSString *body;
+        if (currentMemo) {
+            body = [currentMemo.body mutableCopy];
+        } else if (currentTemplateMemo) {
+            body = [currentTemplateMemo.name mutableCopy];
+        }
+        
         if (indexPath.row == 0) {
             
             // 改行までをタイトルとして設定
             NSMutableArray *lines = [NSMutableArray array];
-            [currentMemo.body enumerateLinesUsingBlock:^(NSString *line, BOOL *stop) {
+            [body enumerateLinesUsingBlock:^(NSString *line, BOOL *stop) {
                 [lines addObject:line];
                 *stop = YES;
             }];
+            
+            if (lines.count <= 0) {
+                cell.detailTextLabel.text = @"(no title)";
+                return;
+            }
             
             // タイトルは本文の一行目
             cell.detailTextLabel.text = [lines objectAtIndex:0];
             
         } else if (indexPath.row == 1) {
-            NSMutableString *tagText = [[NSMutableString alloc] init];
-            NSArray *tags = [tagDao tagForMemo:currentMemo];
-            for (int i = 0; i < tags.count; i++) {
-                if (i != 0) {
-                    [tagText appendString:@" "];
+            if (currentMemo) {
+                NSMutableString *tagText = [[NSMutableString alloc] init];
+                NSArray *tags = [tagDao tagForMemo:currentMemo];
+                for (int i = 0; i < tags.count; i++) {
+                    if (i != 0) {
+                        [tagText appendString:@" "];
+                    }
+                    [tagText appendString:((Tag*)tags[i]).name];
                 }
-                [tagText appendString:((Tag*)tags[i]).name];
+                
+                if (tagText.length > 0) {
+                    cell.detailTextLabel.text = tagText;
+                } else {
+                    cell.detailTextLabel.text = @"なし";
+                }
+                
+            } else if (currentTemplateMemo) {
+                cell.detailTextLabel.text = @"なし";
             }
-            cell.detailTextLabel.text = tagText;
+        } else if (indexPath.row == 2) {
+            cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%d", [body length]];
         }
     } else {
+        
+        NSDate *createDate;
+        NSDate *modifiedDate;
+        if (currentMemo) {
+            createDate = currentMemo.createDate;
+            modifiedDate = currentMemo.modifiedDate;
+        } else if (currentTemplateMemo) {
+            createDate = currentTemplateMemo.createDate;
+            modifiedDate = currentTemplateMemo.modifiedDate;
+        }
+        
         if (indexPath.row == 0) {
-            cell.detailTextLabel.text = [DateUtil dateToString:currentMemo.createDate atDateFormat:@"yyyy/MM/dd hh:mm:ss"];
+            cell.detailTextLabel.text = [DateUtil dateToString:createDate atDateFormat:@"yyyy/MM/dd hh:mm:ss"];
         } else if (indexPath.row == 1) {
-            cell.detailTextLabel.text = [DateUtil dateToString:currentMemo.modifiedDate atDateFormat:@"yyyy/MM/dd hh:mm:ss"];
+            cell.detailTextLabel.text = [DateUtil dateToString:modifiedDate atDateFormat:@"yyyy/MM/dd hh:mm:ss"];
         }
     }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    static NSString *CellIdentifier = @"Cell";
-//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
     [self updateCell:cell forTableView:tableView atIndexPath:indexPath];
     return cell;

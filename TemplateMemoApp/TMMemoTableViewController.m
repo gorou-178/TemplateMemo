@@ -12,6 +12,11 @@
 #import "MemoDao.h"
 #import "TagDao.h"
 
+#import "TemplateMemo.h"
+#import "TemplateMemoSettingInfo.h"
+
+#import "UserDefaultsWrapper.h"
+
 @interface TMMemoTableViewController ()
 {
     id<MemoDao> memoDao;
@@ -24,11 +29,11 @@
 
 @implementation TMMemoTableViewController
 
-- (id)initWithCoder:(NSCoder *)aDecoder
-{
-    NSLog(@"memo: initWithCoder");
-    return [super initWithCoder:aDecoder];
-}
+//- (id)initWithCoder:(NSCoder *)aDecoder
+//{
+//    NSLog(@"memo: initWithCoder");
+//    return [super initWithCoder:aDecoder];
+//}
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -56,11 +61,11 @@
     [super awakeFromNib];
 }
 
-- (void)loadView
-{
-    NSLog(@"memo: loadView");
-    [super loadView];
-}
+//- (void)loadView
+//{
+//    NSLog(@"memo: loadView");
+//    [super loadView];
+//}
 
 - (void)viewDidLoad
 {
@@ -98,20 +103,25 @@
 // メモの新規作成
 - (IBAction)insertNewObject:(id)sender
 {
-    // メモを仮登録
+    // テンプレートを取得
+    // TODO: テンプレート内に置換予約後を入れたい
+    TemplateMemoSettingInfo *templateMemoSettingInfo = [[TemplateMemoSettingInfo alloc] init];
+    TemplateMemo *templateMemo = [UserDefaultsWrapper loadToObject:templateMemoSettingInfo.key];
+    
     // TODO: 何も入力せずに別のメモを選択 または 画面を戻った場合に、新規追加をなかったことにしたい
     Memo* memo = [[Memo alloc] init];
-    memo.body = @"default memo";
+    memo.body = [templateMemo.body mutableCopy];
     
     // DBに登録
     BOOL bResult = [memoDao add:memo];
     if (bResult) {
-        // 最新のmemoidを取得
-        int maxRefCount = [memoDao maxRefCount];
-        memo.memoid = maxRefCount;
-        
-        // キャッシュの一番上に追加
-        [_memoCache insertObject:memo atIndex:0];
+//        _memoCache = [[memoDao memos] mutableCopy];
+//        // 最新のmemoidを取得
+//        int maxRefCount = [memoDao maxRefCount];
+//        memo.memoid = maxRefCount;
+//        
+//        // キャッシュの一番上に追加
+//        [_memoCache insertObject:memo atIndex:0];
         if (activeFilterTag) {
             // メモにタグを関連付けする
             [tagDao addTagLink:memo forLinkTag:activeFilterTag];
@@ -170,21 +180,7 @@
 
 - (void)updateCell:(UITableViewCell *)cell forTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath
 {
-    // 想定外のセクションは無視
-    if (indexPath.section != 0) {
-        return;
-    }
-    
-    if (_memoCache == nil) {
-        return;
-    }
-    
     Memo* memo = _memoCache[indexPath.row];
-    if (memo == nil) {
-        NSLog(@"ERROR: updateCell to memo is nil");
-        return;
-    }
-    
     cell.imageView.image = [UIImage imageNamed:@"memo.png"];
     
     // 改行までをタイトルとして設定
@@ -193,6 +189,13 @@
         [lines addObject:line];
 //        *stop = YES;
     }];
+    
+    // 内容が空の場合
+    if (lines.count <= 0) {
+        cell.textLabel.text = @"(no title)";
+        cell.detailTextLabel.text = @"(no preview)";
+        return;
+    }
     
     // タイトルは本文の一行目
     cell.textLabel.text = [lines objectAtIndex:0];

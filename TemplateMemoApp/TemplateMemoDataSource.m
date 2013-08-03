@@ -9,6 +9,9 @@
 #import "TemplateMemoDataSource.h"
 #import "TemplateDao.h"
 
+#import "TemplateMemoSettingInfo.h"
+#import "UserDefaultsWrapper.h"
+
 @implementation TemplateMemoDataSource
 
 - (id)init
@@ -20,13 +23,31 @@
     id<TemplateDao> templateDao = [TemplateDaoImpl new];
     self.dataList = [[templateDao templates] mutableCopy];
     
+    TemplateMemo *emptyTemplate = [[TemplateMemo alloc] init];
+    emptyTemplate.row = 0;
+    emptyTemplate.labelText = @"なし";
+    emptyTemplate.name = @"なし";
+    emptyTemplate.body = @"";
+    [self.dataList insertObject:emptyTemplate atIndex:0];
+    
     return self;
 }
 
 - (void)updateCellData:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath tableViewCell:(UITableViewCell *)cell
 {
+    TemplateMemoSettingInfo *templateMemoSettingInfo = [[TemplateMemoSettingInfo alloc] init];
+    TemplateMemo *selectedTemplate = [UserDefaultsWrapper loadToObject:templateMemoSettingInfo.key];
+    
     TemplateMemo *templateMemo = self.dataList[indexPath.row];
+    templateMemo.labelText = [templateMemo.name mutableCopy]; // ラベル名とテンプレ名を同じにする
     cell.textLabel.text = templateMemo.name;
+    
+    // 同じテンプレートの場合チェックマークをつける
+    if ([templateMemo isEqual:selectedTemplate]) {
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    } else {
+        cell.accessoryType = UITableViewCellAccessoryNone;
+    }
     
     // 改行までをタイトルとして設定
     NSMutableArray *lines = [NSMutableArray array];

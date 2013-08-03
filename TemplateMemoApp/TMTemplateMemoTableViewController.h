@@ -11,4 +11,7 @@
 @interface TMTemplateMemoTableViewController : UITableViewController
 
 - (IBAction)insertTemplateMemo:(id)sender;
+// セルの更新
+- (void)updateVisibleCells;
+
 @end
