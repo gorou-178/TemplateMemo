@@ -110,7 +110,7 @@
         <scene sceneID="7i4-CR-a0f">
             <objects>
                 <viewController id="uBN-jV-h8E" customClass="TMEditMemoViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="K06-ye-jmc" customClass="EditView">
+                    <view key="view" contentMode="scaleToFill" id="K06-ye-jmc">
                         <rect key="frame" x="0.0" y="64" width="703" height="660"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
@@ -118,19 +118,17 @@
                                 <subviews>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IrB-i0-gRh">
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="640" id="XXb-rn-f5J"/>
-                                        </constraints>
                                         <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="IrB-i0-gRh" firstAttribute="top" secondItem="vYD-V7-0Pf" secondAttribute="top" constant="20" symbolic="YES" type="default" id="CuK-xy-fL6"/>
                                     <constraint firstItem="IrB-i0-gRh" firstAttribute="bottom" secondItem="vYD-V7-0Pf" secondAttribute="bottom" type="default" id="Nk2-49-1Jg"/>
                                     <constraint firstItem="IrB-i0-gRh" firstAttribute="centerX" secondItem="vYD-V7-0Pf" secondAttribute="centerX" type="default" id="Utw-gc-nhL"/>
                                     <constraint firstItem="IrB-i0-gRh" firstAttribute="trailing" secondItem="vYD-V7-0Pf" secondAttribute="trailing" type="default" id="V9f-yD-I7s"/>
+                                    <constraint firstItem="IrB-i0-gRh" firstAttribute="top" secondItem="vYD-V7-0Pf" secondAttribute="top" type="default" id="q0X-9Q-W82"/>
+                                    <constraint firstItem="IrB-i0-gRh" firstAttribute="centerY" secondItem="vYD-V7-0Pf" secondAttribute="centerY" type="default" id="tkS-cT-EVl"/>
                                     <constraint firstItem="IrB-i0-gRh" firstAttribute="leading" secondItem="vYD-V7-0Pf" secondAttribute="leading" type="default" id="w07-2O-8wh"/>
                                 </constraints>
                             </scrollView>
@@ -164,7 +162,10 @@
                     <navigationItem key="navigationItem" id="qsf-YY-hQD"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="bodyScrollView" destination="vYD-V7-0Pf" id="Frx-xB-zDG"/>
                         <outlet property="bodyTextView" destination="IrB-i0-gRh" id="B0T-vw-bWH"/>
+                        <outlet property="memoInfoButton" destination="Gez-4L-WVp" id="bCP-80-1rB"/>
+                        <outlet property="tagSettingButton" destination="r6Z-NO-oYq" id="s0S-9R-Lcq"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Qj8-85-zkN" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -534,35 +535,10 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="同期設定" id="kAs-Iu-J76">
-                                <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" textLabel="9c5-oq-HJD" detailTextLabel="hb8-7c-bnD" style="IBUITableViewCellStyleValue1" id="RFc-5R-Gkp">
-                                        <rect key="frame" x="0.0" y="302" width="320" height="46"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="10" y="1" width="280" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Simplenote" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9c5-oq-HJD">
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                </label>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="none" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hb8-7c-bnD">
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" red="0.2196078431372549" green="0.32941176470588235" blue="0.52941176470588236" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                </label>
-                                            </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
                             <tableViewSection headerTitle="外部サービス認証" id="MBC-2k-vfE">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" textLabel="tS2-x1-lTi" detailTextLabel="ljI-wV-ZUN" style="IBUITableViewCellStyleValue1" id="jkr-qG-EeF">
-                                        <rect key="frame" x="0.0" y="392" width="320" height="45"/>
+                                        <rect key="frame" x="0.0" y="302" width="320" height="45"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="10" y="1" width="280" height="43"/>
@@ -585,7 +561,7 @@
                                         </view>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" textLabel="6If-v7-a3n" detailTextLabel="pTZ-Ia-Mju" style="IBUITableViewCellStyleValue1" id="BKI-bN-Bxe">
-                                        <rect key="frame" x="0.0" y="437" width="320" height="45"/>
+                                        <rect key="frame" x="0.0" y="347" width="320" height="45"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="10" y="0.0" width="280" height="43"/>

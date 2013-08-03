@@ -10,6 +10,7 @@
 #import "TMTagTableViewController.h"
 #import "TMMemoTableViewController.h"
 #import "TMEditMemoViewController.h"
+#import "TMTemplateMemoTableViewController.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -18,5 +19,6 @@
 @property (strong, nonatomic) TMTagTableViewController *tagTableViewController;
 @property (strong, nonatomic) TMMemoTableViewController *memoTableViewController;
 @property (strong, nonatomic) TMEditMemoViewController *editMemoViewController;
+@property (strong, nonatomic) TMTemplateMemoTableViewController *templateMemoViewController;
 
 @end

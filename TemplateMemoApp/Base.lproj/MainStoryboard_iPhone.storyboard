@@ -362,39 +362,10 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="同期設定" id="biw-qa-Qe5">
-                                <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" textLabel="fcy-TG-ekA" detailTextLabel="GtI-z7-kVt" style="IBUITableViewCellStyleValue1" id="qH8-AO-tGO">
-                                        <rect key="frame" x="0.0" y="318" width="320" height="46"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="10" y="1" width="280" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Simplenote" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="fcy-TG-ekA">
-                                                    <rect key="frame" x="10" y="11" width="92" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                </label>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="none" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="GtI-z7-kVt">
-                                                    <rect key="frame" x="232" y="11" width="38" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" red="0.21960784310000001" green="0.3294117647" blue="0.52941176469999995" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                </label>
-                                            </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
-                                    </tableViewCell>
-                                </cells>
-                            </tableViewSection>
                             <tableViewSection headerTitle="外部サービス認証" id="EK2-zJ-wea">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" textLabel="Ugu-mC-dob" detailTextLabel="S7D-Yx-G14" style="IBUITableViewCellStyleValue1" id="McW-zR-iPn">
-                                        <rect key="frame" x="0.0" y="410" width="320" height="45"/>
+                                        <rect key="frame" x="0.0" y="318" width="320" height="45"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="10" y="1" width="280" height="43"/>
@@ -419,7 +390,7 @@
                                         </view>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" textLabel="GVK-0C-TTo" detailTextLabel="rC5-rD-mYB" style="IBUITableViewCellStyleValue1" id="xSC-ON-WKn">
-                                        <rect key="frame" x="0.0" y="455" width="320" height="45"/>
+                                        <rect key="frame" x="0.0" y="363" width="320" height="45"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="10" y="0.0" width="280" height="43"/>
@@ -506,6 +477,9 @@
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
+                                <connections>
+                                    <segue destination="DlC-Ih-2UV" kind="push" id="Gux-Z7-jjq"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -529,7 +503,7 @@
         <scene sceneID="ia4-Wt-Pjb">
             <objects>
                 <viewController id="DlC-Ih-2UV" customClass="TMEditMemoViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Zcb-CF-jdy" customClass="EditView">
+                    <view key="view" contentMode="scaleToFill" id="Zcb-CF-jdy">
                         <rect key="frame" x="0.0" y="64" width="320" height="372"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
@@ -537,9 +511,6 @@
                                 <subviews>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gc2-zV-s97">
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="352" id="dOq-Li-bpg"/>
-                                        </constraints>
                                         <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -547,9 +518,10 @@
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="Gc2-zV-s97" firstAttribute="bottom" secondItem="Tp0-If-Jh1" secondAttribute="bottom" type="default" id="GLj-9r-Yhc"/>
-                                    <constraint firstItem="Gc2-zV-s97" firstAttribute="top" secondItem="Tp0-If-Jh1" secondAttribute="top" constant="20" symbolic="YES" type="default" id="Gqs-VC-MIP"/>
                                     <constraint firstItem="Gc2-zV-s97" firstAttribute="centerX" secondItem="Tp0-If-Jh1" secondAttribute="centerX" type="default" id="LQs-lr-J1s"/>
                                     <constraint firstItem="Gc2-zV-s97" firstAttribute="leading" secondItem="Tp0-If-Jh1" secondAttribute="leading" type="default" id="Rk4-E5-jfu"/>
+                                    <constraint firstItem="Gc2-zV-s97" firstAttribute="top" secondItem="Tp0-If-Jh1" secondAttribute="top" type="default" id="UPf-qO-6bh"/>
+                                    <constraint firstItem="Gc2-zV-s97" firstAttribute="centerY" secondItem="Tp0-If-Jh1" secondAttribute="centerY" type="default" id="ccx-Sd-ceO"/>
                                     <constraint firstItem="Gc2-zV-s97" firstAttribute="trailing" secondItem="Tp0-If-Jh1" secondAttribute="trailing" type="default" id="f6Z-hP-ryB"/>
                                 </constraints>
                             </scrollView>
@@ -579,7 +551,10 @@
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="bodyScrollView" destination="Tp0-If-Jh1" id="xH8-PU-QWm"/>
                         <outlet property="bodyTextView" destination="Gc2-zV-s97" id="2TA-la-xCe"/>
+                        <outlet property="memoInfoButton" destination="R6m-hz-kNH" id="jjp-hk-3Nu"/>
+                        <outlet property="tagSettingButton" destination="lD6-Wr-VhI" id="S9I-my-5ad"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CiJ-qy-9Q5" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -754,6 +729,7 @@
                             <outlet property="delegate" destination="2zz-le-sEx" id="Jgw-Yx-gIE"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" id="LQO-Qc-fvF"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="z5U-P1-mb6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -766,6 +742,7 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="Gux-Z7-jjq"/>
         <segue reference="r7u-fB-4tM"/>
     </inferredMetricsTieBreakers>
 </document>

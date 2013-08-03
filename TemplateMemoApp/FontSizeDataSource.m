@@ -25,32 +25,32 @@
     
     FontSize *fontSize = [[FontSize alloc] init];
     fontSize.row = 0;
-    fontSize.labelText = @"最小";
     fontSize.size = 14;
+    fontSize.labelText = [[NSString alloc] initWithFormat:@"最小(%gpt)", fontSize.size];
     [self.dataList addObject:fontSize];
     
     fontSize = [[FontSize alloc] init];
     fontSize.row = 1;
-    fontSize.labelText = @"小";
     fontSize.size = 18;
+    fontSize.labelText = [[NSString alloc] initWithFormat:@"小(%gpt)", fontSize.size];
     [self.dataList addObject:fontSize];
     
     fontSize = [[FontSize alloc] init];
     fontSize.row = 2;
-    fontSize.labelText = @"中";
     fontSize.size = 24;
+    fontSize.labelText = [[NSString alloc] initWithFormat:@"中(%gpt)", fontSize.size];
     [self.dataList addObject:fontSize];
     
     fontSize = [[FontSize alloc] init];
     fontSize.row = 3;
-    fontSize.labelText = @"大";
     fontSize.size = 36;
+    fontSize.labelText = [[NSString alloc] initWithFormat:@"大(%gpt)", fontSize.size];
     [self.dataList addObject:fontSize];
     
     fontSize = [[FontSize alloc] init];
     fontSize.row = 4;
-    fontSize.labelText = @"最大";
     fontSize.size = 48;
+    fontSize.labelText = [[NSString alloc] initWithFormat:@"最大(%gpt)", fontSize.size];
     [self.dataList addObject:fontSize];
     
     return self;

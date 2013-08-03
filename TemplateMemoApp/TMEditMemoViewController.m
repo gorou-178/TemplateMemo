@@ -10,8 +10,10 @@
 #import "TMEditMemoViewController.h"
 #import "MemoDao.h"
 #import "TagDao.h"
+#import "TemplateDao.h"
 #import "Font.h"
 #import "FontSize.h"
+#import "TemplateMemo.h"
 #import "FontSettingInfo.h"
 #import "FontSizeSettingInfo.h"
 #import "UserDefaultsWrapper.h"
@@ -23,8 +25,11 @@
 {
     id<MemoDao> memoDao;
     id<TagDao> tagDao;
+    id<TemplateDao> templateDao;
     id<UITextInput> activeTextInput;
     UITableViewController *activeSideView;
+    BOOL _registered;
+    CGSize originalSize;
 }
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
 - (void)configureView;
@@ -45,9 +50,10 @@
 {
     tagDao = [TagDaoImpl new];
     memoDao = [MemoDaoImpl new];
+    templateDao = [TemplateDaoImpl new];
     
     // textView設定
-    [self registerForKeyboardNotifications];
+//    [self registerForKeyboardNotifications];
     
     // navigationItem UI作成
     [self createEditDoneButton];
@@ -62,6 +68,8 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    
+    originalSize = CGSizeZero;
     
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     appDelegate.editMemoViewController = self;
@@ -116,7 +124,12 @@
 
 - (void)setDetailItem:(Memo *)newDetailItem
 {
+    // TODO: ポインタ比較はNGだと思う
     if (_detailItem != newDetailItem) {
+        
+        // 編集モード - メモ
+        _editTarget = TMEditTargetMemo;
+        [self.tagSettingButton setEnabled:YES];
         
 //        // メモ選択で表示する
 //        if ([self.bodyTextView isHidden]) {
@@ -135,24 +148,32 @@
     }
 }
 
+- (void)setTemplateMemo:(TemplateMemo *)templateMemo
+{
+    // TODO: ポインタ比較はNGだと思う
+    if (_templateMemo != templateMemo ) {
+        _editTarget = TMEditTargetTemplate;
+        _templateMemo = templateMemo;
+        [self.tagSettingButton setEnabled:NO];
+        
+        // Update the view.
+        [self configureView];
+    }
+    
+    if (self.masterPopoverController != nil) {
+        [self.masterPopoverController dismissPopoverAnimated:YES];
+    }
+}
+
 - (void)configureView
 {
-    if (_detailItem) {
+    FontSettingInfo *fontSettingInfo = [[FontSettingInfo alloc] init];
+    Font *font = [UserDefaultsWrapper loadToObject:fontSettingInfo.key];
+    self.bodyTextView.font = font.uiFont;
+    
+    if (_editTarget == TMEditTargetMemo) {
         
-        FontSettingInfo *fontSettingInfo = [[FontSettingInfo alloc] init];
-        Font *font = [UserDefaultsWrapper loadToObject:fontSettingInfo.key];
-        self.bodyTextView.font = font.uiFont;
-        
-//        NSMutableString *tagText = [[NSMutableString alloc] init];
-//        NSArray *tags = [tagDao tagForMemo:_detailItem];
-//        for (int i = 0; i < tags.count; i++) {
-//            if (i != 0) {
-//                [tagText appendString:@" "];
-//            }
-//            [tagText appendString:((Tag*)tags[i]).name];
-//        }
-//        self.tagTextField.text = tagText;
-        self.bodyTextView.text = _detailItem.body;
+        self.bodyTextView.text = [_detailItem.body mutableCopy];
         
         // 改行までをタイトルとして設定
         NSMutableArray *lines = [NSMutableArray array];
@@ -161,78 +182,111 @@
             *stop = YES;
         }];
         
+        if (lines.count <= 0) {
+            self.navigationItem.title = @"(no title)";
+            return;
+        }
+        
         // タイトルは本文の一行目
         self.navigationItem.title = [lines objectAtIndex:0];
+        
+    } else if (_editTarget == TMEditTargetTemplate) {
+        self.navigationItem.title = [_templateMemo.name mutableCopy];
+        
+        self.bodyTextView.text = [_templateMemo.body mutableCopy];
     }
-}
-
-#pragma mark - Text view
-
-- (void)registerForKeyboardNotifications
-{
-    // キーボードが表示される時に通知が来る
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWasShown:)
-                                                 name:UIKeyboardDidShowNotification
-                                               object:nil];
-    
-    // キーボードが閉じる時に通知が来る
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillBeHidden:)
-                                                 name:UIKeyboardWillHideNotification
-                                               object:nil];
-    
-    // キーボード表示 & キーボード切り替え後に通知が来る
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillShowNotification:)
-                                                 name:UIKeyboardWillShowNotification
-                                               object:nil];
-    
-    // キーボードの切り替え時に通知が来る
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillChangeFrameNotification:)
-                                                 name:UIKeyboardWillChangeFrameNotification
-                                               object:nil];
 }
 
 #pragma mark - Notification Keyboard selectors
 
-- (void)keyboardWillChangeFrameNotification:(NSNotification*)aNotification
-{
-    NSLog(@"call keyboardWillChangeFrameNotification");
-}
+//- (void)keyboardWillChangeFrameNotification:(NSNotification*)aNotification
+//{
+//    NSLog(@"call keyboardWillChangeFrameNotification");
+//}
+//
+//- (void)keyboardWillShowNotification:(NSNotification*)aNotification
+//{
+//    NSLog(@"call keyboardWillShowNotification");
+//}
 
-- (void)keyboardWillShowNotification:(NSNotification*)aNotification
-{
-    NSLog(@"call keyboardWillShowNotification");
-}
-
-- (void)keyboardWasShown:(NSNotification*)aNotification
+- (void)keyboardWillShow:(NSNotification*)aNotification
 {
     self.editMode = YES;
     NSLog(@"call keyboardWasShown => editMode: %d", self.editMode);
+   
+    NSDictionary *userInfo = [aNotification userInfo];
+    CGRect keyboardRect = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    
+    keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
+    
+    if([_bodyTextView isFirstResponder])
+    {
+        NSTimeInterval animationDuration = [[[aNotification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+        [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
+        [UIView setAnimationDuration:animationDuration];
+        
+        CGRect frame = _bodyTextView.frame;
+        if(CGSizeEqualToSize(originalSize, CGSizeZero))
+        {
+            originalSize = frame.size;
+        }
+        
+        CGPoint pt = CGPointMake(0, CGRectGetMinY(keyboardRect));
+        pt = [_bodyScrollView convertPoint:pt fromView:self.view];
+        
+        CGSize size = CGSizeZero;
+        if( pt.y > _bodyTextView.frame.origin.y )
+        {
+            size = CGSizeMake(_bodyTextView.frame.size.width, pt.y - _bodyTextView.frame.origin.y);
+            frame.size = size;
+            _bodyTextView.frame = frame;
+            
+            [UIView commitAnimations];
+            
+        }
+    }
+    
     // キーボードを開いたタイミングでボタンを「編集完了ボタン」に変更
     [self createEditDoneButton];
-    self.navigationItem.rightBarButtonItem = self.editDoneButton;
+    [self.navigationItem setRightBarButtonItem:self.editDoneButton animated:YES];
 }
 
-- (void)keyboardWillBeHidden:(NSNotification*)aNotification
+- (void)keybaordWillHide:(NSNotification*)aNotification
 {
     self.editMode = NO;
     NSLog(@"call keyboardWillBeHidden => editMode: %d", self.editMode);
+    
+    if([_bodyTextView isFirstResponder])
+    {
+        NSTimeInterval animationDuration = [[[aNotification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+        [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
+        [UIView setAnimationDuration:animationDuration];
+        
+        CGRect frame = _bodyTextView.frame;
+        frame.size = originalSize;
+        _bodyTextView.frame = frame;
+        
+        originalSize = CGSizeZero;
+        
+        [UIView commitAnimations];
+    }
+    
     // キーボードが閉じたタイミングでボタンを「メモ追加ボタン」に変更(iPadのみ)
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         [self createAddMemoButton];
-        self.navigationItem.rightBarButtonItem = self.addMemoButton;
+        [self.navigationItem setRightBarButtonItem:self.addMemoButton animated:YES];
+        [self.navigationItem setRightBarButtonItem:self.addMemoButton animated:YES];
     } else {
-        self.navigationItem.rightBarButtonItem = nil;
+        [self.navigationItem setRightBarButtonItem:nil animated:YES];
     }
     
-    // メモを保存
-    [self saveMemo];
-    
-    // タグを保存
-//    [self saveTag];
+    if (_editTarget == TMEditTargetMemo) {
+        // メモを保存
+        [self saveMemo];
+    } else if (_editTarget == TMEditTargetTemplate) {
+        // テンプレートを保存
+        [self saveTemplateMemo];
+    }
 }
 
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView
@@ -242,21 +296,68 @@
     return YES;
 }
 
-- (BOOL)textViewShouldEndEditing:(UITextView *)textView
-{
-    NSLog(@"call textViewShouldEndEditing");
-    return YES;
-}
-
-- (void)textViewDidBeginEditing:(UITextView *)textView
-{
-    NSLog(@"call textViewDidBeginEditing");
-}
-
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
     activeTextInput = nil;
     NSLog(@"call textViewDidEndEditing");
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    // super
+    [super viewWillAppear:animated];
+    
+    // Register for notifiactions
+    if (!_registered) {
+        NSNotificationCenter *center;
+        center = [NSNotificationCenter defaultCenter];
+        [center addObserver:self
+                   selector:@selector(keyboardWillShow:)
+                       name:UIKeyboardWillShowNotification
+                     object:nil];
+        
+        [center addObserver:self
+                   selector:@selector(keybaordWillHide:)
+                       name:UIKeyboardWillHideNotification
+                     object:nil];
+        
+        // キーボード表示中に何かの通知が来た場合の対処
+        [center addObserver:self
+                   selector:@selector(applicationWillResignActive:)
+                       name:UIApplicationWillResignActiveNotification
+                     object:nil];
+        _registered = YES;
+    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    // super
+    [super viewWillDisappear:animated];
+    
+    // Unregister from notification center
+    if (_registered) {
+        NSNotificationCenter *center;
+        center = [NSNotificationCenter defaultCenter];
+        [center removeObserver:self
+                          name:UIKeyboardWillShowNotification
+                        object:nil];
+        
+        [center removeObserver:self
+                          name:UIKeyboardWillHideNotification
+                        object:nil];
+        
+        [center removeObserver:self
+                          name:UIApplicationWillResignActiveNotification
+                        object:nil];
+        _registered = NO;
+    }
+}
+
+- (void)applicationWillResignActive:(NSNotificationCenter *)center
+{
+    NSLog(@"★applicationWillResignActive");
+    [self onPushDone:self.editDoneButton];
 }
 
 #pragma mark - Custom UI Selectors
@@ -265,7 +366,11 @@
     // メモコントローラのメモ追加処理をコール
     NSLog(@"onPushAdd");
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-    [appDelegate.memoTableViewController insertNewObject:sender];
+    if (_editTarget == TMEditTargetMemo) {
+        [appDelegate.memoTableViewController insertNewObject:sender];
+    } else if (_editTarget == TMEditTargetTemplate) {
+        [appDelegate.templateMemoViewController insertTemplateMemo:sender];
+    }
 }
 
 - (void)onPushDone:(id)sender {
@@ -279,9 +384,6 @@
 //    }
     activeTextInput = nil;
     
-    // メモを保存
-    [self saveMemo];
-    
     // タグを保存
 //    [self saveTag];
 }
@@ -291,12 +393,55 @@
 {
     // 選択したMemoを保存
     if (_detailItem) {
-        _detailItem.body = self.bodyTextView.text;
+        
+        if (self.bodyTextView.text.length > 0) {
+            _detailItem.body = self.bodyTextView.text;
+        } else {
+            _detailItem.body = @"";
+        }
         
         BOOL bResult = [memoDao update:_detailItem];
         if (bResult) {
+            
+            // 改行までをタイトルとして設定
+            NSMutableArray *lines = [NSMutableArray array];
+            [_detailItem.body enumerateLinesUsingBlock:^(NSString *line, BOOL *stop) {
+                [lines addObject:line];
+                //        *stop = YES;
+            }];
+            
+            // 内容が空の場合
+            if (lines.count <= 0) {
+                self.navigationItem.title = @"(no title)";
+                return;
+            }
+            
+            // タイトルは本文の一行目
+            self.navigationItem.title = [lines objectAtIndex:0];
+            
             AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
             [appDelegate.memoTableViewController updateVisibleCells];
+        }
+    }
+}
+
+// テンプレートを保存
+- (void)saveTemplateMemo
+{
+    if (_templateMemo) {
+        
+        if ([self.bodyTextView.text length] > 0) {
+            _templateMemo.body = self.bodyTextView.text;
+        } else {
+            _templateMemo.body = @"";
+        }
+        
+        if ([templateDao update:_templateMemo]) {
+            
+            self.navigationItem.title = _templateMemo.name;
+            
+            AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+            [appDelegate.templateMemoViewController updateVisibleCells];
         }
     }
 }

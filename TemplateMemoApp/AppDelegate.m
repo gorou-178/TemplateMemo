@@ -9,6 +9,15 @@
 #import "AppDelegate.h"
 #import "FMDBWrapper.h"
 
+#import "Font.h"
+#import "FontSize.h"
+#import "TemplateMemo.h"
+#import "FontSettingInfo.h"
+#import "FontSizeSettingInfo.h"
+#import "TemplateMemoSettingInfo.h"
+
+#import "UserDefaultsWrapper.h"
+
 #import "TMAppContext.h"
 
 @implementation AppDelegate
@@ -22,7 +31,49 @@
         splitViewController.delegate = (id)navigationController.topViewController;
     }
     
-    [TMAppContext sharedManager];    
+    [TMAppContext sharedManager];
+    
+#if DEBUG
+    // NSUserDefaultsのデータを全て削除
+    NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
+    [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:appDomain];
+#endif
+    
+    // デフォルト設定を登録
+    FontSizeSettingInfo *fontSizeSettingInfo = [[FontSizeSettingInfo alloc] init];
+    FontSize *fontSize = [[FontSize alloc] init];
+    fontSize.row = 0;
+    fontSize.size = 14;
+    fontSize.labelText = [[NSString alloc] initWithFormat:@"最小(%gpt)", fontSize.size];
+    
+    FontSettingInfo *fontSettingInfo = [[FontSettingInfo alloc] init];
+    Font *systemFont = [[Font alloc] init];
+    systemFont.uiFont = [UIFont systemFontOfSize:fontSize.size];
+    systemFont.row = 0;
+    systemFont.name = [systemFont.uiFont fontName];
+    systemFont.labelText = [systemFont.uiFont familyName];
+    
+    TemplateMemoSettingInfo *templateMemoSettingInfo = [[TemplateMemoSettingInfo alloc] init];
+    TemplateMemo *templateMemo = [[TemplateMemo alloc] init];
+    templateMemo.row = 0;
+    templateMemo.name = @"なし";
+    templateMemo.labelText = @"なし";
+    
+    FontSize *loadFontSize = [UserDefaultsWrapper loadToObject:fontSizeSettingInfo.key];
+    if (loadFontSize == nil) {
+        [UserDefaultsWrapper save:fontSizeSettingInfo.key toObject:fontSize];
+    }
+    
+    Font *loadFont = [UserDefaultsWrapper loadToObject:fontSettingInfo.key];
+    if (loadFont == nil) {
+        [UserDefaultsWrapper save:fontSettingInfo.key toObject:systemFont];
+    }
+    
+    TemplateMemo *loadTemplateMemo = [UserDefaultsWrapper loadToObject:templateMemoSettingInfo.key];
+    if (loadTemplateMemo == nil) {
+        [UserDefaultsWrapper save:templateMemoSettingInfo.key toObject:templateMemo];
+    }
+    
     return YES;
 }
 							
