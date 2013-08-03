@@ -7,6 +7,7 @@
 //
 
 #import "TemplateMemo.h"
+#import "DateUtil.h"
 
 @implementation TemplateMemo
 
@@ -31,8 +32,8 @@
     [coder encodeObject:labelText forKey:@"labelText"];
     [coder encodeObject:self.name forKey:@"name"];
     [coder encodeObject:self.body forKey:@"body"];
-    [coder encodeObject:self.createDate forKey:@"createDate"];
-    [coder encodeObject:self.modifiedDate forKey:@"modifiedDate"];
+    [coder encodeObject:[DateUtil dateToString:self.createDate atDateFormat:@"yyyy/MM/dd hh:mm:ss"] forKey:@"createDate"];
+    [coder encodeObject:[DateUtil dateToString:self.modifiedDate atDateFormat:@"yyyy/MM/dd hh:mm:ss"] forKey:@"modifiedDate"];
     [coder encodeObject:[NSNumber numberWithInt:self.deleteFlag] forKey:@"deleteFlag"];
 }
 
@@ -44,8 +45,8 @@
         labelText = [coder decodeObjectForKey:@"labelText"];
         self.name = [coder decodeObjectForKey:@"name"];
         self.body = [coder decodeObjectForKey:@"body"];
-        self.createDate = [[coder decodeObjectForKey:@"createDate"] date];
-        self.modifiedDate = [[coder decodeObjectForKey:@"modifiedDate"] date];
+        self.createDate = [DateUtil dateStringToDate:[coder decodeObjectForKey:@"createDate"] atDateFormat:@"yyyy/MM/dd hh:mm:ss"];
+        self.modifiedDate = [DateUtil dateStringToDate:[coder decodeObjectForKey:@"modifiedDate"] atDateFormat:@"yyyy/MM/dd hh:mm:ss"];
         self.deleteFlag = [[coder decodeObjectForKey:@"deleteFlag"] intValue];
     }
     return self;

@@ -51,7 +51,7 @@
 {
     NSMutableArray* templates = [[NSMutableArray alloc] init];
     
-    FMResultSet* result = [db executeQuery:@"select id, name, body, datetime(createDate, 'localtime') cDate, datetime(modifiedDate,'localtime') mDate from templateMemo where deleteFlag = 0;"];
+    FMResultSet* result = [db executeQuery:@"select id, name, body, datetime(createDate, 'localtime') cDate, datetime(modifiedDate,'localtime') mDate from templateMemo where deleteFlag = 0 order by modifiedDate desc;"];
     if ([db hadError]) {
         NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
         [result close];
@@ -109,7 +109,7 @@
     
     [db beginTransaction];
     
-    NSString *sql = [[NSString alloc] initWithFormat:@"update templateMemo set name = ’%@’, body = '%@', modifiedDate = julianday('%@') where id = %d", templateMemo.name, templateMemo.body, strDate, templateMemo.templateId];
+    NSString *sql = [[NSString alloc] initWithFormat:@"update templateMemo set name = '%@', body = '%@', modifiedDate = julianday('%@') where id = %d", templateMemo.name, templateMemo.body, strDate, templateMemo.templateId];
     BOOL bResult = [db executeUpdate:sql];
     if ([db hadError]) {
         NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
