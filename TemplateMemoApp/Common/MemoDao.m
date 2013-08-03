@@ -80,12 +80,12 @@
         
         NSString *cDate = [result stringForColumn:@"cDate"];
         NSString *mDate = [result stringForColumn:@"mDate"];
-        NSLog(@"mDate: %@", mDate);
+//        NSLog(@"mDate: %@", mDate);
         
         memo.createDate = [DateUtil dateStringToDate:cDate atDateFormat:@"yyyy-MM-dd hh:mm:ss"];
         memo.modifiedDate = [DateUtil dateStringToDate:mDate atDateFormat:@"yyyy-MM-dd hh:mm:ss"];
         
-        NSLog(@"modifiedDate: %@", memo.modifiedDate);
+//        NSLog(@"modifiedDate: %@", memo.modifiedDate);
         
         memo.deleteFlag = 0;
         [memos addObject:memo];
@@ -118,12 +118,12 @@
         
         NSString *cDate = [result stringForColumn:@"m_cDate"];
         NSString *mDate = [result stringForColumn:@"m_mDate"];
-        NSLog(@"mDate: %@", mDate);
+//        NSLog(@"mDate: %@", mDate);
         
         memo.createDate = [DateUtil dateStringToDate:cDate atDateFormat:@"yyyy-MM-dd hh:mm:ss"];
         memo.modifiedDate = [DateUtil dateStringToDate:mDate atDateFormat:@"yyyy-MM-dd hh:mm:ss"];
         
-        NSLog(@"modifiedDate: %@", memo.modifiedDate);
+//        NSLog(@"modifiedDate: %@", memo.modifiedDate);
         
         memo.deleteFlag = 0;
         [memos addObject:memo];

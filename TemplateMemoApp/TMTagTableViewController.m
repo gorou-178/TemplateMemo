@@ -22,17 +22,17 @@
 
 @implementation TMTagTableViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    NSLog(@"initWithNibName");
-    return [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-}
+//- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+//{
+//    NSLog(@"initWithNibName");
+//    return [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+//}
 
-- (void)loadView
-{
-    [super loadView];
-    NSLog(@"loadView");
-}
+//- (void)loadView
+//{
+//    [super loadView];
+//    NSLog(@"loadView");
+//}
 
 - (void)awakeFromNib
 {
@@ -53,11 +53,11 @@
     [super awakeFromNib];
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder
-{
-    NSLog(@"initWithCodar");
-    return [super initWithCoder:aDecoder];
-}
+//- (id)initWithCoder:(NSCoder *)aDecoder
+//{
+//    NSLog(@"initWithCodar");
+//    return [super initWithCoder:aDecoder];
+//}
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -101,25 +101,25 @@
     [appDelegate.editMemoViewController setActiveSideView:self];
 }
 
-- (void)viewDidDisappear:(BOOL)animated
-{
-    NSLog(@"viewDidDisappear");
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    NSLog(@"viewWillDisappear");
-}
-
-- (void)viewWillLayoutSubviews
-{
-    NSLog(@"viewWillLayoutSubviews");
-}
-
-- (void)viewDidLayoutSubviews
-{
-    NSLog(@"viewDidLayoutSubviews");
-}
+//- (void)viewDidDisappear:(BOOL)animated
+//{
+//    NSLog(@"viewDidDisappear");
+//}
+//
+//- (void)viewWillDisappear:(BOOL)animated
+//{
+//    NSLog(@"viewWillDisappear");
+//}
+//
+//- (void)viewWillLayoutSubviews
+//{
+//    NSLog(@"viewWillLayoutSubviews");
+//}
+//
+//- (void)viewDidLayoutSubviews
+//{
+//    NSLog(@"viewDidLayoutSubviews");
+//}
 
 - (void)didReceiveMemoryWarning
 {
@@ -142,11 +142,6 @@
 
 - (void)updateCell:(UITableViewCell *)cell forTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath
 {
-    // 想定外のセクションは無視
-    if (indexPath.section != 0) {
-        return;
-    }
-    
     if (indexPath.row == 0) {
         // 一番最初は「All Memo」
         cell.textLabel.text = @"All Memo";
