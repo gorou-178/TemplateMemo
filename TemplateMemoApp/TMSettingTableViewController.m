@@ -20,6 +20,10 @@
 #import "TemplateMemoDataSource.h"
 #import "TemplateMemoSettingInfo.h"
 
+#import "AAMFeedbackViewController.h"
+
+#define DISP_AD_BOTTOM
+
 @interface TMSettingTableViewController ()
 
 @end
@@ -35,15 +39,36 @@
     return self;
 }
 
+- (void)awakeFromNib
+{
+    fastViewFlag = YES;
+	bannerIsVisible = NO;
+    
+    [super awakeFromNib];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    // iPhoneのときのみ表示
+    CGRect insetSize;
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+        adView = [[ADBannerView alloc] init];
+        insetSize = adView.bounds;
+        adView.delegate = self;
+        adView.autoresizesSubviews = YES;
+        adView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
+        adView.alpha = 0.0;
+        [self.view addSubview:adView];
+    } else {
+        insetSize = CGRectMake(0, 0, 0, 50);
+    }
+    
+    // UITableView のコンテンツに余白を付ける（下50px）
+    self.tableView.contentInset = UIEdgeInsetsMake(0.f, 0.f, insetSize.size.height, 0.f);
+    // UITableView のスクロール可能範囲に余白を付ける（下50px）
+    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0.f, 0.f, insetSize.size.height, 0.f);
 }
 
 - (void)didReceiveMemoryWarning
@@ -54,7 +79,51 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    DDLogInfo(@"設定表示");
+    [super viewWillAppear:animated];
+    [self.tableView deselectRowAtIndexPath:self.tableView.indexPathForSelectedRow animated:YES];
     [self.tableView reloadData];
+    [self changeRotateForm];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    // iPadにてアプリ起動時にランドスケープの場合、ボタン表示位置が左寄りになるのを防ぐために必要
+    if(fastViewFlag == YES){
+        fastViewFlag = NO;
+        [self changeRotateForm];
+    }
+}
+
+// 回転処理 -----------------------------------------------
+
+// 回転時の各ビューのサイズ・表示位置の調整を行う
+- (void)changeRotateForm
+{
+    CGFloat height = self.view.bounds.size.height;
+    
+#ifdef DISP_AD_BOTTOM
+    
+    adView.frame = CGRectMake(0, height, adView.frame.size.width, adView.frame.size.height);
+	if (bannerIsVisible) {
+		adView.frame = CGRectOffset(adView.frame, 0, -CGRectGetHeight(adView.frame));
+    }
+#else
+	if (bannerIsVisible) {
+		adView.frame = CGRectMake(0, 0, adView.frame.size.width, adView.frame.size.height);
+    }
+    else{
+        adView.frame = CGRectMake(0, -adView.frame.size.height, adView.frame.size.width, adView.frame.size.height);
+    }
+#endif
+}
+
+// 回転アニメーション直前にコール
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration
+{
+    DDLogInfo(@"設定表示: ローテーション >> %d", interfaceOrientation);
+    [self changeRotateForm];
 }
 
 #pragma mark - Table view data source
@@ -94,51 +163,10 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    static NSString *CellIdentifier = @"Cell";
-//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
     [self updateCellData:tableView cellForRowAtIndexPath:indexPath tableViewCell:cell];
     return cell;
 }
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 #pragma mark - Table view delegate
 
@@ -153,6 +181,18 @@
                               otherButtonTitles:@"OK", nil
                               ];
         [alert show];
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        DDLogInfo(@"設定表示: 外部サービス設定タップ");
+    } else if (indexPath.section == 3) {
+        if (indexPath.row == 2) {
+            AAMFeedbackViewController *vc = [[AAMFeedbackViewController alloc]init];
+            vc.toRecipients = [NSArray arrayWithObject:@"s.reianai@gmail.com"];
+            vc.ccRecipients = nil;
+            vc.bccRecipients = nil;
+            UINavigationController *nvc = [[UINavigationController alloc]initWithRootViewController:vc];
+            [self presentViewController:nvc animated:YES completion:nil];
+            DDLogInfo(@"設定表示: ご意見・ご要望を送るタップ");
+        }
     }
 }
 
@@ -171,6 +211,80 @@
         SettingInfo *settingInfo = [[TemplateMemoSettingInfo alloc] init];
         settingInfo.dataSource = [[TemplateMemoDataSource alloc] init];
         [viewController setSettingInfo:settingInfo withDataList:settingInfo.dataSource.dataList];
+    }
+}
+
+// スクロールされる度に呼ばれる
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    CGRect frame = self.view.frame;
+    float viewHeight = frame.size.height;
+    float adViewWidth = adView.frame.size.width;
+    float adViewHeight = adView.frame.size.height;
+    adView.center = CGPointMake(adViewWidth / 2, self.tableView.contentOffset.y + viewHeight - adViewHeight / 2);
+    [self.view bringSubviewToFront:adView];
+}
+
+#pragma mark - iAd Delegate
+
+// iAD ------------------------------------------------
+
+// 新しい広告がロードされた後に呼ばれる
+// 非表示中のバナービューを表示する
+- (void)bannerViewDidLoadAd:(ADBannerView *)banner
+{
+	if (!bannerIsVisible) {
+		[UIView beginAnimations:@"animateAdBannerOn" context:NULL];
+		[UIView setAnimationDuration:1.0];
+        
+#ifdef DISP_AD_BOTTOM
+		banner.frame = CGRectOffset(banner.frame, 0, -CGRectGetHeight(banner.frame));
+#else
+		banner.frame = CGRectOffset(banner.frame, 0, CGRectGetHeight(banner.frame));
+#endif
+        banner.alpha = 1.0;
+        
+		[UIView commitAnimations];
+		bannerIsVisible = YES;
+        DDLogInfo(@"設定表示: iAd表示");
+	}
+}
+
+// 広告バナータップ後に広告画面切り替わる前に呼ばれる
+- (BOOL)bannerViewActionShouldBegin:(ADBannerView *)banner willLeaveApplication:(BOOL)willLeave
+{
+	BOOL shoudExecuteAction = YES; // 広告画面に切り替える場合はYES（通常はYESを指定する）
+	if (!willLeave && shoudExecuteAction) {
+		// 必要ならココに、広告と競合する可能性のある処理を一時停止する処理を記述する。
+        DDLogInfo(@"設定表示: iAdタップ");
+	}
+	return shoudExecuteAction;
+}
+
+// 広告画面からの復帰時に呼ばれる
+- (void)bannerViewActionDidFinish:(ADBannerView *)banner
+{
+    // 必要ならココに、一時停止していた処理を再開する処理を記述する。
+}
+
+// 表示中の広告が無効になった場合に呼ばれる
+// 表示中のバナービューを非表示にする
+- (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error
+{
+    if (bannerIsVisible) {
+        [UIView beginAnimations:@"animateAdBannerOff" context:NULL];
+		[UIView setAnimationDuration:1.0];
+        
+#ifdef DISP_AD_BOTTOM
+        banner.frame = CGRectOffset(banner.frame, 0, CGRectGetHeight(banner.frame));
+#else
+        banner.frame = CGRectOffset(banner.frame, 0, -CGRectGetHeight(banner.frame));
+#endif
+        banner.alpha = 0.0;
+        
+        [UIView commitAnimations];
+        bannerIsVisible = NO;
+        DDLogInfo(@"設定表示: iAd非表示 >> %@", [error localizedDescription]);
     }
 }
 

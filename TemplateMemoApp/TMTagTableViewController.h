@@ -7,11 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <iAd/iAd.h>
 
 @class TMEditViewController;
 
 @interface TMTagTableViewController : UITableViewController
-
+    <UISearchDisplayDelegate, UISearchBarDelegate, ADBannerViewDelegate>
+{
+    ADBannerView *adView;
+    BOOL bannerIsVisible;
+    BOOL fastViewFlag;
+}
+@property (weak, nonatomic) IBOutlet UISearchBar *tagSearchBar;
+@property (strong, nonatomic) IBOutlet UISearchDisplayController *tagSearchBarController;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *addTagButton;
 
 // セルの更新

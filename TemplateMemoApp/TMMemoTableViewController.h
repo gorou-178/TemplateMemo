@@ -7,16 +7,21 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <iAd/iAd.h>
 #import "Common/MemoDao.h"
 
 @interface TMMemoTableViewController : UITableViewController
-
-@property (strong, nonatomic) NSMutableArray *memoCache;
+    <UISearchDisplayDelegate, UISearchBarDelegate, ADBannerViewDelegate>
+{
+    ADBannerView *adView;
+    BOOL bannerIsVisible;
+    BOOL fastViewFlag;
+}
+@property (weak, nonatomic) IBOutlet UISearchBar *memoSearchBar;
+@property (strong, nonatomic) IBOutlet UISearchDisplayController *memoSearchBarController;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *addMemoButton;
 
-// メモの追加
-- (IBAction)insertNewObject:(id)sender;
-//- (void)insertNewObject:(id)sender;
+- (IBAction)onPushAddButton:(id)sender;
 
 // タグのメモ一覧を表示
 - (void)showTagMemo:(Tag *)tag;

@@ -40,12 +40,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    DDLogInfo(@"タグ設定表示");
+    [super viewWillAppear:animated];
 }
 
 - (void)didReceiveMemoryWarning
@@ -121,45 +121,6 @@
     return cell;
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -184,6 +145,7 @@
                         for (int j = 0; j < selectedTags.count; j++) {
                             Tag *selectedTag = selectedTags[j];
                             if ([selectedTag.name isEqualToString:tag.name]) {
+                                DDLogInfo(@"タグ設定表示: タグ削除 >> %@", selectedTag.name);
                                 [selectedTags removeObjectAtIndex:j];
                                 NSIndexPath *deleteIndexPath = [NSIndexPath indexPathForRow:j inSection:0];
                                 [self.tableView deleteRowsAtIndexPaths:@[deleteIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -203,6 +165,7 @@
                         NSIndexPath *insertIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
                         [self.tableView insertRowsAtIndexPaths:@[insertIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
                         isUpdateTable = YES;
+                        DDLogInfo(@"タグ設定表示: タグ追加 >> %@", tag.name);
                     }
                 }
                 
@@ -214,6 +177,7 @@
         Tag *selectedTag = selectedTags[indexPath.row];
         if ([tagDao removeTagLink:currentMemo forLinkTag:selectedTag]) {
             
+            DDLogInfo(@"タグ設定表示: タグ削除 >> %@", selectedTag.name);
             [selectedTags removeObjectAtIndex:indexPath.row];
             [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
             isUpdateTable = YES;

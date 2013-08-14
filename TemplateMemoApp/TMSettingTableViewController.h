@@ -7,7 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <iAd/iAd.h>
 
-@interface TMSettingTableViewController : UITableViewController
-
+@interface TMSettingTableViewController : UITableViewController <ADBannerViewDelegate>
+{
+    ADBannerView *adView;
+    BOOL bannerIsVisible;
+    BOOL fastViewFlag;
+}
 @end

@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TMTemplateMemoTableViewController : UITableViewController
+@interface TMTemplateMemoTableViewController : UITableViewController <UISearchDisplayDelegate, UISearchBarDelegate>
 
+@property (weak, nonatomic) IBOutlet UISearchBar *templeSearchBar;
+@property (strong, nonatomic) IBOutlet UISearchDisplayController *templeSearchBarController;
 - (IBAction)insertTemplateMemo:(id)sender;
 // セルの更新
 - (void)updateVisibleCells;

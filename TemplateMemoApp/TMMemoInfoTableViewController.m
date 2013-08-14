@@ -42,12 +42,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+}
 
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+- (void)viewWillAppear:(BOOL)animated
+{
+    DDLogInfo(@"メモ情報表示");
+    [super viewWillAppear:animated];
 }
 
 - (void)didReceiveMemoryWarning
@@ -131,9 +131,9 @@
         }
         
         if (indexPath.row == 0) {
-            cell.detailTextLabel.text = [DateUtil dateToString:createDate atDateFormat:@"yyyy/MM/dd hh:mm:ss"];
+            cell.detailTextLabel.text = [DateUtil dateToString:createDate atDateFormat:@"yyyy/MM/dd HH:mm:ss"];
         } else if (indexPath.row == 1) {
-            cell.detailTextLabel.text = [DateUtil dateToString:modifiedDate atDateFormat:@"yyyy/MM/dd hh:mm:ss"];
+            cell.detailTextLabel.text = [DateUtil dateToString:modifiedDate atDateFormat:@"yyyy/MM/dd HH:mm:ss"];
         }
     }
 }
@@ -143,19 +143,6 @@
     UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
     [self updateCell:cell forTableView:tableView atIndexPath:indexPath];
     return cell;
-}
-
-#pragma mark - Table view delegate
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
 }
 
 @end
