@@ -82,8 +82,8 @@
         NSString *mDate = [result stringForColumn:@"mDate"];
 //        NSLog(@"mDate: %@", mDate);
         
-        memo.createDate = [DateUtil dateStringToDate:cDate atDateFormat:@"yyyy-MM-dd hh:mm:ss"];
-        memo.modifiedDate = [DateUtil dateStringToDate:mDate atDateFormat:@"yyyy-MM-dd hh:mm:ss"];
+        memo.createDate = [DateUtil dateStringToDate:cDate atDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        memo.modifiedDate = [DateUtil dateStringToDate:mDate atDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         
 //        NSLog(@"modifiedDate: %@", memo.modifiedDate);
         
@@ -120,8 +120,8 @@
         NSString *mDate = [result stringForColumn:@"m_mDate"];
 //        NSLog(@"mDate: %@", mDate);
         
-        memo.createDate = [DateUtil dateStringToDate:cDate atDateFormat:@"yyyy-MM-dd hh:mm:ss"];
-        memo.modifiedDate = [DateUtil dateStringToDate:mDate atDateFormat:@"yyyy-MM-dd hh:mm:ss"];
+        memo.createDate = [DateUtil dateStringToDate:cDate atDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        memo.modifiedDate = [DateUtil dateStringToDate:mDate atDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         
 //        NSLog(@"modifiedDate: %@", memo.modifiedDate);
         
@@ -157,7 +157,7 @@
     // 現在時刻を文字列で取得
     NSDate *nowDateForGMT = [NSDate date];
     NSTimeZone *timeZoneUTC = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
-    NSString *strDate = [DateUtil dateToString:nowDateForGMT atDateFormat:@"yyyy-MM-dd hh:mm:ss" setTimeZone:timeZoneUTC];
+    NSString *strDate = [DateUtil dateToString:nowDateForGMT atDateFormat:@"yyyy-MM-dd HH:mm:ss" setTimeZone:timeZoneUTC];
     
     [db beginTransaction];
     
@@ -180,7 +180,7 @@
     // 現在時刻を文字列で取得
     NSDate *nowDateForGMT = [NSDate date];
     NSTimeZone *timeZoneUTC = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
-    NSString *strDate = [DateUtil dateToString:nowDateForGMT atDateFormat:@"yyyy-MM-dd hh:mm:ss" setTimeZone:timeZoneUTC];
+    NSString *strDate = [DateUtil dateToString:nowDateForGMT atDateFormat:@"yyyy-MM-dd HH:mm:ss" setTimeZone:timeZoneUTC];
     
     [db beginTransaction];
     
@@ -202,7 +202,7 @@
     // 現在時刻を文字列で取得
     NSDate *nowDateForGMT = [NSDate date];
     NSTimeZone *timeZoneUTC = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
-    NSString *strDate = [DateUtil dateToString:nowDateForGMT atDateFormat:@"yyyy-MM-dd hh:mm:ss" setTimeZone:timeZoneUTC];
+    NSString *strDate = [DateUtil dateToString:nowDateForGMT atDateFormat:@"yyyy-MM-dd HH:mm:ss" setTimeZone:timeZoneUTC];
 
     [db beginTransaction];
     

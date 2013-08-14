@@ -75,8 +75,8 @@
         NSString *cDate = [result stringForColumn:@"cDate"];
         NSString *mDate = [result stringForColumn:@"mDate"];
         
-        tag.createDate = [DateUtil dateStringToDate:cDate atDateFormat:@"yyyy-MM-dd hh:mm:ss"];
-        tag.modifiedDate = [DateUtil dateStringToDate:mDate atDateFormat:@"yyyy-MM-dd hh:mm:ss"];
+        tag.createDate = [DateUtil dateStringToDate:cDate atDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        tag.modifiedDate = [DateUtil dateStringToDate:mDate atDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         
         tag.deleteFlag = 0;
         [tags addObject:tag];
@@ -140,8 +140,8 @@
         NSString *cDate = [result stringForColumn:@"cDate"];
         NSString *mDate = [result stringForColumn:@"mDate"];
         
-        tag.createDate = [DateUtil dateStringToDate:cDate atDateFormat:@"yyyy-MM-dd hh:mm:ss"];
-        tag.modifiedDate = [DateUtil dateStringToDate:mDate atDateFormat:@"yyyy-MM-dd hh:mm:ss"];
+        tag.createDate = [DateUtil dateStringToDate:cDate atDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        tag.modifiedDate = [DateUtil dateStringToDate:mDate atDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         
         tag.deleteFlag = 0;
         [tags addObject:tag];
@@ -168,7 +168,7 @@
 
 - (int)countOfMemo:(Tag*)tag
 {
-    NSString *sql = [[NSString alloc] initWithFormat:@"select count(id) countId from tagLink where tagId = %d;", tag.tagId];
+    NSString *sql = [[NSString alloc] initWithFormat:@"select count(tl.id) countId from memo m, tagLink tl where tagId = %d and tl.memoId = m.id and m.deleteFlag = 0;", tag.tagId];
     FMResultSet* result = [db executeQuery:sql];
     if ([db hadError]) {
         NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
@@ -187,7 +187,7 @@
     // 現在時刻を文字列で取得
     NSDate *nowDateForGMT = [NSDate date];
     NSTimeZone *timeZoneUTC = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
-    NSString *strDate = [DateUtil dateToString:nowDateForGMT atDateFormat:@"yyyy-MM-dd hh:mm:ss" setTimeZone:timeZoneUTC];
+    NSString *strDate = [DateUtil dateToString:nowDateForGMT atDateFormat:@"yyyy-MM-dd HH:mm:ss" setTimeZone:timeZoneUTC];
     
     [db beginTransaction];
     
@@ -224,7 +224,7 @@
     // 現在時刻を文字列で取得
     NSDate *nowDateForGMT = [NSDate date];
     NSTimeZone *timeZoneUTC = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
-    NSString *strDate = [DateUtil dateToString:nowDateForGMT atDateFormat:@"yyyy-MM-dd hh:mm:ss" setTimeZone:timeZoneUTC];
+    NSString *strDate = [DateUtil dateToString:nowDateForGMT atDateFormat:@"yyyy-MM-dd HH:mm:ss" setTimeZone:timeZoneUTC];
     
     [db beginTransaction];
     
@@ -255,7 +255,7 @@
     // 現在時刻を文字列で取得
     NSDate *nowDateForGMT = [NSDate date];
     NSTimeZone *timeZoneUTC = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
-    NSString *strDate = [DateUtil dateToString:nowDateForGMT atDateFormat:@"yyyy-MM-dd hh:mm:ss" setTimeZone:timeZoneUTC];
+    NSString *strDate = [DateUtil dateToString:nowDateForGMT atDateFormat:@"yyyy-MM-dd HH:mm:ss" setTimeZone:timeZoneUTC];
     
     [db beginTransaction];
     

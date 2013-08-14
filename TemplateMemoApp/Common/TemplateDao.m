@@ -67,8 +67,8 @@
         NSString *cDate = [result stringForColumn:@"cDate"];
         NSString *mDate = [result stringForColumn:@"mDate"];
         
-        templateMemo.createDate = [DateUtil dateStringToDate:cDate atDateFormat:@"yyyy-MM-dd hh:mm:ss"];
-        templateMemo.modifiedDate = [DateUtil dateStringToDate:mDate atDateFormat:@"yyyy-MM-dd hh:mm:ss"];
+        templateMemo.createDate = [DateUtil dateStringToDate:cDate atDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        templateMemo.modifiedDate = [DateUtil dateStringToDate:mDate atDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         
         templateMemo.deleteFlag = 0;
         [templates addObject:templateMemo];
@@ -83,7 +83,7 @@
     // 現在時刻を文字列で取得
     NSDate *nowDateForGMT = [NSDate date];
     NSTimeZone *timeZoneUTC = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
-    NSString *strDate = [DateUtil dateToString:nowDateForGMT atDateFormat:@"yyyy-MM-dd hh:mm:ss" setTimeZone:timeZoneUTC];
+    NSString *strDate = [DateUtil dateToString:nowDateForGMT atDateFormat:@"yyyy-MM-dd HH:mm:ss" setTimeZone:timeZoneUTC];
     
     [db beginTransaction];
     
@@ -105,7 +105,7 @@
     // 現在時刻を文字列で取得
     NSDate *nowDateForGMT = [NSDate date];
     NSTimeZone *timeZoneUTC = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
-    NSString *strDate = [DateUtil dateToString:nowDateForGMT atDateFormat:@"yyyy-MM-dd hh:mm:ss" setTimeZone:timeZoneUTC];
+    NSString *strDate = [DateUtil dateToString:nowDateForGMT atDateFormat:@"yyyy-MM-dd HH:mm:ss" setTimeZone:timeZoneUTC];
     
     [db beginTransaction];
     
@@ -126,7 +126,7 @@
     // 現在時刻を文字列で取得
     NSDate *nowDateForGMT = [NSDate date];
     NSTimeZone *timeZoneUTC = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
-    NSString *strDate = [DateUtil dateToString:nowDateForGMT atDateFormat:@"yyyy-MM-dd hh:mm:ss" setTimeZone:timeZoneUTC];
+    NSString *strDate = [DateUtil dateToString:nowDateForGMT atDateFormat:@"yyyy-MM-dd HH:mm:ss" setTimeZone:timeZoneUTC];
     
     [db beginTransaction];
     
