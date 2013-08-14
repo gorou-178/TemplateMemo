@@ -44,7 +44,7 @@
 
 - (BOOL)update:(SettingInfo *)settingInfo
 {
-    NSLog(@"SettingDataSource: update");
+    DDLogInfo(@"詳細設定更新: %@ >> %@", settingInfo.detailTitle, settingInfo.settingData.labelText);
     [UserDefaultsWrapper save:settingInfo.key toObject:settingInfo.settingData];
     return YES;
 }

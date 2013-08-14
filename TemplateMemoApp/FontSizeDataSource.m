@@ -61,9 +61,6 @@
     FontSizeSettingInfo *fontSizeSettingInfo = [[FontSizeSettingInfo alloc] init];
     FontSize *fontSize = [UserDefaultsWrapper loadToObject:fontSizeSettingInfo.key];
     
-//    FontSettingInfo *fontSettingInfo = [[FontSettingInfo alloc] init];
-//    Font *font = [UserDefaultsWrapper loadToObject:fontSettingInfo.key];
-    
     // 現在の設定のセルにチェックをつける
     if (indexPath.row == fontSize.row) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
@@ -72,34 +69,6 @@
     }
     
     cell.textLabel.text = ((FontSize *)self.dataList[indexPath.row]).labelText;
-//    cell.detailTextLabel.font = [UIFont fontWithName:font.uiFont.fontName size:((FontSize *)self.dataList[indexPath.row]).size];
-//    cell.detailTextLabel.text = @"この大きさで表示されます";
 }
-
-//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    static NSString *identifer = @"Cell";
-//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifer];
-//    if (!cell) {
-//        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifer];
-//    }
-//    [self updateCellData:tableView cellForRowAtIndexPath:indexPath tableViewCell:cell];
-//    return cell;
-//}
-//
-//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-//{
-//    return self.dataList.count;
-//}
-//
-//- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    return NO;
-//}
-//
-//- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    return NO;
-//}
 
 @end

@@ -30,7 +30,7 @@
     systemFont.uiFont = [UIFont systemFontOfSize:fontSize.size];
     systemFont.row = 0;
     systemFont.name = [systemFont.uiFont fontName];
-    systemFont.labelText = [systemFont.uiFont familyName];
+    systemFont.labelText = [systemFont.uiFont fontName];
     [self.dataList addObject:systemFont];
 
     // ヒラギノ角ゴ ProN W3
@@ -38,7 +38,7 @@
     hiraginoKakuGothic.uiFont = [UIFont fontWithName:@"HiraKakuProN-W3" size:fontSize.size];
     hiraginoKakuGothic.row = 1;
     hiraginoKakuGothic.name = [hiraginoKakuGothic.uiFont fontName];
-    hiraginoKakuGothic.labelText = [hiraginoKakuGothic.uiFont familyName];
+    hiraginoKakuGothic.labelText = [hiraginoKakuGothic.uiFont fontName];
     [self.dataList addObject:hiraginoKakuGothic];
     
     // Helvetica NeueUI
@@ -46,24 +46,30 @@
     helvetica.uiFont = [UIFont fontWithName:@".HelveticaNeueUI" size:fontSize.size];
     helvetica.row = 2;
     helvetica.name = [helvetica.uiFont fontName];
-    helvetica.labelText = [helvetica.uiFont familyName];
+    helvetica.labelText = [helvetica.uiFont fontName];
     [self.dataList addObject:helvetica];
     
-/*
-    NSEnumerator *familyNames = [[UIFont familyNames] objectEnumerator];
-    NSString *familyName;
-    int index = 0;
-    while(familyName = [familyNames nextObject]) {
-        for (NSString *fontName in [UIFont fontNamesForFamilyName:familyName]) {
-            Font *font = [[Font alloc] init];
-            font.row = index;
-            font.labelText = fontName;
-            font.uiFont = [UIFont fontWithName:fontName size:fontSize.size];
-            [self.dataList addObject:font];
-            ++index;
-        }
-    }
-*/
+    Font *bokutachinoGothic = [[Font alloc] init];
+    bokutachinoGothic.uiFont = [UIFont fontWithName:@"BokutachinoGothic" size:fontSize.size];
+    bokutachinoGothic.row = 3;
+    bokutachinoGothic.name = [bokutachinoGothic.uiFont fontName];
+    bokutachinoGothic.labelText = [bokutachinoGothic.uiFont fontName];
+    [self.dataList addObject:bokutachinoGothic];
+    
+    Font *hannariMincho = [[Font alloc] init];
+    hannariMincho.uiFont = [UIFont fontWithName:@"HannariMincho" size:fontSize.size];
+    hannariMincho.row = 4;
+    hannariMincho.name = [hannariMincho.uiFont fontName];
+    hannariMincho.labelText = [hannariMincho.uiFont fontName];
+    [self.dataList addObject:hannariMincho];
+    
+    Font *huiFontP = [[Font alloc] init];
+    huiFontP.uiFont = [UIFont fontWithName:@"HuiFontP" size:fontSize.size];
+    huiFontP.row = 5;
+    huiFontP.name = [huiFontP.uiFont fontName];
+    huiFontP.labelText = [huiFontP.uiFont fontName];
+    [self.dataList addObject:huiFontP];
+
     return self;
 }
 
@@ -80,34 +86,6 @@
     }
     
     cell.textLabel.text = ((Font *)self.dataList[indexPath.row]).labelText;
-//    cell.detailTextLabel.font = ((Font *)self.dataList[indexPath.row]).uiFont;
-//    cell.detailTextLabel.text = [((Font *)self.dataList[indexPath.row]).uiFont familyName];
 }
-
-//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    static NSString *identifer = @"Cell";
-//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifer];
-//    if (!cell) {
-//        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifer];
-//    }
-//    [self updateCellData:tableView cellForRowAtIndexPath:indexPath tableViewCell:cell];
-//    return cell;
-//}
-//
-//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-//{
-//    return self.dataList.count;
-//}
-//
-//- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    return NO;
-//}
-//
-//- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    return NO;
-//}
 
 @end

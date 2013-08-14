@@ -11,6 +11,7 @@
 #import "TMMemoTableViewController.h"
 #import "TMEditMemoViewController.h"
 #import "TMTemplateMemoTableViewController.h"
+#import "UINavigationController+AllRotate.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 

@@ -18,20 +18,29 @@
 
 #import "UserDefaultsWrapper.h"
 
-#import "TMAppContext.h"
+#import "DDFileLogger.h"
+#import "DDTTYLogger.h"
+#import "TMLogFormatter.h"
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES );
+    NSString *dir = [paths objectAtIndex:0];
+    NSLog(@"DDLogFile: %@", dir);
+    
+    DDFileLogger *fileLogger = [[DDFileLogger alloc] initWithLogFileManager:[[DDLogFileManagerDefault alloc] initWithLogsDirectory:dir]];
+    fileLogger.logFormatter = [[TMLogFormatter alloc] init];
+    [DDLog addLogger:[DDTTYLogger sharedInstance]];
+    [DDLog addLogger:fileLogger];
+    
     // Override point for customization after application launch.
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
         UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
         splitViewController.delegate = (id)navigationController.topViewController;
     }
-    
-    [TMAppContext sharedManager];
     
 #if DEBUG
     // NSUserDefaultsのデータを全て削除
@@ -73,7 +82,7 @@
     if (loadTemplateMemo == nil) {
         [UserDefaultsWrapper save:templateMemoSettingInfo.key toObject:templateMemo];
     }
-    
+
     return YES;
 }
 							
@@ -105,7 +114,7 @@
     FMDBWrapper *fmdbWrapper = [[FMDBWrapper alloc] init];
     if ([fmdbWrapper open]) {
         if ([fmdbWrapper vacuum]) {
-            NSLog(@"SQLite: 最適化完了");
+            DDLogInfo(@"AppDelegate: vacuum");
         }
     }
 }
