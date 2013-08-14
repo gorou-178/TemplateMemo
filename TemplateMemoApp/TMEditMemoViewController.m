@@ -21,12 +21,16 @@
 #import "TMTagSettingTableViewController.h"
 #import "TMMemoInfoTableViewController.h"
 
+#import "MemoUndoRedoStore.h"
+#import "KeyboardButtonView.h"
+
+#define DISP_AD_BOTTOM
+
 @interface TMEditMemoViewController ()
 {
     id<MemoDao> memoDao;
     id<TagDao> tagDao;
     id<TemplateDao> templateDao;
-    id<UITextInput> activeTextInput;
     UITableViewController *activeSideView;
     BOOL _registered;
     CGSize originalSize;
@@ -51,28 +55,67 @@
     tagDao = [TagDaoImpl new];
     memoDao = [MemoDaoImpl new];
     templateDao = [TemplateDaoImpl new];
+    _editTarget = TMEditTargetMemo;
     
-    // textView設定
-//    [self registerForKeyboardNotifications];
+    fastViewFlag = YES;
+	bannerIsVisible = NO;
     
-    // navigationItem UI作成
-    [self createEditDoneButton];
+    _undoStore = [[MemoUndoRedoStore alloc] init];
+    _redoStore = [[MemoUndoRedoStore alloc] init];
     
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        [self createAddMemoButton];
-        self.navigationItem.rightBarButtonItem = self.addMemoButton;
+    [self setAddMemoButton];
+    [self setEditDoneButton];
+}
+
+- (void)handleSingleTap
+{
+    NSLog(@"handleSingleTap");
+    if (![self.bodyTextView isEditable]) {
+        [self.bodyTextView setEditable:YES];
     }
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
     
     originalSize = CGSizeZero;
     
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap)];
+    
+    //modify this number to recognizer number of tap
+    [singleTap setNumberOfTapsRequired:1];
+    [self.bodyTextView addGestureRecognizer:singleTap];
+    
+    CGRect insetSize;
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        adView = [[ADBannerView alloc] init];
+        adView.delegate = self;
+        adView.autoresizesSubviews = YES;
+        adView.autoresizingMask =  UIViewAutoresizingFlexibleTopMargin;
+        adView.alpha = 0.0;
+        insetSize = adView.bounds;
+        [self.view addSubview:adView];
+    } else {
+        insetSize = CGRectMake(0, 0, 0, 50);
+    }
+    
+    // UITableView のコンテンツに余白を付ける
+    self.bodyTextView.contentInset = UIEdgeInsetsMake(0.f, 0.f, insetSize.size.height, 0.f);
+    // UITableView のスクロール可能範囲に余白を付ける
+    self.bodyTextView.scrollIndicatorInsets = UIEdgeInsetsMake(0.f, 0.f, insetSize.size.height, 0.f);
+    
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     appDelegate.editMemoViewController = self;
+    self.bodyTextView.delegate = self;
+    
+    // キーボードアクセサリビュー作成
+    CGRect bounds = self.view.bounds;
+    KeyboardButtonView *accessoryView = [[KeyboardButtonView alloc] initWithFrame:CGRectMake(0,0,bounds.size.width,35)];
+    [accessoryView.closeButton addTarget:self action:@selector(onPushCloseButton:) forControlEvents:UIControlEventTouchUpInside];
+    [accessoryView.rightButton addTarget:self action:@selector(onPushRightButton:) forControlEvents:UIControlEventTouchUpInside];
+    [accessoryView.leftButton addTarget:self action:@selector(onPushLeftButton:) forControlEvents:UIControlEventTouchUpInside];
+    self.bodyTextView.inputAccessoryView = accessoryView;
 }
 
 - (void)didReceiveMemoryWarning
@@ -106,38 +149,43 @@
 
 #pragma mark - Custom UI
 
-- (void)createAddMemoButton
+- (void)setAddMemoButton
 {
-    if (self.addMemoButton == nil) {
-        self.addMemoButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(onPushAdd:)];
+    // キーボードが閉じたタイミングでボタンを「メモ追加ボタン」に変更(iPadのみ)
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
+        if (self.addMemoButton == nil) {
+            self.addMemoButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(onPushAdd:)];
+            [self.addMemoButton setEnabled:NO];
+        }
+        [self.navigationItem setRightBarButtonItem:self.addMemoButton animated:YES];
+    } else {
+        [self.navigationItem setRightBarButtonItem:nil animated:YES];
     }
 }
 
-- (void)createEditDoneButton
+- (void)setEditDoneButton
 {
     if (self.editDoneButton == nil) {
         self.editDoneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(onPushDone:)];
     }
+    [self.navigationItem setRightBarButtonItem:self.editDoneButton animated:YES];
 }
 
 #pragma mark - Managing the tmEditViewControler
 
 - (void)setDetailItem:(Memo *)newDetailItem
 {
-    // TODO: ポインタ比較はNGだと思う
     if (_detailItem != newDetailItem) {
-        
-        // 編集モード - メモ
+        _detailItem = newDetailItem;
         _editTarget = TMEditTargetMemo;
         [self.tagSettingButton setEnabled:YES];
+        [self.addMemoButton setEnabled:YES];
         
-//        // メモ選択で表示する
-//        if ([self.bodyTextView isHidden]) {
-//            [self.bodyTextView setHidden:NO];
-//            [self.tagTextField setHidden:NO];
-//        }
-        
-        _detailItem = newDetailItem;
+        // メモ選択で表示する
+        if ([self.bodyTextView isHidden]) {
+            [self.bodyTextView setHidden:NO];
+            [self.memoInfoButton setEnabled:YES];
+        }
         
         // Update the view.
         [self configureView];
@@ -150,11 +198,17 @@
 
 - (void)setTemplateMemo:(TemplateMemo *)templateMemo
 {
-    // TODO: ポインタ比較はNGだと思う
     if (_templateMemo != templateMemo ) {
         _editTarget = TMEditTargetTemplate;
         _templateMemo = templateMemo;
         [self.tagSettingButton setEnabled:NO];
+        [self.addMemoButton setEnabled:NO];
+        
+        // メモ選択で表示する
+        if ([self.bodyTextView isHidden]) {
+            [self.bodyTextView setHidden:NO];
+            [self.memoInfoButton setEnabled:YES];
+        }
         
         // Update the view.
         [self configureView];
@@ -197,114 +251,68 @@
     }
 }
 
-#pragma mark - Notification Keyboard selectors
-
-//- (void)keyboardWillChangeFrameNotification:(NSNotification*)aNotification
-//{
-//    NSLog(@"call keyboardWillChangeFrameNotification");
-//}
-//
-//- (void)keyboardWillShowNotification:(NSNotification*)aNotification
-//{
-//    NSLog(@"call keyboardWillShowNotification");
-//}
-
 - (void)keyboardWillShow:(NSNotification*)aNotification
 {
-    self.editMode = YES;
-    NSLog(@"call keyboardWasShown => editMode: %d", self.editMode);
-   
-    NSDictionary *userInfo = [aNotification userInfo];
-    CGRect keyboardRect = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    
-    keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
-    
-    if([_bodyTextView isFirstResponder])
+    // アクティブ出ない場合何もしない
+    if(![_bodyTextView isFirstResponder])
     {
-        NSTimeInterval animationDuration = [[[aNotification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
-        [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
-        [UIView setAnimationDuration:animationDuration];
-        
-        CGRect frame = _bodyTextView.frame;
-        if(CGSizeEqualToSize(originalSize, CGSizeZero))
-        {
-            originalSize = frame.size;
-        }
-        
-        CGPoint pt = CGPointMake(0, CGRectGetMinY(keyboardRect));
-        pt = [_bodyScrollView convertPoint:pt fromView:self.view];
-        
-        CGSize size = CGSizeZero;
-        if( pt.y > _bodyTextView.frame.origin.y )
-        {
-            size = CGSizeMake(_bodyTextView.frame.size.width, pt.y - _bodyTextView.frame.origin.y);
-            frame.size = size;
-            _bodyTextView.frame = frame;
-            
-            [UIView commitAnimations];
-            
-        }
+        return;
     }
     
-    // キーボードを開いたタイミングでボタンを「編集完了ボタン」に変更
-    [self createEditDoneButton];
-    [self.navigationItem setRightBarButtonItem:self.editDoneButton animated:YES];
+    self.editMode = YES;
+    NSDictionary *userInfo = [aNotification userInfo];
+    CGRect keyboardRect = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    keyboardRect = [self.view convertRect:keyboardRect fromView:nil];
+    NSTimeInterval animationDuration = [[[aNotification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
+    [UIView setAnimationDuration:animationDuration];
+    
+    CGRect frame = _bodyTextView.frame;
+    if(CGSizeEqualToSize(originalSize, CGSizeZero))
+    {
+        originalSize = frame.size;
+    }
+    
+    CGPoint pt = CGPointMake(0, CGRectGetMinY(keyboardRect));
+    pt = [_bodyScrollView convertPoint:pt fromView:self.view];
+    
+    CGSize size = CGSizeZero;
+    if( pt.y > _bodyTextView.frame.origin.y )
+    {
+        size = CGSizeMake(_bodyTextView.frame.size.width, pt.y - _bodyTextView.frame.origin.y);
+        frame.size = size;
+        _bodyTextView.frame = frame;
+        
+        [UIView commitAnimations];
+        
+    }
 }
 
 - (void)keybaordWillHide:(NSNotification*)aNotification
 {
-    self.editMode = NO;
-    NSLog(@"call keyboardWillBeHidden => editMode: %d", self.editMode);
-    
-    if([_bodyTextView isFirstResponder])
+    // アクティブでない場合何もしない
+    if(![_bodyTextView isFirstResponder])
     {
-        NSTimeInterval animationDuration = [[[aNotification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
-        [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
-        [UIView setAnimationDuration:animationDuration];
-        
-        CGRect frame = _bodyTextView.frame;
-        frame.size = originalSize;
-        _bodyTextView.frame = frame;
-        
-        originalSize = CGSizeZero;
-        
-        [UIView commitAnimations];
+        return;
     }
     
-    // キーボードが閉じたタイミングでボタンを「メモ追加ボタン」に変更(iPadのみ)
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
-        [self createAddMemoButton];
-        [self.navigationItem setRightBarButtonItem:self.addMemoButton animated:YES];
-        [self.navigationItem setRightBarButtonItem:self.addMemoButton animated:YES];
-    } else {
-        [self.navigationItem setRightBarButtonItem:nil animated:YES];
-    }
+    self.editMode = NO;
+    NSTimeInterval animationDuration = [[[aNotification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
+    [UIView setAnimationDuration:animationDuration];
     
-    if (_editTarget == TMEditTargetMemo) {
-        // メモを保存
-        [self saveMemo];
-    } else if (_editTarget == TMEditTargetTemplate) {
-        // テンプレートを保存
-        [self saveTemplateMemo];
-    }
-}
-
-- (BOOL)textViewShouldBeginEditing:(UITextView *)textView
-{
-    NSLog(@"call textViewShouldBeginEditing");
-    activeTextInput = self.bodyTextView;
-    return YES;
-}
-
-- (void)textViewDidEndEditing:(UITextView *)textView
-{
-    activeTextInput = nil;
-    NSLog(@"call textViewDidEndEditing");
+    CGRect frame = _bodyTextView.frame;
+    frame.size = originalSize;
+    _bodyTextView.frame = frame;
+    
+    originalSize = CGSizeZero;
+    
+    [UIView commitAnimations];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    // super
+    DDLogInfo(@"メモ表示");
     [super viewWillAppear:animated];
     
     // Register for notifiactions
@@ -328,11 +336,21 @@
                      object:nil];
         _registered = YES;
     }
+    [self changeRotateForm];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    // iPadにてアプリ起動時にランドスケープの場合、ボタン表示位置が左寄りになるのを防ぐために必要
+    if(fastViewFlag == YES){
+        fastViewFlag = NO;
+        [self changeRotateForm];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    // super
     [super viewWillDisappear:animated];
     
     // Unregister from notification center
@@ -356,41 +374,145 @@
 
 - (void)applicationWillResignActive:(NSNotificationCenter *)center
 {
-    NSLog(@"★applicationWillResignActive");
+    // キーボード表示と同時に他のアプリやOSの通知ダイアログが表示された場合の対処
+    DDLogInfo(@"メモ表示: 非アクティブ");
     [self onPushDone:self.editDoneButton];
 }
+
+//- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+//{
+//    NSString *newString = [textView.text stringByReplacingCharactersInRange:range withString:text];
+////    NSLog(@"'%@' text:%@ , loc:%d , len:%d → %@",textView.text , text , range.location , range.length , newString);
+//    // 変換完了であればUndoに積む
+//    if ([_bodyTextView markedTextRange] == nil) {
+//
+////        [[_bodyTextView.undoManager prepareWithInvocationTarget:self] updateTextRange:textView.selectedTextRange currentText:textView.text];
+////        [_undoStore push:_detailItem.memoid bodyHistory:textView.text];
+//    }
+//
+//    return YES;
+//}
+
+//- (void)updateTextRange:(UITextRange *)textRange currentText:(NSString *)currentText
+//{
+//    [[_bodyTextView.undoManager prepareWithInvocationTarget:self] updateTextRange:_bodyTextView.selectedTextRange currentText:_bodyTextView.text];
+//
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        self.bodyTextView.scrollEnabled = NO;
+//        [self.bodyTextView setText:currentText];
+////        [self.bodyTextView replaceRange:textRange withText:currentText];
+//        self.bodyTextView.scrollEnabled = YES;
+//        self.bodyTextView.selectedTextRange = textRange;
+//    });
+//}
 
 #pragma mark - Custom UI Selectors
 
 - (void)onPushAdd:(id)sender {
     // メモコントローラのメモ追加処理をコール
-    NSLog(@"onPushAdd");
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     if (_editTarget == TMEditTargetMemo) {
-        [appDelegate.memoTableViewController insertNewObject:sender];
+        DDLogInfo(@"メモ表示: メモ新規作成");
+        [appDelegate.memoTableViewController onPushAddButton:sender];
     } else if (_editTarget == TMEditTargetTemplate) {
+        DDLogInfo(@"メモ表示: テンプレート新規作成");
         [appDelegate.templateMemoViewController insertTemplateMemo:sender];
     }
 }
 
 - (void)onPushDone:(id)sender {
     // 意図的にキーボードを閉じる場合
-    NSLog(@"onPushDone");
-    // 現在アクティブなtextInputによって閉じるキーボードを変更
-//    if (activeTextInput == self.tagTextField) {
-//        [self.tagTextField resignFirstResponder];
-//    } else {
-        [self.bodyTextView resignFirstResponder];
-//    }
-    activeTextInput = nil;
-    
-    // タグを保存
-//    [self saveTag];
+    DDLogInfo(@"メモ表示: 編集完了");
+    [self.bodyTextView resignFirstResponder];
+    [self.bodyTextView setEditable:NO];
+//    [self saveMemo];
 }
+
+- (void)onPushCloseButton:(id)sender
+{
+    DDLogInfo(@"メモ表示: キーボードを閉じる");
+    [self onPushDone:sender];
+}
+
+- (void)onPushRightButton:(id)sender
+{
+    UITextRange *currentRange = self.bodyTextView.selectedTextRange;
+    if([currentRange.end isEqual:self.bodyTextView.endOfDocument]){
+        return;
+    }
+    
+    [currentRange isEmpty] ? [self moveCaret:1] : [self moveSelectRange:1];
+}
+
+- (void)onPushLeftButton:(id)sender
+{
+    UITextRange *currentRange = self.bodyTextView.selectedTextRange;
+    if([currentRange.start isEqual:self.bodyTextView.beginningOfDocument]){
+        return;
+    }
+    
+    [currentRange isEmpty] ? [self moveCaret:-1] : [self moveSelectRange:-1];
+}
+
+- (void)moveSelectRange:(NSInteger)offset
+{
+    UITextRange *currentRange = self.bodyTextView.selectedTextRange;
+    UITextPosition *newPosition =
+    [self.bodyTextView positionFromPosition:currentRange.end offset:offset];
+    
+    UITextRange *newRange;
+    newRange = [self.bodyTextView textRangeFromPosition:currentRange.start
+                                                 toPosition:newPosition];
+    
+    self.bodyTextView.selectedTextRange = newRange;
+}
+
+- (void)moveCaret:(NSInteger)offset
+{
+    UITextRange *currentRange = self.bodyTextView.selectedTextRange;
+    UITextPosition *newPosition =
+    [self.bodyTextView positionFromPosition:currentRange.start offset:offset];
+    
+    UITextRange *newRange;
+    newRange = [self.bodyTextView textRangeFromPosition:newPosition
+                                                 toPosition:newPosition];
+    
+    self.bodyTextView.selectedTextRange = newRange;
+}
+
+//- (void)onPushRedoButton:(id)sender
+//{
+//    if (_detailItem) {
+//        NSString *redoBody = [_redoStore pop:_detailItem.memoid];
+//        if (redoBody != nil) {
+//            // redo前のデータをundoに積む
+//            [_undoStore push:_detailItem.memoid bodyHistory:_detailItem.body];
+//            _detailItem.body = [redoBody mutableCopy];
+//            [self.bodyTextView setText:[redoBody mutableCopy]];
+//        } else {
+//            
+//        }
+//    }
+//}
+//
+//- (void)onPushUndoButton:(id)sender
+//{
+//    if (_detailItem) {
+//        NSString *undoBody = [_undoStore pop:_detailItem.memoid];
+//        if (undoBody != nil) {
+//            // undo前のデータをredoに積む
+//            [_redoStore push:_detailItem.memoid bodyHistory:_detailItem.body];
+//            _detailItem.body = [undoBody mutableCopy];
+//            [self.bodyTextView setText:[undoBody mutableCopy]];
+//        }
+//    }
+//}
 
 // メモを保存
 - (void)saveMemo
 {
+    [self setAddMemoButton];
+    
     // 選択したMemoを保存
     if (_detailItem) {
         
@@ -421,6 +543,7 @@
             
             AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
             [appDelegate.memoTableViewController updateVisibleCells];
+            DDLogInfo(@"メモ表示: メモを保存");
         }
     }
 }
@@ -428,6 +551,7 @@
 // テンプレートを保存
 - (void)saveTemplateMemo
 {
+    [self setAddMemoButton];
     if (_templateMemo) {
         
         if ([self.bodyTextView.text length] > 0) {
@@ -442,107 +566,29 @@
             
             AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
             [appDelegate.templateMemoViewController updateVisibleCells];
+            DDLogInfo(@"メモ表示: テンプレートを保存");
         }
     }
 }
 
-// tagTextFieldの内容でTag/TagLinkを保存
-//- (void)saveTag
-//{
-//    if (self.tagTextField.text.length > 0) {
-//        
-//        /*
-//         1 入力されたタグ名半角空白で区切る
-//         2 現在登録されているタグ一覧を取得
-//         3 タグ名が一致するタグを全て取り出す
-//         4 タグ名が一致しないタグは新規登録
-//         5 保存対象のメモのtagLinkから全てのtagを取得
-//         6 5と3でtagが一致しなかったtagをメモのtagLinkを削除
-//         7 4のtagLinkを新規登録
-//         */
-//        
-//        // 入力タグから重複を消す
-//        NSArray *tagNames = [self.tagTextField.text componentsSeparatedByString:@" "];
-//        NSSet *uniqOriginalTagNameSet = [[NSSet alloc] initWithArray:tagNames];
-//        NSString *uniqTagNameText = [[uniqOriginalTagNameSet allObjects] componentsJoinedByString:@" "];
-//        self.tagTextField.text = uniqTagNameText;
-//        
-//        // 現在登録されているtagを追加
-//        NSMutableArray *tags = [tagDao.tags mutableCopy];
-//        NSMutableSet *tagNameSet = [[NSMutableSet alloc] init];
-//        for (Tag *tag in tags) {
-//            [tagNameSet addObject:tag.name];
-//        }
-//        
-//        // 新しく設定されたtagを調べる
-//        for (NSString *tagName in tagNames) {
-//            // 現在登録されているタグにはないタグ名の場合、新規追加する
-//            if (![tagNameSet containsObject:tagName]) {
-//                Tag *tag = [Tag new];
-//                tag.name = tagName;
-//                tag.deleteFlag = 0;
-//                [tagDao add:tag];
-//            }
-//        }
-//        
-//        // 再度タグを全て取得(tagIdの取得がしたいため)
-//        tags = [tagDao.tags mutableCopy];
-//        
-//        // 元々のtagLinkのタグが入力タグに存在しない場合、リンクを削除する
-//        NSMutableArray *copyTagNames = [tagNames mutableCopy];
-//        NSMutableArray *memoTags = [[tagDao tagForMemo:_detailItem] mutableCopy];
-//        for (Tag *tag in memoTags) {
-//            if (![tagNames containsObject:tag.name]) {
-//                [tagDao removeTagLink:_detailItem forLinkTag:tag];
-//            } else {
-//                [copyTagNames removeObject:tag.name];
-//            }
-//        }
-//        
-//        // 新しく追加したTagのTagLinkを追加
-//        for (NSString *tagName in copyTagNames) {
-//            for (Tag *tag in tags) {
-//                if ([tag.name isEqualToString:tagName]) {
-//                    [tagDao addTagLink:_detailItem forLinkTag:tag];
-//                }
-//            }
-//        }
-//        
-//        // タグTableViewを更新
-//        AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-//        [appDelegate.tagTableViewController updateVisibleCells];
-//    }
-//}
+#pragma mark - Text view Delegate
 
-//#pragma mark - tagTextField delegate
-//
-//- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
-//{
-//    NSLog(@"tagTextField shouldBeginEditing");
-//    activeTextInput = self.tagTextField;
-//    return YES;
-//}
-//
-//// tagTextFieldでreturnキータップでキーボードを閉じる
-//- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-//    NSLog(@"tagTextField shouldReturn");
-//    [textField resignFirstResponder];
-//    activeTextInput = nil;
-//    return YES;
-//}
-//
-//- (void)textFieldDidEndEditing:(UITextField *)textField
-//{
-//    NSLog(@"tagTextField DidEndEditing");
-//    activeTextInput = nil;
-//}
+- (BOOL)textViewShouldBeginEditing:(UITextView *)textView
+{
+    [self setEditDoneButton];
+    return YES;
+}
 
-#pragma mark - tagTextField Actions
-
-//- (IBAction)onDidEndOnExitForTagTextField:(id)sender {
-//    NSLog(@"tagTextField EndTagEdit");
-//    activeTextInput = nil;
-//}
+- (void)textViewDidEndEditing:(UITextView *)textView
+{
+    if (_editTarget == TMEditTargetMemo) {
+        // メモを保存
+        [self saveMemo];
+    } else if (_editTarget == TMEditTargetTemplate) {
+        // テンプレートを保存
+        [self saveTemplateMemo];
+    }
+}
 
 #pragma mark - Split view
 
@@ -555,8 +601,12 @@
     } else {
         barButtonItem.title = appDelegate.memoTableViewController.navigationItem.title;
     }
+    if (barButtonItem.title == nil) {
+        barButtonItem.title = @"タグ";
+    }
     [self.navigationItem setLeftBarButtonItem:barButtonItem animated:YES];
     self.masterPopoverController = popoverController;
+    DDLogInfo(@"メモ表示: ポップオーバー表示");
 }
 
 - (void)splitViewController:(UISplitViewController *)splitController willShowViewController:(UIViewController *)viewController invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem
@@ -564,6 +614,7 @@
     // Called when the view is shown again in the split view, invalidating the button and popover controller.
     [self.navigationItem setLeftBarButtonItem:nil animated:YES];
     self.masterPopoverController = nil;
+    DDLogInfo(@"メモ表示: 2カラム表示");
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -574,6 +625,117 @@
     } else if ([[segue identifier] isEqualToString:@"showMemoInfo"]){
         TMMemoInfoTableViewController *destinationView = [segue destinationViewController];
         [destinationView setActiveMemo:self];
+    }
+}
+
+// スクロールされる度に呼ばれる
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    CGRect frame = self.view.frame;
+    float viewHeight = frame.size.height;
+    float adViewWidth = adView.frame.size.width;
+    float adViewHeight = adView.frame.size.height;
+    adView.center = CGPointMake(adViewWidth / 2, self.bodyTextView.contentOffset.y + viewHeight - adViewHeight / 2);
+    [self.view bringSubviewToFront:adView];
+}
+
+#pragma mark - iAd Delegate
+
+// iAD ------------------------------------------------
+
+// 新しい広告がロードされた後に呼ばれる
+// 非表示中のバナービューを表示する
+- (void)bannerViewDidLoadAd:(ADBannerView *)banner
+{
+	if (!bannerIsVisible) {
+        UIDeviceOrientation interfaceOrientation = [[UIDevice currentDevice] orientation];
+        if (interfaceOrientation != UIDeviceOrientationPortrait && interfaceOrientation != UIDeviceOrientationPortraitUpsideDown ) {
+            return;
+        }
+		[UIView beginAnimations:@"animateAdBannerOn" context:NULL];
+		[UIView setAnimationDuration:1.0];
+        
+#ifdef DISP_AD_BOTTOM
+		banner.frame = CGRectOffset(banner.frame, 0, -CGRectGetHeight(banner.frame));
+#else
+		banner.frame = CGRectOffset(banner.frame, 0, CGRectGetHeight(banner.frame));
+#endif
+        banner.alpha = 1.0;
+        
+		[UIView commitAnimations];
+		bannerIsVisible = YES;
+        DDLogInfo(@"メモ表示: iAd表示");
+	}
+}
+
+// 広告バナータップ後に広告画面切り替わる前に呼ばれる
+- (BOOL)bannerViewActionShouldBegin:(ADBannerView *)banner willLeaveApplication:(BOOL)willLeave
+{
+	BOOL shoudExecuteAction = YES; // 広告画面に切り替える場合はYES（通常はYESを指定する）
+	if (!willLeave && shoudExecuteAction) {
+		// 必要ならココに、広告と競合する可能性のある処理を一時停止する処理を記述する。
+        DDLogInfo(@"メモ表示: iAdタップ");
+	}
+	return shoudExecuteAction;
+}
+
+// 広告画面からの復帰時に呼ばれる
+- (void)bannerViewActionDidFinish:(ADBannerView *)banner
+{
+    // 必要ならココに、一時停止していた処理を再開する処理を記述する。
+}
+
+// 表示中の広告が無効になった場合に呼ばれる
+// 表示中のバナービューを非表示にする
+- (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error
+{
+    if (bannerIsVisible) {
+        [UIView beginAnimations:@"animateAdBannerOff" context:NULL];
+		[UIView setAnimationDuration:1.0];
+        
+#ifdef DISP_AD_BOTTOM
+        banner.frame = CGRectOffset(banner.frame, 0, CGRectGetHeight(banner.frame));
+#else
+        banner.frame = CGRectOffset(banner.frame, 0, -CGRectGetHeight(banner.frame));
+#endif
+        banner.alpha = 0.0;
+        
+        [UIView commitAnimations];
+        bannerIsVisible = NO;
+        DDLogInfo(@"メモ表示: iAd非表示 >> %@", [error localizedDescription]);
+    }
+}
+
+// 回転処理 -----------------------------------------------
+
+// 回転時の各ビューのサイズ・表示位置の調整を行う
+- (void)changeRotateForm
+{
+    CGFloat height = self.view.bounds.size.height;
+#ifdef DISP_AD_BOTTOM
+    adView.frame = CGRectMake(0, height, adView.frame.size.width, adView.frame.size.height);
+	if (bannerIsVisible) {
+		adView.frame = CGRectOffset(adView.frame, 0, -CGRectGetHeight(adView.frame));
+    }
+#else
+	if (bannerIsVisible) {
+		adView.frame = CGRectMake(0, 0, adView.frame.size.width, adView.frame.size.height);
+    }
+    else{
+        adView.frame = CGRectMake(0, -adView.frame.size.height, adView.frame.size.width, adView.frame.size.height);
+    }
+#endif
+}
+
+// 回転アニメーション直前にコール
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration
+{
+    DDLogInfo(@"メモ表示: ローテーション %d", interfaceOrientation);
+    if (interfaceOrientation != UIDeviceOrientationPortrait && interfaceOrientation != UIDeviceOrientationPortraitUpsideDown ) {
+        [self bannerView:adView didFailToReceiveAdWithError:nil];
+    } else {
+        [self bannerViewDidLoadAd:adView];
+        [self changeRotateForm];
     }
 }
 
