@@ -17,6 +17,6 @@
 - (int)maxRefCount;
 @end
 
-@interface TemplateDaoImpl : FMDBWrapper<TemplateDao>
+@interface TemplateDaoImpl : NSObject<TemplateDao, FMDBUsable>
 
 @end

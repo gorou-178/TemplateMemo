@@ -17,6 +17,9 @@
 // メモを全件取得
 - (NSArray*)memos;
 
+// メモを取得
+- (Memo*)memo:(NSInteger)memoId;
+
 // タグに関連付けされたメモを取得
 - (TagLink*)tagMemos:(Tag*)tag;
 
@@ -36,5 +39,5 @@
 - (BOOL)remove:(Memo*)memo;
 @end
 
-@interface MemoDaoImpl : FMDBWrapper <MemoDao>
+@interface MemoDaoImpl : NSObject <MemoDao, FMDBUsable>
 @end

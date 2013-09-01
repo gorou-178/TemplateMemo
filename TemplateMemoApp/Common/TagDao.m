@@ -10,48 +10,59 @@
 #import "FMDatabase.h"
 #import "DateUtil.h"
 
+@interface TagDaoImpl ()
+{
+    FMDBWrapper *_fmdb;
+}
+@end
+
 @implementation TagDaoImpl
 
 - (id)init
 {
-    NSLog(@"TagDaoImpl init");
     self = [super init];
-    [self createTable];
+    if (self) {
+        _fmdb = [[FMDBWrapper alloc] init];
+        [self createTable];
+    }
     return self;
 }
 
-- (id)initWithDataBaseFileName:(NSString *)fileName
+- (id)initWithFMDBWrapper:(FMDBWrapper*)fmdb
 {
-    self = [super initWithDataBaseFileName:fileName];
-    [self createTable];
+    self = [super init];
+    if (self) {
+        _fmdb = fmdb;
+        [self createTable];
+    }
     return self;
 }
 
 - (BOOL)createTable
 {
-    BOOL bResult = [self open];
-    if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+    BOOL bResult = [_fmdb open];
+    if ([_fmdb.db hadError]) {
+        DDLogError(@"DBエラー: %@ %@ code = %d >> %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [_fmdb.db lastErrorCode], [_fmdb.db lastErrorMessage]);
         return bResult;
     }
     
-    [db beginTransaction];
+    [_fmdb.db beginTransaction];
     
-    bResult = [db executeUpdate:@"CREATE TABLE IF NOT EXISTS tag (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, posision INTEGER, createDate REAL, modifiedDate REAL, deleteFlag INTEGER);"];
-    if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-        [db rollback];
+    bResult = [_fmdb.db executeUpdate:@"CREATE TABLE IF NOT EXISTS tag (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, posision INTEGER, createDate REAL, modifiedDate REAL, deleteFlag INTEGER);"];
+    if ([_fmdb.db hadError]) {
+        DDLogError(@"DBエラー(ロールバック): %@ %@ code = %d >> %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [_fmdb.db lastErrorCode], [_fmdb.db lastErrorMessage]);
+        [_fmdb.db rollback];
         return bResult;
     }
     
-    bResult = [db executeUpdate:@"CREATE TABLE IF NOT EXISTS tagLink (id INTEGER PRIMARY KEY AUTOINCREMENT, tagId INTEGER, memoId INTEGER, createDate REAL, modifiedDate REAL);"];
-    if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-        [db rollback];
+    bResult = [_fmdb.db executeUpdate:@"CREATE TABLE IF NOT EXISTS tagLink (id INTEGER PRIMARY KEY AUTOINCREMENT, tagId INTEGER, memoId INTEGER, createDate REAL, modifiedDate REAL);"];
+    if ([_fmdb.db hadError]) {
+        DDLogError(@"DBエラー(ロールバック): %@ %@ code = %d >> %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [_fmdb.db lastErrorCode], [_fmdb.db lastErrorMessage]);
+        [_fmdb.db rollback];
         return bResult;
     }
     
-    [db commit];
+    [_fmdb.db commit];
     return bResult;
 }
 
@@ -59,9 +70,9 @@
 {
     NSMutableArray* tags = [[NSMutableArray alloc] init];
     NSString *sql = @"select id, name, posision, datetime(createDate, 'localtime') cDate, datetime(modifiedDate,'localtime') mDate from tag where deleteFlag = 0 order by posision desc;";
-    FMResultSet* result = [db executeQuery:sql];
-    if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+    FMResultSet* result = [_fmdb.db executeQuery:sql];
+    if ([_fmdb.db hadError]) {
+        DDLogError(@"DBエラー: %@ %@ code = %d >> %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [_fmdb.db lastErrorCode], [_fmdb.db lastErrorMessage]);
         [result close];
         return tags;
     }
@@ -92,9 +103,9 @@
     
     // メモに関連付けされているタグを取得
     NSString *tagIdsSql = [[NSString alloc] initWithFormat:@"select tagId from tagLink where memoId = %d;", memo.memoid];
-    FMResultSet* result = [db executeQuery:tagIdsSql];
-    if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+    FMResultSet* result = [_fmdb.db executeQuery:tagIdsSql];
+    if ([_fmdb.db hadError]) {
+        DDLogError(@"DBエラー: %@ %@ code = %d >> %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [_fmdb.db lastErrorCode], [_fmdb.db lastErrorMessage]);
         [result close];
         return nil;
     }
@@ -124,9 +135,9 @@
     NSLog(@"tagForMemo sql: %@", sql);
     
     // 対象のタグを全て取得
-    result = [db executeQuery:sql];
-    if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+    result = [_fmdb.db executeQuery:sql];
+    if ([_fmdb.db hadError]) {
+        DDLogError(@"DBエラー: %@ %@ code = %d >> %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [_fmdb.db lastErrorCode], [_fmdb.db lastErrorMessage]);
         [result close];
         return nil;
     }
@@ -153,9 +164,9 @@
 
 - (int)count
 {
-    FMResultSet* result = [db executeQuery:@"select count(id) countId from tag where deleteFlag = 0;"];
-    if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+    FMResultSet* result = [_fmdb.db executeQuery:@"select count(id) countId from tag where deleteFlag = 0;"];
+    if ([_fmdb.db hadError]) {
+        DDLogError(@"DBエラー: %@ %@ code = %d >> %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [_fmdb.db lastErrorCode], [_fmdb.db lastErrorMessage]);
         [result close];
         return 0;
     }
@@ -169,9 +180,9 @@
 - (int)countOfMemo:(Tag*)tag
 {
     NSString *sql = [[NSString alloc] initWithFormat:@"select count(tl.id) countId from memo m, tagLink tl where tagId = %d and tl.memoId = m.id and m.deleteFlag = 0;", tag.tagId];
-    FMResultSet* result = [db executeQuery:sql];
-    if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+    FMResultSet* result = [_fmdb.db executeQuery:sql];
+    if ([_fmdb.db hadError]) {
+        DDLogError(@"DBエラー: %@ %@ code = %d >> %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [_fmdb.db lastErrorCode], [_fmdb.db lastErrorMessage]);
         [result close];
         return 0;
     }
@@ -189,14 +200,14 @@
     NSTimeZone *timeZoneUTC = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
     NSString *strDate = [DateUtil dateToString:nowDateForGMT atDateFormat:@"yyyy-MM-dd HH:mm:ss" setTimeZone:timeZoneUTC];
     
-    [db beginTransaction];
+    [_fmdb.db beginTransaction];
     
     NSString *selectSql = [[NSString alloc] initWithFormat:@"select max(posision) maxPosision from tag where deleteFlag = 0;"];
-    FMResultSet *result = [db executeQuery:selectSql];
-    if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+    FMResultSet *result = [_fmdb.db executeQuery:selectSql];
+    if ([_fmdb.db hadError]) {
+        DDLogError(@"DBエラー(ロールバック): %@ %@ code = %d >> %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [_fmdb.db lastErrorCode], [_fmdb.db lastErrorMessage]);
         [result close];
-        [db rollback];
+        [_fmdb.db rollback];
         return NO;
     }
     
@@ -208,14 +219,14 @@
     // posisionを更新してinsert
     tag.posision = newPosision;
     NSString *insertSql = [[NSString alloc] initWithFormat:@"insert into tag(name, posision, createDate, modifiedDate, deleteFlag) values('%@', %d, julianday('%@'), julianday('%@'), 0)", tag.name, tag.posision, strDate, strDate];
-    BOOL bResult = [db executeUpdate:insertSql];
-    if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-        [db rollback];
+    BOOL bResult = [_fmdb.db executeUpdate:insertSql];
+    if ([_fmdb.db hadError]) {
+        DDLogError(@"DBエラー(ロールバック): %@ %@ code = %d >> %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [_fmdb.db lastErrorCode], [_fmdb.db lastErrorMessage]);
+        [_fmdb.db rollback];
         return NO;
     }
     
-    [db commit];
+    [_fmdb.db commit];
     return bResult;
 }
 
@@ -226,17 +237,17 @@
     NSTimeZone *timeZoneUTC = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
     NSString *strDate = [DateUtil dateToString:nowDateForGMT atDateFormat:@"yyyy-MM-dd HH:mm:ss" setTimeZone:timeZoneUTC];
     
-    [db beginTransaction];
+    [_fmdb.db beginTransaction];
     
     NSString *insertSql = [[NSString alloc] initWithFormat:@"insert into tagLink(tagId, memoId, createDate, modifiedDate) values(%d, %d, julianday('%@'), julianday('%@'))", tag.tagId, memo.memoid, strDate, strDate];
-    BOOL bResult = [db executeUpdate:insertSql];
-    if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-        [db rollback];
+    BOOL bResult = [_fmdb.db executeUpdate:insertSql];
+    if ([_fmdb.db hadError]) {
+        DDLogError(@"DBエラー(ロールバック): %@ %@ code = %d >> %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [_fmdb.db lastErrorCode], [_fmdb.db lastErrorMessage]);
+        [_fmdb.db rollback];
         return NO;
     }
     
-    [db commit];
+    [_fmdb.db commit];
     return bResult;
 }
 
@@ -257,52 +268,52 @@
     NSTimeZone *timeZoneUTC = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
     NSString *strDate = [DateUtil dateToString:nowDateForGMT atDateFormat:@"yyyy-MM-dd HH:mm:ss" setTimeZone:timeZoneUTC];
     
-    [db beginTransaction];
+    [_fmdb.db beginTransaction];
     
     // タグリンクを削除
     NSString *removeTagLinkSql = [[NSString alloc] initWithFormat:@"delete from tagLink where tagId = %d", tag.tagId];
-    BOOL bResult = [db executeUpdate:removeTagLinkSql];
-    if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-        [db rollback];
+    BOOL bResult = [_fmdb.db executeUpdate:removeTagLinkSql];
+    if ([_fmdb.db hadError]) {
+        DDLogError(@"DBエラー(ロールバック): %@ %@ code = %d >> %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [_fmdb.db lastErrorCode], [_fmdb.db lastErrorMessage]);
+        [_fmdb.db rollback];
         return NO;
     }
     
     // タグを削除
     NSString *deleteTagSql = [[NSString alloc] initWithFormat:@"update tag set deleteFlag = 1, modifiedDate = julianday('%@') where id = %d", strDate, tag.tagId];
-    bResult = [db executeUpdate:deleteTagSql];
-    if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-        [db rollback];
+    bResult = [_fmdb.db executeUpdate:deleteTagSql];
+    if ([_fmdb.db hadError]) {
+        DDLogError(@"DBエラー(ロールバック): %@ %@ code = %d >> %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [_fmdb.db lastErrorCode], [_fmdb.db lastErrorMessage]);
+        [_fmdb.db rollback];
         return NO;
     }
     
-    [db commit];
+    [_fmdb.db commit];
     return bResult;
 }
 
 - (BOOL)removeTagLink:(Memo*)memo forLinkTag:(Tag*)tag
 {
-    [db beginTransaction];
+    [_fmdb.db beginTransaction];
     // タグリンクを削除
     NSString *removeTagLinkSql = [[NSString alloc] initWithFormat:@"delete from tagLink where tagId = %d and memoId = %d;", tag.tagId, memo.memoid];
-    BOOL bResult = [db executeUpdate:removeTagLinkSql];
-    if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-        [db rollback];
+    BOOL bResult = [_fmdb.db executeUpdate:removeTagLinkSql];
+    if ([_fmdb.db hadError]) {
+        DDLogError(@"DBエラー(ロールバック): %@ %@ code = %d >> %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [_fmdb.db lastErrorCode], [_fmdb.db lastErrorMessage]);
+        [_fmdb.db rollback];
         return NO;
     }
     
-    [db commit];
+    [_fmdb.db commit];
     return bResult;
 }
 
 // 自動インクリメントキーの現在の最大値を取得
 - (int)maxRefCount
 {
-    FMResultSet *result = [db executeQuery:@"select MAX(id) as maxRefCount from tag"];
-    if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
+    FMResultSet *result = [_fmdb.db executeQuery:@"select MAX(id) as maxRefCount from tag"];
+    if ([_fmdb.db hadError]) {
+        DDLogError(@"DBエラー: %@ %@ code = %d >> %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [_fmdb.db lastErrorCode], [_fmdb.db lastErrorMessage]);
         [result close];
         return 0;
     }

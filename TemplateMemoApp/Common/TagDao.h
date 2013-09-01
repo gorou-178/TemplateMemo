@@ -48,6 +48,5 @@
 @end
 
 // タグのFMDB実装
-@interface TagDaoImpl : FMDBWrapper <TagDao>
-
+@interface TagDaoImpl : NSObject <TagDao, FMDBUsable>
 @end

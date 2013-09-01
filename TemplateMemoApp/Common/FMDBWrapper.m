@@ -16,62 +16,62 @@
 
 - (id)init
 {
-    NSLog(@"FMDBWrapper: init");
+    DDLogVerbose(@"FMDBWrapper: init");
     self = [super init];
-    
-    NSArray* paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES );
-    NSString* dir = [paths objectAtIndex:0];
-    strDBFilePath = [[NSString alloc] initWithString:[dir stringByAppendingPathComponent:@"database.sqlite"]];
-    NSLog(@"FMDBWrapper: dbPath : %@", strDBFilePath);
-    db = [FMDatabase databaseWithPath:strDBFilePath];
-    [db open];
+    [self createDBFilePath:@"database.sqlite"];
+    [self createDB];
     return self;
 }
 
 - (id)initWithDataBaseFileName:(NSString *)fileName
 {
-    NSLog(@"FMDBWrapper: initWithDataBaseFileName");
     self = [super init];
-    
+    [self createDBFilePath:fileName];
+    [self createDB];
+    return self;
+}
+
+- (void)createDB
+{
+    self.db = [FMDatabase databaseWithPath:strDBFilePath];
+    [self.db open];
+}
+
+- (void)createDBFilePath:(NSString *)fileName
+{
     NSArray* paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES );
     NSString* dir = [paths objectAtIndex:0];
     strDBFilePath = [[NSString alloc] initWithString:[dir stringByAppendingPathComponent:fileName]];
-    NSLog(@"FMDBWrapper: dbPath : %@", strDBFilePath);
-    return self;
+    DDLogVerbose(@"DBファイル: %@", strDBFilePath);
 }
 
 // デストラクタ
 - (void)dealloc
 {
-    NSLog(@"FMDBWrapper: dealloc");
     strDBFilePath = nil;
-    if (db != nil) {
-        [db close];
+    if (self.db != nil) {
+        [self.db close];
     }
 }
 
 - (BOOL)open
 {
-    db = [FMDatabase databaseWithPath:strDBFilePath];
-    if (db == nil) {
-        return NO;
-    }
-    return [db open];
+    return [self.db open];
 }
 
 // databaseファイルを最適化
 - (BOOL)vacuum
 {
-    [db beginTransaction];
+//    [self.db beginTransaction];
     
-    BOOL bResult = [db executeUpdate:@"vacuum"];
-    if ([db hadError]) {
-        NSLog(@"Err %d: %@", [db lastErrorCode], [db lastErrorMessage]);
-        [db rollback];
+    BOOL bResult = [self.db executeUpdate:@"vacuum"];
+    if ([self.db hadError]) {
+        DDLogError(@"DBエラー(ロールバック): %@ %@ code = %d >> %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), [self.db lastErrorCode], [self.db lastErrorMessage]);
+//        [self.db rollback];
         return NO;
     }
     
-    [db commit];
+//    [self.db commit];
     return bResult;
 }
 

@@ -13,8 +13,10 @@
 {
 @protected
     NSString* strDBFilePath;
-    FMDatabase *db;
 }
+
+@property (strong, nonatomic) FMDatabase *db;
+
 - (id)init;
 - (id)initWithDataBaseFileName:(NSString *)fileName;
 - (void)dealloc;
@@ -22,4 +24,8 @@
 - (BOOL)open;
 - (BOOL)vacuum;
 
+@end
+
+@protocol FMDBUsable <NSObject>
+- (id)initWithFMDBWrapper:(FMDBWrapper*)fmdb;
 @end
