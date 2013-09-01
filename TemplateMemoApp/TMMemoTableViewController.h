@@ -29,4 +29,6 @@
 // セルの更新
 - (void)updateVisibleCells;
 
+- (BOOL)removeMemo:(Memo *)memo;
+
 @end
