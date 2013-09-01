@@ -21,4 +21,11 @@
 + (NSDate *)dateStringToDate:(NSString *)strDate atDateFormat:(NSString *)format setTimeZone:(NSTimeZone *)timeZone;
 + (NSDate *)dateStringToDate:(NSString *)strDate atDateFormat:(NSString *)format setTimeZone:(NSTimeZone *)timeZone setLocale:(NSLocale *)locale;
 + (NSDate *)dateStringToDate:(NSString *)strDate atDateFormat:(NSString *)format setTimeZone:(NSTimeZone *)timeZone setLocale:(NSLocale *)locale setCalendar:(NSCalendar *)calendar;
+
+// 現在日付
++ (NSDate *)nowDateForSystemTimeZone;
++ (NSDate *)nowDateForDefaultTimeZone;
++ (NSDate *)nowDateForLocalTimeZone;
++ (NSDate *)nowDate:(NSTimeZone *)timeZone;
+
 @end

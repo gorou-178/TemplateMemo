@@ -17,7 +17,7 @@
 
 + (NSString *)dateToString:(NSDate *)date atDateFormat:(NSString *)format setTimeZone:(NSTimeZone *)timeZone
 {
-    return [DateUtil dateToString:date atDateFormat:format setTimeZone:timeZone setLocale:[NSLocale systemLocale]];
+    return [DateUtil dateToString:date atDateFormat:format setTimeZone:timeZone setLocale:[NSLocale currentLocale]];
 }
 
 + (NSString *)dateToString:(NSDate *)date atDateFormat:(NSString *)format setTimeZone:(NSTimeZone *)timeZone setLocale:(NSLocale *)locale
@@ -31,17 +31,17 @@
         return nil;
     }
     
-    // システムのタイムゾーンを設定
+    // システムのタイムゾーンを設定(12時間表示のバグ回避)
     if (timeZone == nil) {
         timeZone = [NSTimeZone systemTimeZone];
     }
     
-    // システムのロケールを設定
+    // ロケールを設定(12時間表示のバグ回避 + 曜日表示)
     if (locale == nil) {
-        locale = [NSLocale systemLocale];
+        locale = [NSLocale currentLocale];
     }
     
-    // グレゴリオ暦のカレンダーを設定
+    // グレゴリオ暦のカレンダーを設定(和暦表示バグ回避のため)
     if (calendar == nil) {
         calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
     }
@@ -62,7 +62,7 @@
 
 + (NSDate *)dateStringToDate:(NSString *)strDate atDateFormat:(NSString *)format setTimeZone:(NSTimeZone *)timeZone
 {
-    return [DateUtil dateStringToDate:strDate atDateFormat:format setTimeZone:timeZone setLocale:[NSLocale systemLocale]];
+    return [DateUtil dateStringToDate:strDate atDateFormat:format setTimeZone:timeZone setLocale:[NSLocale currentLocale]];
 }
 
 + (NSDate *)dateStringToDate:(NSString *)strDate atDateFormat:(NSString *)format setTimeZone:(NSTimeZone *)timeZone setLocale:(NSLocale *)locale
@@ -81,9 +81,9 @@
         timeZone = [NSTimeZone systemTimeZone];
     }
     
-    // システムのロケールを設定
+    // ロケールを設定
     if (locale == nil) {
-        locale = [NSLocale systemLocale];
+        locale = [NSLocale currentLocale];
     }
     
     // グレゴリオ暦のカレンダーを設定
@@ -97,6 +97,26 @@
     [formatter setCalendar:calendar];
     [formatter setDateFormat:format];
     return [formatter dateFromString:strDate];
+}
+
++ (NSDate *)nowDateForSystemTimeZone
+{
+    return [self nowDate:[NSTimeZone systemTimeZone]];
+}
+
++ (NSDate *)nowDateForDefaultTimeZone
+{
+    return [self nowDate:[NSTimeZone defaultTimeZone]];
+}
+
++ (NSDate *)nowDateForLocalTimeZone
+{
+    return [self nowDate:[NSTimeZone localTimeZone]];
+}
+
++ (NSDate *)nowDate:(NSTimeZone *)timeZone
+{
+    return [NSDate dateWithTimeIntervalSinceNow:[timeZone secondsFromGMT]];
 }
 
 @end
