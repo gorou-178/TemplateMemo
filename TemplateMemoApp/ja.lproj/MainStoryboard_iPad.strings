@@ -1,18 +1,198 @@
 
-/* Class = "IBUIViewController"; title = "Detail"; ObjectID = "4"; */
-"4.title" = "ボックス";
-
 /* Class = "IBUITableViewController"; title = "Master"; ObjectID = "19"; */
-"19.title" = "メモ";
+"19.title" = "Master";
 
-/* Class = "IBUILabel"; text = "Detail view content goes here"; ObjectID = "27"; */
-"27.text" = "メモが表示される";
+/* Class = "IBUINavigationItem"; title = "メモ"; ObjectID = "40"; */
+"40.title" = "メモ";
 
-/* Class = "IBUINavigationItem"; title = "Master"; ObjectID = "40"; */
-"40.title" = "ボックス";
+/* Class = "IBUINavigationItem"; title = "ライセンス情報"; ObjectID = "0uy-ue-9XG"; */
+"0uy-ue-9XG.title" = "ライセンス情報";
 
-/* Class = "IBUINavigationItem"; title = "Detail"; ObjectID = "53"; */
-"53.title" = "ボックス";
+/* Class = "IBUILabel"; text = "ライセンス情報"; ObjectID = "1td-pv-H6f"; */
+"1td-pv-H6f.text" = "ライセンス情報";
 
-/* Class = "IBUILabel"; text = "Title"; ObjectID = "tIi-5l-S0i"; */
-"tIi-5l-S0i.text" = "タイトル";
+/* Class = "IBUITableViewSection"; headerTitle = "テンプレート設定"; ObjectID = "2d0-u1-Hkv"; */
+"2d0-u1-Hkv.headerTitle" = "てんぷれ設定";
+
+/* Class = "IBUILabel"; text = "更新日付"; ObjectID = "3Ws-9u-rSx"; */
+"3Ws-9u-rSx.text" = "更新日付";
+
+/* Class = "IBUILabel"; text = "このアプリについて"; ObjectID = "5ae-P0-clw"; */
+"5ae-P0-clw.text" = "このアプリについて";
+
+/* Class = "IBUILabel"; text = "Dropbox"; ObjectID = "6If-v7-a3n"; */
+"6If-v7-a3n.text" = "Dropbox";
+
+/* Class = "IBUILabel"; text = "テンプレート名"; ObjectID = "6Qw-78-mnZ"; */
+"6Qw-78-mnZ.text" = "てんぷれ名";
+
+/* Class = "IBUILabel"; text = "Title"; ObjectID = "8jV-27-ZMD"; */
+"8jV-27-ZMD.text" = "Title";
+
+/* Class = "IBUILabel"; text = "Detail"; ObjectID = "9dO-R8-Ze6"; */
+"9dO-R8-Ze6.text" = "Detail";
+
+/* Class = "IBUILabel"; text = "フォント"; ObjectID = "9lc-kB-msp"; */
+"9lc-kB-msp.text" = "フォント";
+
+/* Class = "IBUILabel"; text = "yyyy/mm/dd HH:MM:ss"; ObjectID = "AKK-6I-xFA"; */
+"AKK-6I-xFA.text" = "yyyy/mm/dd HH:MM:ss";
+
+/* Class = "IBUILabel"; text = "none"; ObjectID = "DMl-jf-er5"; */
+"DMl-jf-er5.text" = "none";
+
+/* Class = "IBUILabel"; text = "yyyy/mm/dd HH:MM:ss"; ObjectID = "EVJ-8g-Etc"; */
+"EVJ-8g-Etc.text" = "yyyy/mm/dd HH:MM:ss";
+
+/* Class = "IBUILabel"; text = "TemplateMemo"; ObjectID = "EZi-6h-g20"; */
+"EZi-6h-g20.text" = "TemplateMemo";
+
+/* Class = "IBUILabel"; text = "Subtitle"; ObjectID = "FKa-Qs-pjw"; */
+"FKa-Qs-pjw.text" = "Subtitle";
+
+/* Class = "IBUINavigationItem"; title = "詳細設定"; ObjectID = "Fox-Pb-f6w"; */
+"Fox-Pb-f6w.title" = "詳細設定";
+
+/* Class = "IBUINavigationItem"; title = "アプリケーション情報"; ObjectID = "GPP-sK-SkT"; */
+"GPP-sK-SkT.title" = "アプリケーション情報";
+
+/* Class = "IBUINavigationItem"; title = "設定"; ObjectID = "GXc-98-5aY"; */
+"GXc-98-5aY.title" = "設定";
+
+/* Class = "IBUILabel"; text = "バージョン"; ObjectID = "Inh-7L-BzB"; */
+"Inh-7L-BzB.text" = "バージョン";
+
+/* Class = "IBUITableViewSection"; headerTitle = "外部サービス認証"; ObjectID = "MBC-2k-vfE"; */
+"MBC-2k-vfE.headerTitle" = "外部サービス認証";
+
+/* Class = "IBUITableViewSection"; headerTitle = "バージョン情報"; ObjectID = "Mb6-f8-3Qe"; */
+"Mb6-f8-3Qe.headerTitle" = "バージョン情報";
+
+/* Class = "IBUINavigationItem"; title = "ライセンス情報"; ObjectID = "MfG-EM-xhs"; */
+"MfG-EM-xhs.title" = "ライセンス情報";
+
+/* Class = "IBUILabel"; text = "デバイス"; ObjectID = "MqU-cJ-ji0"; */
+"MqU-cJ-ji0.text" = "デバイス";
+
+/* Class = "IBUILabel"; text = "モデル"; ObjectID = "NYB-FI-wW2"; */
+"NYB-FI-wW2.text" = "モデル";
+
+/* Class = "IBUISearchBar"; placeholder = "タグを検索"; ObjectID = "PPY-sK-O10"; */
+"PPY-sK-O10.placeholder" = "タグを検索";
+
+/* Class = "IBUILabel"; text = "Detail"; ObjectID = "PcX-4O-moW"; */
+"PcX-4O-moW.text" = "Detail";
+
+/* Class = "IBUILabel"; text = "デフォルトテンプレート"; ObjectID = "Pkv-4K-2CA"; */
+"Pkv-4K-2CA.text" = "デフォルト";
+
+/* Class = "IBUITableViewController"; title = "タグ編集"; ObjectID = "UXo-D2-eUT"; */
+"UXo-D2-eUT.title" = "タグ編集";
+
+/* Class = "IBUINavigationItem"; title = "てんぷれを追記"; ObjectID = "Vin-kA-N4Z"; */
+"Vin-kA-N4Z.title" = "てんぷれを追記";
+
+/* Class = "IBUISearchBar"; placeholder = "テンプレートを検索"; ObjectID = "WDh-b4-rou"; */
+"WDh-b4-rou.placeholder" = "てんぷれを検索";
+
+/* Class = "IBUISearchBar"; WDh-b4-rou.scopeButtonTitles[0] = "名前"; ObjectID = "WDh-b4-rou"; */
+"WDh-b4-rou.scopeButtonTitles[0]" = "名前";
+
+/* Class = "IBUISearchBar"; WDh-b4-rou.scopeButtonTitles[1] = "本文"; ObjectID = "WDh-b4-rou"; */
+"WDh-b4-rou.scopeButtonTitles[1]" = "本文";
+
+/* Class = "IBUISearchBar"; WDh-b4-rou.scopeButtonTitles[2] = "名前 + 本文"; ObjectID = "WDh-b4-rou"; */
+"WDh-b4-rou.scopeButtonTitles[2]" = "名前 + 本文";
+
+/* Class = "IBUILabel"; text = "作成日付"; ObjectID = "WOT-IV-uD8"; */
+"WOT-IV-uD8.text" = "作成日付";
+
+/* Class = "IBUILabel"; text = "1.0.0"; ObjectID = "XIm-CW-QXU"; */
+"XIm-CW-QXU.text" = "1.0.0";
+
+/* Class = "IBUINavigationItem"; title = "テンプレート"; ObjectID = "XNb-l6-9l4"; */
+"XNb-l6-9l4.title" = "てんぷれ";
+
+/* Class = "IBUILabel"; text = "6.1"; ObjectID = "YSc-YW-9Up"; */
+"YSc-YW-9Up.text" = "6.1";
+
+/* Class = "IBUILabel"; text = "ご意見・ご要望を送る"; ObjectID = "Z9n-l4-ws6"; */
+"Z9n-l4-ws6.text" = "ご意見・ご要望を送る";
+
+/* Class = "IBUILabel"; text = "タグ"; ObjectID = "Zxh-LJ-sd7"; */
+"Zxh-LJ-sd7.text" = "タグ";
+
+/* Class = "IBUILabel"; text = "テンプレート一覧"; ObjectID = "aZE-gi-qGy"; */
+"aZE-gi-qGy.text" = "てんぷれ一覧";
+
+/* Class = "IBUILabel"; text = "タイトル"; ObjectID = "b0e-QL-hlW"; */
+"b0e-QL-hlW.text" = "タイトル";
+
+/* Class = "IBUILabel"; text = "フォントサイズ"; ObjectID = "d74-Wc-oZN"; */
+"d74-Wc-oZN.text" = "フォントサイズ";
+
+/* Class = "IBUILabel"; text = "iOS"; ObjectID = "f6g-Vu-m5o"; */
+"f6g-Vu-m5o.text" = "iOS";
+
+/* Class = "IBUIViewController"; title = "ライセンス情報"; ObjectID = "gZf-Ic-1kr"; */
+"gZf-Ic-1kr.title" = "ライセンス情報";
+
+/* Class = "IBUILabel"; text = "メモ数"; ObjectID = "gnp-kO-zG5"; */
+"gnp-kO-zG5.text" = "メモ数";
+
+/* Class = "IBUILabel"; text = "ABC123"; ObjectID = "hUv-7q-brJ"; */
+"hUv-7q-brJ.text" = "ABC123";
+
+/* Class = "IBUILabel"; text = "テンプレートプレビュー"; ObjectID = "iIF-F7-Oho"; */
+"iIF-F7-Oho.text" = "てんぷれプレビュー";
+
+/* Class = "IBUILabel"; text = "メモプレビュー"; ObjectID = "l9Q-HM-mfM"; */
+"l9Q-HM-mfM.text" = "メモプレビュー";
+
+/* Class = "IBUILabel"; text = "none"; ObjectID = "ljI-wV-ZUN"; */
+"ljI-wV-ZUN.text" = "none";
+
+/* Class = "IBUILabel"; text = "文字数"; ObjectID = "m2A-US-mSM"; */
+"m2A-US-mSM.text" = "文字数";
+
+/* Class = "IBUITableViewSection"; headerTitle = "端末情報"; ObjectID = "nfQ-vQ-kPH"; */
+"nfQ-vQ-kPH.headerTitle" = "端末情報";
+
+/* Class = "IBUILabel"; text = "none"; ObjectID = "pTZ-Ia-Mju"; */
+"pTZ-Ia-Mju.text" = "none";
+
+/* Class = "IBUITableViewSection"; headerTitle = "その他"; ObjectID = "pgk-SV-koP"; */
+"pgk-SV-koP.headerTitle" = "その他";
+
+/* Class = "IBUILabel"; text = "アプリ名"; ObjectID = "prM-g8-n0O"; */
+"prM-g8-n0O.text" = "アプリ名";
+
+/* Class = "IBUINavigationItem"; title = "タグ"; ObjectID = "pyb-ek-H8g"; */
+"pyb-ek-H8g.title" = "タグ";
+
+/* Class = "IBUINavigationItem"; title = "テンプレめも"; ObjectID = "qsf-YY-hQD"; */
+"qsf-YY-hQD.title" = "テンプレめも";
+
+/* Class = "IBUILabel"; text = "タグ名"; ObjectID = "ryi-OA-SbY"; */
+"ryi-OA-SbY.text" = "タグ名";
+
+/* Class = "IBUITableViewSection"; headerTitle = "表示設定"; ObjectID = "sh2-Cb-B8d"; */
+"sh2-Cb-B8d.headerTitle" = "表示設定";
+
+/* Class = "IBUILabel"; text = "メモタイトル"; ObjectID = "tIi-5l-S0i"; */
+"tIi-5l-S0i.text" = "メモタイトル";
+
+/* Class = "IBUILabel"; text = "Evernote"; ObjectID = "tS2-x1-lTi"; */
+"tS2-x1-lTi.text" = "Evernote";
+
+/* Class = "IBUILabel"; text = "iPhone"; ObjectID = "uUo-RZ-yZv"; */
+"uUo-RZ-yZv.text" = "iPhone";
+
+/* Class = "IBUIBarButtonItem"; title = "閉じる"; ObjectID = "uWZ-Ed-3EM"; */
+"uWZ-Ed-3EM.title" = "閉じる";
+
+/* Class = "IBUISearchBar"; placeholder = "メモを検索"; ObjectID = "yHC-Zf-mRR"; */
+"yHC-Zf-mRR.placeholder" = "メモを検索";
+
+/* Class = "IBUITableViewSection"; headerTitle = "メモ情報"; ObjectID = "yl7-9V-1pj"; */
+"yl7-9V-1pj.headerTitle" = "メモ情報";
