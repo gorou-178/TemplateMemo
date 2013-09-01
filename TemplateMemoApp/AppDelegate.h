@@ -11,7 +11,8 @@
 #import "TMMemoTableViewController.h"
 #import "TMEditMemoViewController.h"
 #import "TMTemplateMemoTableViewController.h"
-#import "UINavigationController+AllRotate.h"
+
+#import "FMDBWrapper.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -21,5 +22,7 @@
 @property (strong, nonatomic) TMMemoTableViewController *memoTableViewController;
 @property (strong, nonatomic) TMEditMemoViewController *editMemoViewController;
 @property (strong, nonatomic) TMTemplateMemoTableViewController *templateMemoViewController;
+
+@property (strong, nonatomic) FMDBWrapper *fmdb;
 
 @end
