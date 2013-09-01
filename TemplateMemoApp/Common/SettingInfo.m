@@ -7,6 +7,7 @@
 //
 
 #import "SettingInfo.h"
+#import "UIDeviceHelper.h"
 
 @implementation SettingData
 @synthesize row = row;
@@ -48,8 +49,13 @@
 - (id)init
 {
     self = [super init];
-    detailTitle = @"デフォルト";
-    key = @"setting.default";
+    detailTitle = NSLocalizedString(@"settinginfo.title.default", @"settinginfo - default");
+    if ([UIDeviceHelper isJapaneseLanguage]) {
+        key = @"setting.ja.default";
+    }
+    else {
+        key = @"setting.en.default";
+    }
     return self;
 }
 

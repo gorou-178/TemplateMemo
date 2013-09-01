@@ -7,14 +7,20 @@
 //
 
 #import "FontSettingInfo.h"
+#import "UIDeviceHelper.h"
 
 @implementation FontSettingInfo
 
 - (id)init
 {
     self = [super init];
-    detailTitle = @"フォント";
-    key = @"setting.font";
+    detailTitle = NSLocalizedString(@"settinginfo.font.title", @"settinginfo title - font");
+    if ([UIDeviceHelper isJapaneseLanguage]) {
+        key = @"setting.ja.font";
+    }
+    else {
+        key = @"setting.en.font";
+    }
     return self;
 }
 

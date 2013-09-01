@@ -7,14 +7,20 @@
 //
 
 #import "FontSizeSettingInfo.h"
+#import "UIDeviceHelper.h"
 
 @implementation FontSizeSettingInfo
 
 - (id)init
 {
     self = [super init];
-    detailTitle = @"フォントサイズ";
-    key = @"setting.font.size";
+    detailTitle = NSLocalizedString(@"settinginfo.fontsize.title", @"settinginfo title - fontsize");
+    if ([UIDeviceHelper isJapaneseLanguage]) {
+        key = @"setting.ja.font.size";
+    }
+    else {
+        key = @"setting.en.font.size";
+    }
     return self;
 }
 

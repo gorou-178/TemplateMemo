@@ -7,14 +7,21 @@
 //
 
 #import "TemplateMemoSettingInfo.h"
+#import "UIDeviceHelper.h"
 
 @implementation TemplateMemoSettingInfo
 
 - (id)init
 {
     self = [super init];
-    detailTitle = @"デフォルトテンプレート";
-    key = @"setting.templateMemo";
+    detailTitle = NSLocalizedString(@"settinginfo.defaulttemplate.title", @"settinginfo title - default template");
+    if ([UIDeviceHelper isJapaneseLanguage]) {
+        key = @"setting.ja.templateMemo";
+    }
+    else {
+        key = @"setting.en.templateMemo";
+    }
+    
     return self;
 }
 
