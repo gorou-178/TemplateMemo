@@ -7,7 +7,7 @@
 //
 
 #import "TMAppInfoTableViewController.h"
-#import "UIDevice-Hardware.h"
+
 
 @interface TMAppInfoTableViewController ()
 

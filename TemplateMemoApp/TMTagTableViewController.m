@@ -13,6 +13,9 @@
 
 #define DISP_AD_BOTTOM
 
+static const NSInteger ALERT_TAG_ADD = 1;
+static const NSInteger ALERT_TAG_EDIT = 2;
+
 @interface TMTagTableViewController ()
 {
     id<TagDao> tagDao;
@@ -27,17 +30,20 @@
 
 - (void)awakeFromNib
 {
-    NSLog(@"awakeFromNib");
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
         self.clearsSelectionOnViewWillAppear = NO;
         self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
     }
     
-    memoDao = [MemoDaoImpl new];
+    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    appDelegate.tagTableViewController = self;
+    [appDelegate.editMemoViewController setActiveSideView:self];
+    
+    memoDao = [[MemoDaoImpl alloc] initWithFMDBWrapper:appDelegate.fmdb];
     filterdTagArray = [[NSMutableArray alloc] init];
     
     // タグ一覧を取得
-    tagDao = [TagDaoImpl new];
+    tagDao = [[TagDaoImpl alloc] initWithFMDBWrapper:appDelegate.fmdb];
     tagCache = [tagDao.tags mutableCopy];
     
     fastViewFlag = YES;
@@ -48,7 +54,6 @@
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
-    NSLog(@"initWithStyle");
     self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
@@ -59,18 +64,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSLog(@"viewDidLoad");
     
     // 編集ボタン
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
-    
-    // AppデリゲートのwindowからSplitViewを取得
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-    appDelegate.tagTableViewController = self;
-    [appDelegate.editMemoViewController setActiveSideView:self];
-    
     self.tagSearchBar.delegate = self;
     self.tagSearchBarController.delegate = self;
+    
+    // UISearchBarのplaceholderのlocalizeがバグっているためあえて設定
+    [self.tagSearchBar setPlaceholder:NSLocalizedString(@"tagview.searchbar.placeholer", @"tagview search bar placeholer")];
     
     // iPhoneのときのみ表示
     CGRect insetSize;
@@ -91,6 +92,7 @@
     // UITableView のスクロール可能範囲に余白を付ける（下50px）
     self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0.f, 0.f, insetSize.size.height, 0.f);
     
+    // ダミーのフッター
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, 120)];
 }
 
@@ -98,8 +100,9 @@
 {
     DDLogInfo(@"タグ一覧表示");
     [super viewWillAppear:animated];
-    // 検索バーを隠す
-    [self.tableView setContentOffset:CGPointMake(0.0f, self.searchDisplayController.searchBar.frame.size.height)];
+    // 選択していたセルまでスクロールさせる(戻った時に選択したセルを見せたほうが使いやすい)
+    // 検索バーを隠すと選択セルまでスクロールができなかったため(一番上までスクロールされる)
+    [self.tableView scrollToNearestSelectedRowAtScrollPosition:UITableViewScrollPositionMiddle animated:YES];
     // 選択セルのハイライトを解除
     [self.tableView deselectRowAtIndexPath:self.tableView.indexPathForSelectedRow animated:YES];
     [self changeRotateForm];
@@ -107,7 +110,6 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    NSLog(@"viewDidAppear");
     [super viewDidAppear:animated];
     // アクティブなViewとしてeditViewに通知
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
@@ -125,7 +127,8 @@
 // 回転時の各ビューのサイズ・表示位置の調整を行う
 - (void)changeRotateForm
 {
-    CGFloat height = self.view.bounds.size.height + self.tagSearchBar.bounds.size.height;
+    //CGFloat height = self.view.bounds.size.height + self.tagSearchBar.bounds.size.height;
+    CGFloat height = self.view.bounds.size.height + self.tableView.contentOffset.y;
 #ifdef DISP_AD_BOTTOM
     
     adView.frame = CGRectMake(0, height, adView.frame.size.width, adView.frame.size.height);
@@ -183,11 +186,11 @@
 
 - (IBAction)insertTag:(id)sender {
     // テキスト付きアラートダイアログ
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"タグ名前を入力"
-                                                    message:@"\n"
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"tagview.inserttag.title", @"tag view insert tag dialog title")
+                                                    message:nil
                                                    delegate:self
-                                          cancelButtonTitle:@"キャンセル"
-                                          otherButtonTitles:@"OK", nil];
+                                          cancelButtonTitle:NSLocalizedString(@"tagview.inserttag.cancel", @"tag view insert tag dialog cancel button")
+                                          otherButtonTitles:NSLocalizedString(@"tagview.inserttag.ok", @"tag view insert tag dialog ok button"), nil];
     [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
     [alert show];
 }
@@ -195,7 +198,8 @@
 - (BOOL)alertViewShouldEnableFirstOtherButton:(UIAlertView *)alertView
 {
     NSString *inputText = [[alertView textFieldAtIndex:0] text];
-    if( [inputText length] >= 1 )
+    NSUInteger bytes = [inputText lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+    if(bytes >= 1 && bytes <= 24)
     {
         return YES;
     }
@@ -214,17 +218,18 @@
             // 同名タグが存在した場合警告を表示
             if ([[tag.name lowercaseString] isEqualToString:[inputText lowercaseString]]) {
                 UIAlertView *alert = [[UIAlertView alloc]
-                                      initWithTitle:@"警告"
-                                      message:@"同名のタグが存在します"
+                                      initWithTitle:NSLocalizedString(@"tagview.inserttag.warning.title", @"same tag name warning title")
+                                      message:NSLocalizedString(@"tagview.inserttag.warning.message", @"same tag name warning message")
                                       delegate:nil
                                       cancelButtonTitle:nil
-                                      otherButtonTitles:@"OK", nil
+                                      otherButtonTitles:NSLocalizedString(@"tagview.inserttag.warning.ok", @"same tag name warning ok button"), nil
                                       ];
                 [alert show];
                 return;
             }
         }
         
+//        if (alertView.tag == ALERT_TAG_ADD) {
         // タグを追加
         Tag *newTag = [[Tag alloc] init];
         newTag.name = inputText;
@@ -236,30 +241,41 @@
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
             [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
             
-            // 追加したセルを選択 & 表示(トップにスクロールさせる)
-            [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionTop];
+            // 追加したセルを選択 & 表示(対象が中心に来るようにスクロール)
+            [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionMiddle];
             
             // 選択ハイライトをフェードアウトさせる
             [self.tableView deselectRowAtIndexPath:self.tableView.indexPathForSelectedRow animated:YES];
             
+            // サイズ更新
+            [self changeRotateForm];
             DDLogInfo(@"タグ一覧表示: タグ追加 >> %@", newTag.name);
         }
+//        }
+//        else if (alertView.tag == ALERT_TAG_EDIT) {
+//            Tag *updateTag = tagCache[self.tableView.indexPathForSelectedRow.row];
+//            updateTag.name = inputText;
+//            if ([tagDao update:updateTag]) {
+//                tagCache = [[tagDao tags] mutableCopy];
+//                [self.tableView reloadData];
+//            }
+//        }
     }
 }
 
-- (void)setCellInfo:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath atCell:(UITableViewCell *)cell forTag:(Tag *)tag
-{
-    if (indexPath.row == 0) {
-        // 一番最初は「All Memo」
-        cell.textLabel.text = @"All Memo";
-        cell.imageView.image = [UIImage imageNamed:@"home_32.png"];
-        cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%d", [memoDao count]];
-    } else {
-        Tag *tag = tagCache[indexPath.row - 1];
-        cell.textLabel.text = tag.name;
-        cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%d", [tagDao countOfMemo:tag]];
-    }
-}
+//- (void)setCellInfo:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath atCell:(UITableViewCell *)cell forTag:(Tag *)tag
+//{
+//    if (indexPath.row == 0) {
+//        // 一番最初は「All Memo」
+//        cell.textLabel.text = NSLocalizedString(@"tagview.cell.allmemo", @"タグビューのセル - All Memo");
+//        cell.imageView.image = [UIImage imageNamed:@"home_32.png"];
+//        cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%d", [memoDao count]];
+//    } else {
+//        Tag *tag = tagCache[indexPath.row - 1];
+//        cell.textLabel.text = tag.name;
+//        cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%d", [tagDao countOfMemo:tag]];
+//    }
+//}
 
 // 検索時のtableViewの更新処理
 - (UITableViewCell *)updateFilterdTableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -288,7 +304,7 @@
     
     if (indexPath.row == 0) {
         // 一番最初は「All Memo」
-        cell.textLabel.text = @"All Memo";
+        cell.textLabel.text = NSLocalizedString(@"tagview.cell.allmemo", @"tag view cell - All Memo");
         cell.imageView.image = [UIImage imageNamed:@"home_32.png"];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%d", [memoDao count]];
@@ -317,19 +333,15 @@
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Return NO if you do not want the specified item to be editable.
+    if (indexPath.row == 0) {
+        return NO;
+    }
     return YES;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        
-        if (indexPath.row == 0) {
-            NSLog(@"All Memo not Delete");
-            return;
-        }
-        
         // タグを削除(tagLinkも削除する)
         BOOL bResult = [tagDao remove:tagCache[indexPath.row - 1]];
         if (bResult) {
@@ -348,11 +360,11 @@
 // tableViewCellの色を変える場合はこのタイミングで行う
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row % 2 == 0) {
-        cell.backgroundColor = [UIColor whiteColor];
-    } else {
-        cell.backgroundColor = [UIColor colorWithHue:0.61 saturation:0.09 brightness:0.99 alpha:1.0];
-    }
+//    if (indexPath.row % 2 == 0) {
+//        cell.backgroundColor = [UIColor whiteColor];
+//    } else {
+//        cell.backgroundColor = [UIColor colorWithHue:0.61 saturation:0.09 brightness:0.99 alpha:1.0];
+//    }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -365,7 +377,6 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    NSLog(@"prepareForSegue");
     if ([[segue identifier] isEqualToString:@"showTagMemo"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         TMMemoTableViewController *memoTableViewController = [segue destinationViewController];

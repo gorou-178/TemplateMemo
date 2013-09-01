@@ -16,4 +16,6 @@
 // セルの更新
 - (void)updateVisibleCells;
 
+- (BOOL)removeTemplate:(TemplateMemo *)templateMemo;
+
 @end

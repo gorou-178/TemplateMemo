@@ -34,7 +34,8 @@
 
 - (void)awakeFromNib
 {
-    tagDao = [[TagDaoImpl alloc] init];
+    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    tagDao = [[TagDaoImpl alloc] initWithFMDBWrapper:appDelegate.fmdb];
 }
 
 - (void)viewDidLoad
@@ -75,9 +76,9 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if (section == 0) {
-        return @"メモのタグ";
+        return NSLocalizedString(@"tagsettingview.section.0.header.title", @"tag setting view section 0 header title");
     }
-    return  @"タグ一覧\n以下タグ一覧からタグを選択してください";
+    return NSLocalizedString(@"tagsettingview.section.1.header.title", @"tag setting view section 1 header title");
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -112,6 +113,7 @@
     } else {
         Tag *currentTag = tags[indexPath.row];
         cell.textLabel.text = currentTag.name;
+        cell.accessoryType = UITableViewCellAccessoryNone;
         for (Tag *selectedTag in selectedTags) {
             if ([selectedTag.name isEqual:currentTag.name]) {
                 cell.accessoryType = UITableViewCellAccessoryCheckmark;

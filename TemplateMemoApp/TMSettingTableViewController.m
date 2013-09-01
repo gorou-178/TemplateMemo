@@ -101,7 +101,7 @@
 // 回転時の各ビューのサイズ・表示位置の調整を行う
 - (void)changeRotateForm
 {
-    CGFloat height = self.view.bounds.size.height;
+    CGFloat height = self.view.bounds.size.height + self.tableView.contentOffset.y;
     
 #ifdef DISP_AD_BOTTOM
     
@@ -173,20 +173,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 2) {
-        UIAlertView *alert = [[UIAlertView alloc]
-                              initWithTitle:@"サービス認証"
-                              message:@"申し訳ございません、ただ今外部サービス連携は調整中です。次のバージョンアップまでお待ちください。"
-                              delegate:nil
-                              cancelButtonTitle:nil
-                              otherButtonTitles:@"OK", nil
-                              ];
-        [alert show];
-        [tableView deselectRowAtIndexPath:indexPath animated:YES];
-        DDLogInfo(@"設定表示: 外部サービス設定タップ");
-    } else if (indexPath.section == 3) {
         if (indexPath.row == 2) {
             AAMFeedbackViewController *vc = [[AAMFeedbackViewController alloc]init];
-            vc.toRecipients = [NSArray arrayWithObject:@"s.reianai@gmail.com"];
+            vc.toRecipients = [NSArray arrayWithObject:@"template-memo.app@gurimmer.lolipop.jp"];
             vc.ccRecipients = nil;
             vc.bccRecipients = nil;
             UINavigationController *nvc = [[UINavigationController alloc]initWithRootViewController:vc];

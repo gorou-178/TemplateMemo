@@ -6,6 +6,7 @@
 //  Copyright (c) 2013年 gurimmer. All rights reserved.
 //
 
+#import "AppDelegate.h"
 #import "TMMemoInfoTableViewController.h"
 #import "TMEditMemoViewController.h"
 #import "Tag.h"
@@ -36,7 +37,8 @@
 
 - (void)awakeFromNib
 {
-    tagDao = [[TagDaoImpl alloc] init];
+    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    tagDao = [[TagDaoImpl alloc] initWithFMDBWrapper:appDelegate.fmdb];
 }
 
 - (void)viewDidLoad
@@ -75,25 +77,27 @@
         if (currentMemo) {
             body = [currentMemo.body mutableCopy];
         } else if (currentTemplateMemo) {
-            body = [currentTemplateMemo.name mutableCopy];
+            body = [currentTemplateMemo.body mutableCopy];
         }
         
         if (indexPath.row == 0) {
             
             // 改行までをタイトルとして設定
-            NSMutableArray *lines = [NSMutableArray array];
-            [body enumerateLinesUsingBlock:^(NSString *line, BOOL *stop) {
-                [lines addObject:line];
-                *stop = YES;
-            }];
+//            NSMutableArray *lines = [NSMutableArray array];
+//            [body enumerateLinesUsingBlock:^(NSString *line, BOOL *stop) {
+//                [lines addObject:line];
+//                *stop = YES;
+//            }];
             
-            if (lines.count <= 0) {
-                cell.detailTextLabel.text = @"(no title)";
-                return;
-            }
+//            if (lines.count <= 0) {
+            AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+            cell.detailTextLabel.text = [appDelegate.editMemoViewController.navigationItem.title mutableCopy];
+//                cell.detailTextLabel.text = @"(no title)";
+//                return;
+//            }
             
             // タイトルは本文の一行目
-            cell.detailTextLabel.text = [lines objectAtIndex:0];
+//            cell.detailTextLabel.text = [lines objectAtIndex:0];
             
         } else if (indexPath.row == 1) {
             if (currentMemo) {
@@ -109,11 +113,11 @@
                 if (tagText.length > 0) {
                     cell.detailTextLabel.text = tagText;
                 } else {
-                    cell.detailTextLabel.text = @"なし";
+                    cell.detailTextLabel.text = NSLocalizedString(@"memoinfoview.cell.tag.empty", @"memo info view tag empty");
                 }
                 
             } else if (currentTemplateMemo) {
-                cell.detailTextLabel.text = @"なし";
+                cell.detailTextLabel.text = NSLocalizedString(@"memoinfoview.cell.tag.empty", @"memo info view tag empty");
             }
         } else if (indexPath.row == 2) {
             cell.detailTextLabel.text = [[NSString alloc] initWithFormat:@"%d", [body length]];

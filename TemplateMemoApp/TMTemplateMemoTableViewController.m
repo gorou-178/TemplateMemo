@@ -10,6 +10,10 @@
 #import "TMTemplateMemoTableViewController.h"
 #import "TemplateDao.h"
 
+#import "TemplateMemoSettingInfo.h"
+#import "TemplateMemo.h"
+#import "UserDefaultsWrapper.h"
+
 @interface TMTemplateMemoTableViewController (){
     id<TemplateDao> templateDao;
     NSMutableArray *templateCache;
@@ -32,7 +36,8 @@
 
 - (void)awakeFromNib
 {
-    templateDao = [TemplateDaoImpl new];
+    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    templateDao = [[TemplateDaoImpl alloc] initWithFMDBWrapper:appDelegate.fmdb];
     templateCache = [[templateDao templates] mutableCopy];
     filterdTemplateArray = [[NSMutableArray alloc] init];
     [super awakeFromNib];
@@ -48,6 +53,15 @@
     self.templeSearchBar.delegate = self;
     self.templeSearchBarController.delegate = self;
     
+    // UISearchBarのplaceholderのlocalizeがバグっているためあえて設定
+    [self.templeSearchBar setPlaceholder:NSLocalizedString(@"templateview.searchbar.placeholer", @"templateview search bar placeholer")];
+    
+    self.templeSearchBar.scopeButtonTitles = @[
+                                              NSLocalizedString(@"templatememoview.searchbar.scope.body", @"template memo view search scope - body"),
+                                              NSLocalizedString(@"templatememoview.searchbar.scope.name", @"template memo view search scope - name"),
+                                              NSLocalizedString(@"templatememoview.searchbar.scope.name_body", @"template memo view search scope - name + body")
+                                              ];
+    
     [self.templeSearchBar setShowsScopeBar:NO];
     [self.templeSearchBar sizeToFit];
 }
@@ -57,7 +71,10 @@
     DDLogInfo(@"テンプレート一覧表示");
     [super viewWillAppear:animated];
     // 検索バーを隠す
-    [self.tableView setContentOffset:CGPointMake(0.0f, self.searchDisplayController.searchBar.frame.size.height)];
+//    [self.tableView setContentOffset:CGPointMake(0.0f, self.searchDisplayController.searchBar.frame.size.height)];
+    
+    // 選択していたセルまでスクロールさせる
+    [self.tableView scrollToNearestSelectedRowAtScrollPosition:UITableViewScrollPositionMiddle animated:YES];
 }
 
 - (void)didReceiveMemoryWarning
@@ -69,11 +86,11 @@
 - (IBAction)insertTemplateMemo:(id)sender
 {
     // テキスト付きアラートダイアログ
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"テンプレート名を入力"
-                                                    message:@"\n"
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"templatememoview.insert.title", @"template memo view insert temple dialog title")
+                                                    message:nil
                                                    delegate:self
-                                          cancelButtonTitle:@"キャンセル"
-                                          otherButtonTitles:@"OK", nil];
+                                          cancelButtonTitle:NSLocalizedString(@"templatememoview.insert.cancel", @"template memo view insert temple dialog cancel button")
+                                          otherButtonTitles:NSLocalizedString(@"templatememoview.insert.ok", @"template memo view insert temple dialog ok button"), nil];
     [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
     [alert show];
 }
@@ -81,7 +98,8 @@
 - (BOOL)alertViewShouldEnableFirstOtherButton:(UIAlertView *)alertView
 {
     NSString *inputText = [[alertView textFieldAtIndex:0] text];
-    if( [inputText length] >= 1 )
+    NSUInteger bytes = [inputText lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+    if(bytes >= 1 && bytes <= 24)
     {
         return YES;
     }
@@ -100,11 +118,11 @@
             // 同名タグが存在した場合警告を表示
             if ([[templateMemo.name lowercaseString] isEqualToString:[inputText lowercaseString]]) {
                 UIAlertView *alert = [[UIAlertView alloc]
-                                      initWithTitle:@"警告"
-                                      message:@"同名のテンプレートが存在します"
+                                      initWithTitle:NSLocalizedString(@"templatememoview.insert.warning.title", @"template memo view insert temple dialog warning title")
+                                      message:NSLocalizedString(@"templatememoview.insert.warning.message", @"template memo view insert temple dialog warning message")
                                       delegate:nil
                                       cancelButtonTitle:nil
-                                      otherButtonTitles:@"OK", nil
+                                      otherButtonTitles:NSLocalizedString(@"templatememoview.insert.warning.ok", @"template memo view insert temple dialog warning ok button"), nil
                                       ];
                 [alert show];
                 return;
@@ -161,7 +179,7 @@
 
 - (void)setCellInfo:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath atCell:(UITableViewCell *)cell forTemplate:(TemplateMemo *)templateMemo
 {
-    cell.imageView.image = [UIImage imageNamed:@"book_text_32.png"];
+    cell.imageView.image = [UIImage imageNamed:@"note_32.png"];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     cell.textLabel.text = templateMemo.name;
     
@@ -175,18 +193,18 @@
     if (lines.count > 0) {
         NSMutableString *previewMemo = [NSMutableString new];
         for (int i = 0; i < lines.count; i++) {
-            if ([previewMemo length] > 30) {
+            if ([previewMemo length] > 50) {
                 break;
             }
             [previewMemo appendString:lines[i]];
         }
         if ([previewMemo length] <= 0) {
-            cell.detailTextLabel.text = @"(no preview)";
+            cell.detailTextLabel.text = NSLocalizedString(@"templatememoview.cell.preview.empty", @"template memo view cell preview empty");
         } else {
             cell.detailTextLabel.text = previewMemo.copy;
         }
     } else {
-        cell.detailTextLabel.text = @"(no preview)";
+        cell.detailTextLabel.text = NSLocalizedString(@"templatememoview.cell.preview.empty", @"template memo view cell preview empty");
     }
 }
 
@@ -236,17 +254,53 @@
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        BOOL bResult = [templateDao remove:templateCache[indexPath.row]];
-        if (bResult) {
-            DDLogInfo(@"テンプレート一覧表示: テンプレート削除 >> %@", ((TemplateMemo *)templateCache[indexPath.row]).name);
-            [templateCache removeObjectAtIndex:indexPath.row];
-            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-        }
+    if (editingStyle == UITableViewCellEditingStyleDelete) {        
+        [self removeTemplate:templateCache[indexPath.row]];
     }   
     else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
     }   
+}
+
+- (BOOL)removeTemplate:(TemplateMemo *)templateMemo
+{
+    BOOL bResult = NO;
+    
+    if (![templateCache containsObject:templateMemo]) {
+        return bResult;
+    }
+    
+    NSInteger row = -1;
+    for (int i = 0; i < templateCache.count; i++) {
+        if ([templateMemo isEqual:templateCache[i]]) {
+            row = i;
+            break;
+        }
+    }
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
+    
+    // 同じテンプレートの場合
+    TemplateMemoSettingInfo *templateMemoSettingInfo = [[TemplateMemoSettingInfo alloc] init];
+    TemplateMemo *defTemplateMemo = [UserDefaultsWrapper loadToObject:templateMemoSettingInfo.key];
+    if ([defTemplateMemo isEqual:templateCache[indexPath.row]]) {
+        // テキスト付きアラートダイアログ
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"templatememoview.remove.warning.title", @"template memo view remove temple warning title")
+                                                        message:NSLocalizedString(@"templatememoview.remove.warning.message", @"template memo view remove temple warning message")
+                                                       delegate:nil
+                                              cancelButtonTitle:NSLocalizedString(@"templatememoview.remove.warning.ok", @"template memo view remove temple warning ok button")
+                                              otherButtonTitles:nil];
+        [alert show];
+        bResult = YES;
+    }
+    else {
+        bResult = [templateDao remove:templateCache[indexPath.row]];
+        if (bResult) {
+            DDLogInfo(@"テンプレート一覧表示: テンプレート削除 >> %@", ((TemplateMemo *)templateCache[indexPath.row]).name);
+            [templateCache removeObjectAtIndex:indexPath.row];
+            [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+        }
+    }
+    return bResult;
 }
 
 //- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar
@@ -272,17 +326,27 @@
     }
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    
+    TMEditMemoViewController *editMemoViewController = (TMEditMemoViewController*)segue.destinationViewController;
+    if (appDelegate.editMemoViewController == nil) {
+        appDelegate.editMemoViewController = editMemoViewController;
+    }
+}
+
 #pragma mark Content Filtering
 
 -(void)filterContentForSearchText:(NSString*)searchText scope:(NSString*)scope {
     [filterdTemplateArray removeAllObjects];
-    if ([scope isEqualToString:@"名前"]) {
+    if ([scope isEqualToString:NSLocalizedString(@"templatememoview.searchbar.scope.name", @"template memo view search scope - name")]) {
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.name contains[c] %@",searchText];
         filterdTemplateArray = [NSMutableArray arrayWithArray:[templateCache filteredArrayUsingPredicate:predicate]];
-    } else if ([scope isEqualToString:@"本文"]) {
+    } else if ([scope isEqualToString:NSLocalizedString(@"templatememoview.searchbar.scope.body", @"template memo view search scope - body")]) {
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"self.body contains[c] %@",searchText];
         filterdTemplateArray = [NSMutableArray arrayWithArray:[templateCache filteredArrayUsingPredicate:predicate]];
-    } else if ([scope isEqualToString:@"名前 + 本文"]) {
+    } else if ([scope isEqualToString:NSLocalizedString(@"templatememoview.searchbar.scope.name_body", @"template memo view search scope - name + body")]) {
         NSPredicate *namePredicate = [NSPredicate predicateWithFormat:@"self.name contains[c] %@",searchText];
         NSPredicate *bodyPredicate = [NSPredicate predicateWithFormat:@"self.body contains[c] %@",searchText];
         NSPredicate *predicate = [NSCompoundPredicate orPredicateWithSubpredicates:[NSArray arrayWithObjects:namePredicate, bodyPredicate, nil]];

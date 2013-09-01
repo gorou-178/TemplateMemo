@@ -6,6 +6,7 @@
 //  Copyright (c) 2013年 gurimmer. All rights reserved.
 //
 
+#import "AppDelegate.h"
 #import "TemplateMemoDataSource.h"
 #import "TemplateDao.h"
 
@@ -18,15 +19,14 @@
 {
     self = [super init];
     
-    NSLog(@"TemplateMemoDataSource: init");
-    
-    id<TemplateDao> templateDao = [TemplateDaoImpl new];
+    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    id<TemplateDao> templateDao = [[TemplateDaoImpl alloc] initWithFMDBWrapper:appDelegate.fmdb];
     self.dataList = [[templateDao templates] mutableCopy];
     
     TemplateMemo *emptyTemplate = [[TemplateMemo alloc] init];
     emptyTemplate.row = 0;
-    emptyTemplate.labelText = @"なし";
-    emptyTemplate.name = @"なし";
+    emptyTemplate.labelText = NSLocalizedString(@"setting.template.label.none", @"setting template label - none");
+    emptyTemplate.name = NSLocalizedString(@"setting.template.name.none", @"setting template label - none");
     emptyTemplate.body = @"";
     [self.dataList insertObject:emptyTemplate atIndex:0];
     
@@ -67,7 +67,7 @@
         }
         cell.detailTextLabel.text = previewMemo.copy;
     } else {
-        cell.detailTextLabel.text = @"(no preview)";
+        cell.detailTextLabel.text = NSLocalizedString(@"setting.template.preview.empty", @"setting template empty preview");
     }
 }
 
