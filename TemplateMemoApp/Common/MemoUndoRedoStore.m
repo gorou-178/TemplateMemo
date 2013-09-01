@@ -9,6 +9,7 @@
 #import "MemoUndoRedoStore.h"
 #import "NSMutableArray+StackAdditions.h"
 #import "Memo.h"
+#import "TextViewHistory.h"
 
 @implementation MemoUndoRedoStore
 
@@ -21,10 +22,9 @@
     return self;
 }
 
-- (BOOL)push:(NSInteger)memoId bodyHistory:(NSString *)body;
+- (BOOL)push:(NSInteger)memoId bodyHistory:(NSString *)body atRange:(NSRange)range;
 {
     BOOL bResult = NO;
-    
     if (body == nil) {
         return bResult;
     }
@@ -36,13 +36,16 @@
     }
     
     // スタックに積む
-    [undoRedoHistory push:body];
+    TextViewHistory *history = [[TextViewHistory alloc] init];
+    history.text = [body mutableCopy];
+    history.selectedRange = range;
+    [undoRedoHistory push:history];
     bResult = YES;
     
     return bResult;
 }
 
-- (NSString *)pop:(NSInteger)memoId
+- (TextViewHistory *)pop:(NSInteger)memoId
 {
     NSMutableArray *undoRedoHistory = [undoRedoStore objectForKey:[NSNumber numberWithInt:memoId]];
     if (undoRedoHistory == nil) {
@@ -50,12 +53,12 @@
         return nil;
     }
     
-    NSString *body = [undoRedoHistory pop];
-    if (body == nil) {
+    TextViewHistory *history = [undoRedoHistory pop];
+    if (history == nil) {
         return nil;
     }
     
-    return body;
+    return history;
 }
 
 - (BOOL)remove:(NSInteger)memoId
