@@ -16,6 +16,10 @@
     UITextField *_descriptionPlaceHolder;
     NSInteger _selectedTopicsIndex;
     BOOL _isFeedbackSent;
+    
+    UIBarButtonItem *_mailButton;
+    UIBarButtonItem *_doneButton;
+    BOOL _registered;
 }
 
 @property (strong, nonatomic) NSString *descriptionText;

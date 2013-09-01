@@ -13,6 +13,8 @@
 
 #import "UIDevice-Hardware.h"
 
+#import "SSZipArchive.h"
+
 @interface AAMFeedbackViewController(private)
     - (NSString *) _platform;
     - (NSString *) _platformString;
@@ -92,14 +94,16 @@
     self.title = NSLocalizedString(@"AAMFeedbackTitle", nil);
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelDidPress:)];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:NSLocalizedString(@"AAMFeedbackButtonMail", nil) style:UIBarButtonItemStyleDone target:self action:@selector(nextDidPress:)];
+    _doneButton = [[UIBarButtonItem alloc]initWithTitle:@"done" style:UIBarButtonItemStyleDone target:self action:@selector(onPushDone:)];
+    _mailButton = [[UIBarButtonItem alloc]initWithTitle:NSLocalizedString(@"AAMFeedbackButtonMail", nil) style:UIBarButtonItemStyleDone target:self action:@selector(confirmSendLogFile:)];
+    self.navigationItem.rightBarButtonItem = _mailButton;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    self.toRecipients = [NSArray arrayWithObject:@"s.reianai@gmail.com"];
+    self.toRecipients = [NSArray arrayWithObject:@"template-memo.app@gurimmer.lolipop.jp"];
     self.ccRecipients = nil;
     self.bccRecipients = nil;
 }
@@ -115,6 +119,7 @@
 {
     DDLogInfo(@"問い合わせフォーム表示");
     [super viewWillAppear:animated];
+    [self registKeyBoardNotification];
     [self _updatePlaceholder];
     [self.tableView reloadData];
 }
@@ -129,6 +134,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    [self unRegistKeyBoardNotification];
     [super viewWillDisappear:animated];
 }
 
@@ -290,7 +296,7 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)nextDidPress:(id)sender
+- (void)nextDidPress:(BOOL)isAttachLogFile
 {
     [_descriptionTextView resignFirstResponder];
     
@@ -302,9 +308,28 @@
     [picker setToRecipients:self.toRecipients];
     [picker setCcRecipients:self.ccRecipients];  
     [picker setBccRecipients:self.bccRecipients];
-    
     [picker setSubject:[self _feedbackSubject]];
     [picker setMessageBody:[self _feedbackBody] isHTML:NO];
+    
+    if (isAttachLogFile) {
+        if (![self deleteTmpFile]) {
+            DDLogError(@"作業ディレクトリのファイル削除に失敗しました");
+        }
+        else {
+            DDLogInfo(@"作業ディレクトリのファイル削除");
+        }
+        
+        NSArray *documentPaths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES );
+        NSString *logDirPath = [documentPaths objectAtIndex:0];
+        logDirPath = [[NSString alloc] initWithString:[logDirPath stringByAppendingPathComponent:@"logs"]];
+        NSLog(@"logDirPath: %@", logDirPath);
+        
+        NSString *zipFileName = @"logs.zip";
+        NSString *zipFilePath = [self createZipLogFile:NSTemporaryDirectory() zipFileName:zipFileName logFileDir:logDirPath];
+        NSData *zipFileBinaryData = [[NSData alloc] initWithContentsOfFile:zipFilePath];
+        [picker addAttachmentData:zipFileBinaryData mimeType:@"" fileName:zipFileName];
+    }
+    
     [self presentViewController:picker animated:YES completion:nil];
 }
 
@@ -450,6 +475,141 @@
     if ([platform isEqualToString:@"i386"])      return @"iPhone Simulator";
     if ([platform isEqualToString:@"x86_64"])    return @"iPhone Simulator";
     return platform;
+}
+
+- (void)registKeyBoardNotification
+{
+    // Register for notifiactions
+    if (!_registered) {
+        NSNotificationCenter *center;
+        center = [NSNotificationCenter defaultCenter];
+        [center addObserver:self
+                   selector:@selector(keyboardWillShow:)
+                       name:UIKeyboardWillShowNotification
+                     object:nil];
+        
+        [center addObserver:self
+                   selector:@selector(keybaordWillHide:)
+                       name:UIKeyboardWillHideNotification
+                     object:nil];
+        
+        _registered = YES;
+    }
+}
+
+- (void)unRegistKeyBoardNotification
+{
+    // Unregister from notification center
+    if (_registered) {
+        NSNotificationCenter *center;
+        center = [NSNotificationCenter defaultCenter];
+        [center removeObserver:self
+                          name:UIKeyboardWillShowNotification
+                        object:nil];
+        
+        [center removeObserver:self
+                          name:UIKeyboardWillHideNotification
+                        object:nil];
+        
+        [center removeObserver:self
+                          name:UIApplicationWillResignActiveNotification
+                        object:nil];
+        _registered = NO;
+    }
+}
+
+- (void)keyboardWillShow:(NSNotification*)aNotification
+{
+    self.navigationItem.rightBarButtonItem = _doneButton;
+}
+
+- (void)keybaordWillHide:(NSNotification*)aNotification
+{
+    self.navigationItem.rightBarButtonItem = _mailButton;
+}
+
+- (void)onPushDone:(id)sender
+{
+    [_descriptionTextView resignFirstResponder];
+}
+
+- (BOOL)deleteTmpFile
+{
+    BOOL bResult = NO;
+    
+    // ファイルマネージャを作成
+    NSError *error;
+    NSString *tmpDirPath = NSTemporaryDirectory();
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSArray *deleteList = [fileManager contentsOfDirectoryAtPath:tmpDirPath
+                                                           error:&error];
+    if (!error) {
+        for (NSString *fileName in deleteList) {
+            NSString *filePath = [tmpDirPath stringByAppendingPathComponent:fileName];
+            [fileManager removeItemAtPath:filePath error:&error];
+        }
+        DDLogInfo(@"作業ディレクトリのファイルを削除");
+        bResult = YES;
+    } else {
+        DDLogError(@"作業ディレクトリのファイル一覧取得に失敗: %@", error);
+        return bResult;
+    }
+    
+    return bResult;
+}
+
+- (void)confirmSendLogFile:(id)sender
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"feedbackview.mailsend.confirm.title", @"send mail into log file confirm dialog title")
+                                                    message:NSLocalizedString(@"feedbackview.mailsend.confirm.message", @"send mail into log file confirm dialog message")
+                                                   delegate:self
+                                          cancelButtonTitle:NSLocalizedString(@"feedbackview.mailsend.confirm.cancel", @"send mail into log file confirm dialog cancel button")
+                                          otherButtonTitles:NSLocalizedString(@"feedbackview.mailsend.confirm.nolog", @"send mail into log file confirm dialog not into button"),
+                          NSLocalizedString(@"feedbackview.mailsend.confirm.intolog", @"send mail into log file confirm dialog into button"), nil];
+    [alert show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1) {
+        [self nextDidPress:NO];
+    }
+    else if (buttonIndex == 2) {
+        [self nextDidPress:YES];
+    }
+}
+
+- (NSString *)createZipLogFile:(NSString *)outputPath zipFileName:(NSString*)zipFileName logFileDir:(NSString *)logDirPath
+{
+    // ファイルマネージャを作成
+    NSError *error;
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    NSString *zipOutputPath = [outputPath stringByAppendingPathComponent:zipFileName];
+    NSArray *logFiles = [fileManager contentsOfDirectoryAtPath:logDirPath
+                                                     error:&error];
+    if (!error) {
+        // ファイルやディレクトリの一覧を表示する
+        NSMutableArray *logFilePathList = [[NSMutableArray alloc] init];
+        for (NSString *fileName in logFiles) {
+            NSString *filePath = [logDirPath stringByAppendingPathComponent:fileName];
+            [logFilePathList addObject:filePath];
+        }
+        
+        // ログファイルをzip圧縮
+        BOOL bResult = [SSZipArchive createZipFileAtPath:zipOutputPath withFilesAtPaths:logFilePathList];
+        if (bResult) {
+            DDLogInfo(@"ログファイルをZIP圧縮しました");
+            return zipOutputPath;
+        } else {
+            DDLogError(@"ログファイルのZIP圧縮に失敗しました");
+            return nil;
+        }
+    } else {
+        DDLogError(@"ログファイルディレクトリのファイル一覧取得に失敗しました: %@", error);
+        return nil;
+    }
+    return nil;
 }
 
 @end
