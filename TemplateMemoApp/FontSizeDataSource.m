@@ -25,32 +25,32 @@
     
     FontSize *fontSize = [[FontSize alloc] init];
     fontSize.row = 0;
-    fontSize.size = 14;
-    fontSize.labelText = [[NSString alloc] initWithFormat:@"最小(%gpt)", fontSize.size];
+    fontSize.size = 12;
+    fontSize.labelText = [[NSString alloc] initWithFormat:NSLocalizedString(@"setting.fontsize.verysmall", @"setting fontsize - very small"), fontSize.size];
     [self.dataList addObject:fontSize];
     
     fontSize = [[FontSize alloc] init];
     fontSize.row = 1;
-    fontSize.size = 18;
-    fontSize.labelText = [[NSString alloc] initWithFormat:@"小(%gpt)", fontSize.size];
+    fontSize.size = 14;
+    fontSize.labelText = [[NSString alloc] initWithFormat:NSLocalizedString(@"setting.fontsize.small", @"setting fontsize - small"), fontSize.size];
     [self.dataList addObject:fontSize];
     
     fontSize = [[FontSize alloc] init];
     fontSize.row = 2;
-    fontSize.size = 24;
-    fontSize.labelText = [[NSString alloc] initWithFormat:@"中(%gpt)", fontSize.size];
+    fontSize.size = 18;
+    fontSize.labelText = [[NSString alloc] initWithFormat:NSLocalizedString(@"setting.fontsize.normal", @"setting fontsize - normal"), fontSize.size];
     [self.dataList addObject:fontSize];
     
     fontSize = [[FontSize alloc] init];
     fontSize.row = 3;
-    fontSize.size = 36;
-    fontSize.labelText = [[NSString alloc] initWithFormat:@"大(%gpt)", fontSize.size];
+    fontSize.size = 24;
+    fontSize.labelText = [[NSString alloc] initWithFormat:NSLocalizedString(@"setting.fontsize.large", @"setting fontsize - large"), fontSize.size];
     [self.dataList addObject:fontSize];
     
     fontSize = [[FontSize alloc] init];
     fontSize.row = 4;
-    fontSize.size = 48;
-    fontSize.labelText = [[NSString alloc] initWithFormat:@"最大(%gpt)", fontSize.size];
+    fontSize.size = 36;
+    fontSize.labelText = [[NSString alloc] initWithFormat:NSLocalizedString(@"setting.fontsize.extralarge", @"setting fontsize - extra large"), fontSize.size];
     [self.dataList addObject:fontSize];
     
     return self;
