@@ -3,7 +3,6 @@
 //
 
 #import <Availability.h>
-#import "DDLog.h"
 
 #ifndef __IPHONE_5_0
 #warning "This project uses features only available in iOS SDK 5.0 and later."
@@ -12,13 +11,19 @@
 #ifdef __OBJC__
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
-#endif
 
+    #import "DDLog.h"
+    #import "NSMutableArray+StackAdditions.h"
+    #import "UINavigationController+AllRotate.h"
+    #import "UIDevice-Hardware.h"
 
 #pragma mark - DDLog Setting
 
-#ifdef DEBUG
-    static const int ddLogLevel = LOG_LEVEL_INFO;
-#else
-    static const int ddLogLevel = LOG_LEVEL_WARN;
+    #ifdef DEBUG
+        static const int ddLogLevel = LOG_LEVEL_VERBOSE;
+    #else
+        static const int ddLogLevel = LOG_LEVEL_WARN;
+    #endif
+
 #endif
+
