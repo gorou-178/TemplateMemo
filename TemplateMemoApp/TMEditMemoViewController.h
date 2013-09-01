@@ -9,8 +9,6 @@
 #import <UIKit/UIKit.h>
 #import <iAd/iAd.h>
 
-#import "TMTextView.h"
-
 @class Memo;
 @class TemplateMemo;
 @class MemoUndoRedoStore;
@@ -31,9 +29,11 @@ typedef enum enumTMEditTarget
 
 // IBOutlet
 @property (weak, nonatomic) IBOutlet UIScrollView *bodyScrollView;
-@property (weak, nonatomic) IBOutlet TMTextView *bodyTextView;
+@property (weak, nonatomic) IBOutlet UITextView *bodyTextView;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *templateButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *tagSettingButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *memoInfoButton;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *trashButton;
 
 // Custom UI
 @property (strong, nonatomic) UIBarButtonItem *addMemoButton;
@@ -47,8 +47,11 @@ typedef enum enumTMEditTarget
 @property (strong, nonatomic) MemoUndoRedoStore *undoStore;
 @property (strong, nonatomic) MemoUndoRedoStore *redoStore;
 
+- (IBAction)onPushTrashButton:(id)sender;
+
 // Public Selector
 - (Memo *)currentMemo;
 - (TemplateMemo *)currentTemplateMemo;
 - (void)setActiveSideView:(UITableViewController*)tableViewController;
+- (void)insertTemplate:(TemplateMemo*)templateMemo atRange:(NSRange)range;
 @end
