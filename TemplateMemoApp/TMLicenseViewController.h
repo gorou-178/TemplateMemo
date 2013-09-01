@@ -10,5 +10,6 @@
 
 @interface TMLicenseViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
+- (IBAction)onPushCloseButton:(id)sender;
 
 @end

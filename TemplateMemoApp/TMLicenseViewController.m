@@ -7,6 +7,7 @@
 //
 
 #import "TMLicenseViewController.h"
+#import "UIDeviceHelper.h"
 
 @interface TMLicenseViewController ()
 
@@ -25,9 +26,14 @@
 
 - (void)viewDidLoad
 {
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"appLicence_ja" ofType:@"html"];
+    NSString *licenceFileName;
+    if ([UIDeviceHelper isJapaneseLanguage]) {
+        licenceFileName = @"appLicence_ja";
+    } else {
+        licenceFileName = @"appLicence_en";
+    }
+    NSString *path = [[NSBundle mainBundle] pathForResource:licenceFileName ofType:@"html"];
     [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL fileURLWithPath:path]]];
-    
     [super viewDidLoad];
 }
 
@@ -43,4 +49,7 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (IBAction)onPushCloseButton:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 @end
