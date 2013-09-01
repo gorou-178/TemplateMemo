@@ -46,6 +46,7 @@
 {
     NSUInteger prime = 31;
     int result = 1;
+    result = prime * result + self.memoid;
     result = prime * result + ((self.body == nil) ? 0 : self.body.hash);
     result = prime * result + ((self.createDate == nil) ? 0 : self.createDate.hash);
     result = prime * result + ((self.modifiedDate == nil) ? 0 : self.modifiedDate.hash);
