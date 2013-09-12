@@ -17,6 +17,7 @@
     TemplateMemo *mutableCopy = [[[self class] allocWithZone:zone] init];
     mutableCopy.row = self.row;
     mutableCopy.labelText = [self.labelText mutableCopy];
+    mutableCopy.templateId = self.templateId;
     mutableCopy.name = [self.name mutableCopy];
     mutableCopy.body = [self.body mutableCopy];
     mutableCopy.createDate = self.createDate;
@@ -27,9 +28,8 @@
 
 // シリアライズ時に呼ばれる
 - (void)encodeWithCoder:(NSCoder *)coder {
-    //    [coder encodeObject:indexPath];
-    [coder encodeObject:[NSNumber numberWithInt:row] forKey:@"row"];
-    [coder encodeObject:labelText forKey:@"labelText"];
+    [super encodeWithCoder:coder];
+    [coder encodeObject:[NSNumber numberWithInt:self.templateId] forKey:@"templateId"];
     [coder encodeObject:self.name forKey:@"name"];
     [coder encodeObject:self.body forKey:@"body"];
     [coder encodeObject:[DateUtil dateToString:self.createDate atDateFormat:@"yyyy/MM/dd hh:mm:ss"] forKey:@"createDate"];
@@ -39,10 +39,9 @@
 
 // デシリアライズ時に呼ばれる
 - (id)initWithCoder:(NSCoder *)coder {
-    self = [self init];
+    self = [super initWithCoder:coder];
     if (self) {
-        row = [[coder decodeObjectForKey:@"row"] intValue];
-        labelText = [coder decodeObjectForKey:@"labelText"];
+        self.templateId = [[coder decodeObjectForKey:@"templateId"] intValue];
         self.name = [coder decodeObjectForKey:@"name"];
         self.body = [coder decodeObjectForKey:@"body"];
         self.createDate = [DateUtil dateStringToDate:[coder decodeObjectForKey:@"createDate"] atDateFormat:@"yyyy/MM/dd hh:mm:ss"];
@@ -71,13 +70,13 @@
 - (NSUInteger)hash
 {
     NSUInteger prime = 31;
-    int result = 1;
-    result = prime * result + self.templateId;
-    result = prime * result + ((self.name == nil) ? 0 : self.name.hash);
-    result = prime * result + ((self.body == nil) ? 0 : self.body.hash);
-    result = prime * result + ((self.createDate == nil) ? 0 : self.createDate.hash);
-    result = prime * result + ((self.modifiedDate == nil) ? 0 : self.modifiedDate.hash);
-    result = prime * result + self.deleteFlag;
+    NSUInteger result = 1;
+    result = prime * ( result + self.templateId );
+    result = prime * ( result + ((self.name == nil) ? 0 : self.name.hash) );
+    result = prime * ( result + ((self.body == nil) ? 0 : self.body.hash) );
+    result = prime * ( result + ((self.createDate == nil) ? 0 : self.createDate.hash) );
+    result = prime * ( result + ((self.modifiedDate == nil) ? 0 : self.modifiedDate.hash) );
+    result = prime * ( result + self.deleteFlag );
     return result;
 }
 

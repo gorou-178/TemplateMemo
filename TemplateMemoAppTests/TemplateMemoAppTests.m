@@ -8,6 +8,7 @@
 
 #import "TemplateMemoAppTests.h"
 
+
 @implementation TemplateMemoAppTests
 
 - (void)setUp
@@ -26,7 +27,7 @@
 
 - (void)testExample
 {
-    STFail(@"Unit tests are not implemented yet in TemplateMemoAppTests");
+    
 }
 
 @end

@@ -15,10 +15,14 @@
 		E20DC10717A1286C00139CC1 /* TMTemplateMemoTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E20DC10517A1286B00139CC1 /* TMTemplateMemoTableViewController.m */; };
 		E20DC10A17A1611800139CC1 /* TemplateMemoSettingInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = E20DC10917A1611700139CC1 /* TemplateMemoSettingInfo.m */; };
 		E20DC10B17A1611800139CC1 /* TemplateMemoSettingInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = E20DC10917A1611700139CC1 /* TemplateMemoSettingInfo.m */; };
+		E20F9D9C17D9B6E50068AA52 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E2B02729175CDD7200FBA056 /* libsqlite3.0.dylib */; };
+		E20F9D9D17D9B6F10068AA52 /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E21D644F17CF0892009CB244 /* libz.1.2.5.dylib */; };
+		E20F9D9E17D9B6FE0068AA52 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2BE3FFE17B4C86400476243 /* iAd.framework */; };
+		E20F9D9F17D9B70C0068AA52 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2EE3650175B4D580055D723 /* CoreGraphics.framework */; };
+		E20F9DA017D9B7160068AA52 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E266F56717AE624300000970 /* MessageUI.framework */; };
+		E20F9DA117D9B7350068AA52 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E279A026179435EE0099104D /* QuartzCore.framework */; };
 		E217521C17CB3BEB005389AE /* TextViewHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = E217521B17CB3BEB005389AE /* TextViewHistory.m */; };
 		E217521D17CB3BEB005389AE /* TextViewHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = E217521B17CB3BEB005389AE /* TextViewHistory.m */; };
-		E217521F17CB79F9005389AE /* trash_16.png in Resources */ = {isa = PBXBuildFile; fileRef = E217521E17CB79F9005389AE /* trash_16.png */; };
-		E217522017CB79F9005389AE /* trash_16.png in Resources */ = {isa = PBXBuildFile; fileRef = E217521E17CB79F9005389AE /* trash_16.png */; };
 		E219F6AE17CDC94600E7FFC4 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E219F6AA17CDC94500E7FFC4 /* MainStoryboard_iPad.storyboard */; };
 		E219F6AF17CDC94600E7FFC4 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E219F6AA17CDC94500E7FFC4 /* MainStoryboard_iPad.storyboard */; };
 		E219F6B017CDC94600E7FFC4 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E219F6AC17CDC94600E7FFC4 /* MainStoryboard_iPhone.storyboard */; };
@@ -50,6 +54,7 @@
 		E21D644D17CF084F009CB244 /* SSZipArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = E21D644417CF084F009CB244 /* SSZipArchive.m */; };
 		E21D644E17CF084F009CB244 /* SSZipArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = E21D644417CF084F009CB244 /* SSZipArchive.m */; };
 		E21D645017CF0892009CB244 /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E21D644F17CF0892009CB244 /* libz.1.2.5.dylib */; };
+		E22C1E7517E04A3E006425E3 /* FontTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E22C1E7417E04A3E006425E3 /* FontTests.m */; };
 		E23C7B8A175E3A7D00F6848F /* Memo.m in Sources */ = {isa = PBXBuildFile; fileRef = E23C7B89175E3A7D00F6848F /* Memo.m */; };
 		E23C7B8E175E3E5400F6848F /* MemoDao.m in Sources */ = {isa = PBXBuildFile; fileRef = E23C7B8D175E3E5400F6848F /* MemoDao.m */; };
 		E23FDA8017A8DA7600370B8F /* TMTagSettingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E23FDA7F17A8DA7600370B8F /* TMTagSettingTableViewController.m */; };
@@ -100,6 +105,12 @@
 		E266F56517AE57B900000970 /* AAMFeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E266F56117AE57B900000970 /* AAMFeedbackViewController.m */; };
 		E266F56617AE58E800000970 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2EE3676175B4D590055D723 /* SenTestingKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		E266F56817AE624300000970 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E266F56717AE624300000970 /* MessageUI.framework */; };
+		E2695E5217DD806B0077D6AE /* IncorrectHeaders.zip in Resources */ = {isa = PBXBuildFile; fileRef = E2695E4C17DD806B0077D6AE /* IncorrectHeaders.zip */; };
+		E2695E5317DD806B0077D6AE /* SSZipArchiveTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2695E4D17DD806B0077D6AE /* SSZipArchiveTests.m */; };
+		E2695E5417DD806B0077D6AE /* SymbolicLink.zip in Resources */ = {isa = PBXBuildFile; fileRef = E2695E4E17DD806B0077D6AE /* SymbolicLink.zip */; };
+		E2695E5517DD806B0077D6AE /* TestArchive.zip in Resources */ = {isa = PBXBuildFile; fileRef = E2695E4F17DD806B0077D6AE /* TestArchive.zip */; };
+		E2695E5617DD806B0077D6AE /* TestPasswordArchive.zip in Resources */ = {isa = PBXBuildFile; fileRef = E2695E5017DD806B0077D6AE /* TestPasswordArchive.zip */; };
+		E2695E5717DD806B0077D6AE /* Unicode.zip in Resources */ = {isa = PBXBuildFile; fileRef = E2695E5117DD806B0077D6AE /* Unicode.zip */; };
 		E26C1D25179EB64700988906 /* UserDefaultsWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = E26C1D24179EB64700988906 /* UserDefaultsWrapper.m */; };
 		E26C1D26179EB64700988906 /* UserDefaultsWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = E26C1D24179EB64700988906 /* UserDefaultsWrapper.m */; };
 		E2734E3617869C6B008272CB /* TMTagTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2734E3517869C6B008272CB /* TMTagTableViewController.m */; };
@@ -143,6 +154,25 @@
 		E2832EC5179C1978009E9660 /* TMSettingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E2832EC3179C1976009E9660 /* TMSettingTableViewController.m */; };
 		E2832EC8179C253B009E9660 /* SettingDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = E2832EC7179C2539009E9660 /* SettingDataSource.m */; };
 		E2832EC9179C253B009E9660 /* SettingDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = E2832EC7179C2539009E9660 /* SettingDataSource.m */; };
+		E2899AAE17DD8A2400CC9314 /* DateUtilTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2899A8717DD8A2400CC9314 /* DateUtilTests.m */; };
+		E2899AAF17DD8A2400CC9314 /* FMDBWrapperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2899A8917DD8A2400CC9314 /* FMDBWrapperTests.m */; };
+		E2899AB017DD8A2400CC9314 /* FontDataSourceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2899A8B17DD8A2400CC9314 /* FontDataSourceTests.m */; };
+		E2899AB117DD8A2400CC9314 /* FontSizeDataSourceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2899A8D17DD8A2400CC9314 /* FontSizeDataSourceTests.m */; };
+		E2899AB217DD8A2400CC9314 /* FontSizeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2899A8F17DD8A2400CC9314 /* FontSizeTests.m */; };
+		E2899AB417DD8A2400CC9314 /* MemoDaoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2899A9317DD8A2400CC9314 /* MemoDaoTests.m */; };
+		E2899AB517DD8A2400CC9314 /* MemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2899A9517DD8A2400CC9314 /* MemoTests.m */; };
+		E2899AB617DD8A2400CC9314 /* MemoUndoRedoStoreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2899A9717DD8A2400CC9314 /* MemoUndoRedoStoreTests.m */; };
+		E2899AB717DD8A2400CC9314 /* SettingDataSourceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2899A9917DD8A2400CC9314 /* SettingDataSourceTests.m */; };
+		E2899AB817DD8A2400CC9314 /* SettingInfoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2899A9B17DD8A2400CC9314 /* SettingInfoTests.m */; };
+		E2899AB917DD8A2400CC9314 /* StackAdditionsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2899A9D17DD8A2400CC9314 /* StackAdditionsTests.m */; };
+		E2899ABA17DD8A2400CC9314 /* TagDaoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2899A9F17DD8A2400CC9314 /* TagDaoTests.m */; };
+		E2899ABB17DD8A2400CC9314 /* TagLinkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2899AA117DD8A2400CC9314 /* TagLinkTests.m */; };
+		E2899ABC17DD8A2400CC9314 /* TagTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2899AA317DD8A2400CC9314 /* TagTests.m */; };
+		E2899ABD17DD8A2400CC9314 /* TemplateMemoDaoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2899AA517DD8A2400CC9314 /* TemplateMemoDaoTests.m */; };
+		E2899ABE17DD8A2400CC9314 /* TemplateMemoDataSourceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2899AA717DD8A2400CC9314 /* TemplateMemoDataSourceTests.m */; };
+		E2899ABF17DD8A2400CC9314 /* TemplateMemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2899AA917DD8A2400CC9314 /* TemplateMemoTests.m */; };
+		E2899AC017DD8A2400CC9314 /* TextViewHistoryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2899AAB17DD8A2400CC9314 /* TextViewHistoryTests.m */; };
+		E2899AC117DD8A2400CC9314 /* UserDefaultsWrapperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2899AAD17DD8A2400CC9314 /* UserDefaultsWrapperTests.m */; };
 		E28D84E217CC8225008277C6 /* bootstrap.min.css in Resources */ = {isa = PBXBuildFile; fileRef = E28D84E017CC8225008277C6 /* bootstrap.min.css */; };
 		E28D84E317CC8225008277C6 /* bootstrap.min.css in Resources */ = {isa = PBXBuildFile; fileRef = E28D84E017CC8225008277C6 /* bootstrap.min.css */; };
 		E28D84EA17CC88E2008277C6 /* FMDB_LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = E28D84E917CC88E2008277C6 /* FMDB_LICENSE.txt */; };
@@ -194,7 +224,6 @@
 		E2EE3677175B4D590055D723 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2EE3676175B4D590055D723 /* SenTestingKit.framework */; };
 		E2EE3678175B4D590055D723 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2EE364C175B4D580055D723 /* UIKit.framework */; };
 		E2EE3679175B4D590055D723 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2EE364E175B4D580055D723 /* Foundation.framework */; };
-		E2EE3681175B4D590055D723 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E2EE367F175B4D590055D723 /* InfoPlist.strings */; };
 		E2EE3684175B4D590055D723 /* TemplateMemoAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E2EE3683175B4D590055D723 /* TemplateMemoAppTests.m */; };
 		E2EE36B8175B94390055D723 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E2EE36B6175B94390055D723 /* InfoPlist.strings */; };
 		E2EE36B9175B94390055D723 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E2EE36B6175B94390055D723 /* InfoPlist.strings */; };
@@ -223,7 +252,6 @@
 		E20DC10917A1611700139CC1 /* TemplateMemoSettingInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TemplateMemoSettingInfo.m; sourceTree = "<group>"; };
 		E217521A17CB3BEA005389AE /* TextViewHistory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextViewHistory.h; sourceTree = "<group>"; };
 		E217521B17CB3BEB005389AE /* TextViewHistory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextViewHistory.m; sourceTree = "<group>"; };
-		E217521E17CB79F9005389AE /* trash_16.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = trash_16.png; sourceTree = "<group>"; };
 		E219F6AB17CDC94600E7FFC4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
 		E219F6AD17CDC94600E7FFC4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
 		E21A175917CDB6690054E28E /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
@@ -250,6 +278,8 @@
 		E21D644317CF084F009CB244 /* SSZipArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSZipArchive.h; sourceTree = "<group>"; };
 		E21D644417CF084F009CB244 /* SSZipArchive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSZipArchive.m; sourceTree = "<group>"; };
 		E21D644F17CF0892009CB244 /* libz.1.2.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.5.dylib; path = usr/lib/libz.1.2.5.dylib; sourceTree = SDKROOT; };
+		E22C1E7317E04A3E006425E3 /* FontTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontTests.h; sourceTree = "<group>"; };
+		E22C1E7417E04A3E006425E3 /* FontTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FontTests.m; sourceTree = "<group>"; };
 		E23C7B88175E3A7D00F6848F /* Memo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Memo.h; sourceTree = "<group>"; };
 		E23C7B89175E3A7D00F6848F /* Memo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Memo.m; sourceTree = "<group>"; };
 		E23C7B8C175E3E5400F6848F /* MemoDao.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoDao.h; sourceTree = "<group>"; };
@@ -294,6 +324,12 @@
 		E266F56017AE57B900000970 /* AAMFeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AAMFeedbackViewController.h; sourceTree = "<group>"; };
 		E266F56117AE57B900000970 /* AAMFeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AAMFeedbackViewController.m; sourceTree = "<group>"; };
 		E266F56717AE624300000970 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		E2695E4C17DD806B0077D6AE /* IncorrectHeaders.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = IncorrectHeaders.zip; sourceTree = "<group>"; };
+		E2695E4D17DD806B0077D6AE /* SSZipArchiveTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSZipArchiveTests.m; sourceTree = "<group>"; };
+		E2695E4E17DD806B0077D6AE /* SymbolicLink.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = SymbolicLink.zip; sourceTree = "<group>"; };
+		E2695E4F17DD806B0077D6AE /* TestArchive.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = TestArchive.zip; sourceTree = "<group>"; };
+		E2695E5017DD806B0077D6AE /* TestPasswordArchive.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = TestPasswordArchive.zip; sourceTree = "<group>"; };
+		E2695E5117DD806B0077D6AE /* Unicode.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = Unicode.zip; sourceTree = "<group>"; };
 		E26C1D23179EB64700988906 /* UserDefaultsWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDefaultsWrapper.h; sourceTree = "<group>"; };
 		E26C1D24179EB64700988906 /* UserDefaultsWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserDefaultsWrapper.m; sourceTree = "<group>"; };
 		E2734E3417869C6B008272CB /* TMTagTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMTagTableViewController.h; sourceTree = "<group>"; };
@@ -336,6 +372,44 @@
 		E2832EC3179C1976009E9660 /* TMSettingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TMSettingTableViewController.m; sourceTree = "<group>"; };
 		E2832EC6179C2538009E9660 /* SettingDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingDataSource.h; sourceTree = "<group>"; };
 		E2832EC7179C2539009E9660 /* SettingDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingDataSource.m; sourceTree = "<group>"; };
+		E2899A8617DD8A2400CC9314 /* DateUtilTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateUtilTests.h; sourceTree = "<group>"; };
+		E2899A8717DD8A2400CC9314 /* DateUtilTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DateUtilTests.m; sourceTree = "<group>"; };
+		E2899A8817DD8A2400CC9314 /* FMDBWrapperTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDBWrapperTests.h; sourceTree = "<group>"; };
+		E2899A8917DD8A2400CC9314 /* FMDBWrapperTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDBWrapperTests.m; sourceTree = "<group>"; };
+		E2899A8A17DD8A2400CC9314 /* FontDataSourceTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontDataSourceTests.h; sourceTree = "<group>"; };
+		E2899A8B17DD8A2400CC9314 /* FontDataSourceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FontDataSourceTests.m; sourceTree = "<group>"; };
+		E2899A8C17DD8A2400CC9314 /* FontSizeDataSourceTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontSizeDataSourceTests.h; sourceTree = "<group>"; };
+		E2899A8D17DD8A2400CC9314 /* FontSizeDataSourceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FontSizeDataSourceTests.m; sourceTree = "<group>"; };
+		E2899A8E17DD8A2400CC9314 /* FontSizeTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontSizeTests.h; sourceTree = "<group>"; };
+		E2899A8F17DD8A2400CC9314 /* FontSizeTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FontSizeTests.m; sourceTree = "<group>"; };
+		E2899A9217DD8A2400CC9314 /* MemoDaoTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoDaoTests.h; sourceTree = "<group>"; };
+		E2899A9317DD8A2400CC9314 /* MemoDaoTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MemoDaoTests.m; sourceTree = "<group>"; };
+		E2899A9417DD8A2400CC9314 /* MemoTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoTests.h; sourceTree = "<group>"; };
+		E2899A9517DD8A2400CC9314 /* MemoTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MemoTests.m; sourceTree = "<group>"; };
+		E2899A9617DD8A2400CC9314 /* MemoUndoRedoStoreTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoUndoRedoStoreTests.h; sourceTree = "<group>"; };
+		E2899A9717DD8A2400CC9314 /* MemoUndoRedoStoreTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MemoUndoRedoStoreTests.m; sourceTree = "<group>"; };
+		E2899A9817DD8A2400CC9314 /* SettingDataSourceTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingDataSourceTests.h; sourceTree = "<group>"; };
+		E2899A9917DD8A2400CC9314 /* SettingDataSourceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingDataSourceTests.m; sourceTree = "<group>"; };
+		E2899A9A17DD8A2400CC9314 /* SettingInfoTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingInfoTests.h; sourceTree = "<group>"; };
+		E2899A9B17DD8A2400CC9314 /* SettingInfoTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingInfoTests.m; sourceTree = "<group>"; };
+		E2899A9C17DD8A2400CC9314 /* StackAdditionsTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StackAdditionsTests.h; sourceTree = "<group>"; };
+		E2899A9D17DD8A2400CC9314 /* StackAdditionsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StackAdditionsTests.m; sourceTree = "<group>"; };
+		E2899A9E17DD8A2400CC9314 /* TagDaoTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagDaoTests.h; sourceTree = "<group>"; };
+		E2899A9F17DD8A2400CC9314 /* TagDaoTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagDaoTests.m; sourceTree = "<group>"; };
+		E2899AA017DD8A2400CC9314 /* TagLinkTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagLinkTests.h; sourceTree = "<group>"; };
+		E2899AA117DD8A2400CC9314 /* TagLinkTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagLinkTests.m; sourceTree = "<group>"; };
+		E2899AA217DD8A2400CC9314 /* TagTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TagTests.h; sourceTree = "<group>"; };
+		E2899AA317DD8A2400CC9314 /* TagTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TagTests.m; sourceTree = "<group>"; };
+		E2899AA417DD8A2400CC9314 /* TemplateMemoDaoTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateMemoDaoTests.h; sourceTree = "<group>"; };
+		E2899AA517DD8A2400CC9314 /* TemplateMemoDaoTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TemplateMemoDaoTests.m; sourceTree = "<group>"; };
+		E2899AA617DD8A2400CC9314 /* TemplateMemoDataSourceTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateMemoDataSourceTests.h; sourceTree = "<group>"; };
+		E2899AA717DD8A2400CC9314 /* TemplateMemoDataSourceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TemplateMemoDataSourceTests.m; sourceTree = "<group>"; };
+		E2899AA817DD8A2400CC9314 /* TemplateMemoTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateMemoTests.h; sourceTree = "<group>"; };
+		E2899AA917DD8A2400CC9314 /* TemplateMemoTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TemplateMemoTests.m; sourceTree = "<group>"; };
+		E2899AAA17DD8A2400CC9314 /* TextViewHistoryTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextViewHistoryTests.h; sourceTree = "<group>"; };
+		E2899AAB17DD8A2400CC9314 /* TextViewHistoryTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextViewHistoryTests.m; sourceTree = "<group>"; };
+		E2899AAC17DD8A2400CC9314 /* UserDefaultsWrapperTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDefaultsWrapperTests.h; sourceTree = "<group>"; };
+		E2899AAD17DD8A2400CC9314 /* UserDefaultsWrapperTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserDefaultsWrapperTests.m; sourceTree = "<group>"; };
 		E28D84E017CC8225008277C6 /* bootstrap.min.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = bootstrap.min.css; sourceTree = "<group>"; };
 		E28D84E117CC8225008277C6 /* bootstrap.min.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = bootstrap.min.js; sourceTree = "<group>"; };
 		E28D84E617CC82B1008277C6 /* jquery-2.0.3.min.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "jquery-2.0.3.min.js"; sourceTree = "<group>"; };
@@ -385,10 +459,8 @@
 		E2EE3675175B4D590055D723 /* TemplateMemoAppTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TemplateMemoAppTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2EE3676175B4D590055D723 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		E2EE367E175B4D590055D723 /* TemplateMemoAppTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TemplateMemoAppTests-Info.plist"; sourceTree = "<group>"; };
-		E2EE3680175B4D590055D723 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E2EE3682175B4D590055D723 /* TemplateMemoAppTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TemplateMemoAppTests.h; sourceTree = "<group>"; };
 		E2EE3683175B4D590055D723 /* TemplateMemoAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TemplateMemoAppTests.m; sourceTree = "<group>"; };
-		E2EE368E175B4D7C0055D723 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E2EE36B7175B94390055D723 /* ja */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E2EE36BA175B94460055D723 /* en */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E2F2F7F317AA6A8E004AD742 /* TMMemoInfoTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMMemoInfoTableViewController.h; sourceTree = "<group>"; };
@@ -417,10 +489,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E2EE3677175B4D590055D723 /* SenTestingKit.framework in Frameworks */,
 				E2EE3678175B4D590055D723 /* UIKit.framework in Frameworks */,
 				E2EE3679175B4D590055D723 /* Foundation.framework in Frameworks */,
+				E20F9D9F17D9B70C0068AA52 /* CoreGraphics.framework in Frameworks */,
+				E2EE3677175B4D590055D723 /* SenTestingKit.framework in Frameworks */,
+				E20F9DA017D9B7160068AA52 /* MessageUI.framework in Frameworks */,
+				E20F9DA117D9B7350068AA52 /* QuartzCore.framework in Frameworks */,
+				E20F9D9E17D9B6FE0068AA52 /* iAd.framework in Frameworks */,
 				E21A175B17CDB66A0054E28E /* Crashlytics.framework in Frameworks */,
+				E20F9D9C17D9B6E50068AA52 /* libsqlite3.0.dylib in Frameworks */,
+				E20F9D9D17D9B6F10068AA52 /* libz.1.2.5.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -519,6 +597,19 @@
 				E266F56117AE57B900000970 /* AAMFeedbackViewController.m */,
 			);
 			name = AAMFeedback;
+			sourceTree = "<group>";
+		};
+		E2695E4B17DD80280077D6AE /* SSZipArchive */ = {
+			isa = PBXGroup;
+			children = (
+				E2695E4C17DD806B0077D6AE /* IncorrectHeaders.zip */,
+				E2695E4D17DD806B0077D6AE /* SSZipArchiveTests.m */,
+				E2695E4E17DD806B0077D6AE /* SymbolicLink.zip */,
+				E2695E4F17DD806B0077D6AE /* TestArchive.zip */,
+				E2695E5017DD806B0077D6AE /* TestPasswordArchive.zip */,
+				E2695E5117DD806B0077D6AE /* Unicode.zip */,
+			);
+			path = SSZipArchive;
 			sourceTree = "<group>";
 		};
 		E27C8BFF17B9BC370079B89B /* LumberJack */ = {
@@ -667,6 +758,44 @@
 		E2EE367C175B4D590055D723 /* TemplateMemoAppTests */ = {
 			isa = PBXGroup;
 			children = (
+				E2899A8617DD8A2400CC9314 /* DateUtilTests.h */,
+				E2899A8717DD8A2400CC9314 /* DateUtilTests.m */,
+				E2899A8817DD8A2400CC9314 /* FMDBWrapperTests.h */,
+				E2899A8917DD8A2400CC9314 /* FMDBWrapperTests.m */,
+				E2899A8A17DD8A2400CC9314 /* FontDataSourceTests.h */,
+				E2899A8B17DD8A2400CC9314 /* FontDataSourceTests.m */,
+				E2899A8C17DD8A2400CC9314 /* FontSizeDataSourceTests.h */,
+				E2899A8D17DD8A2400CC9314 /* FontSizeDataSourceTests.m */,
+				E2899A8E17DD8A2400CC9314 /* FontSizeTests.h */,
+				E2899A8F17DD8A2400CC9314 /* FontSizeTests.m */,
+				E2899A9217DD8A2400CC9314 /* MemoDaoTests.h */,
+				E2899A9317DD8A2400CC9314 /* MemoDaoTests.m */,
+				E2899A9417DD8A2400CC9314 /* MemoTests.h */,
+				E2899A9517DD8A2400CC9314 /* MemoTests.m */,
+				E2899A9617DD8A2400CC9314 /* MemoUndoRedoStoreTests.h */,
+				E2899A9717DD8A2400CC9314 /* MemoUndoRedoStoreTests.m */,
+				E2899A9817DD8A2400CC9314 /* SettingDataSourceTests.h */,
+				E2899A9917DD8A2400CC9314 /* SettingDataSourceTests.m */,
+				E2899A9A17DD8A2400CC9314 /* SettingInfoTests.h */,
+				E2899A9B17DD8A2400CC9314 /* SettingInfoTests.m */,
+				E2899A9C17DD8A2400CC9314 /* StackAdditionsTests.h */,
+				E2899A9D17DD8A2400CC9314 /* StackAdditionsTests.m */,
+				E2899A9E17DD8A2400CC9314 /* TagDaoTests.h */,
+				E2899A9F17DD8A2400CC9314 /* TagDaoTests.m */,
+				E2899AA017DD8A2400CC9314 /* TagLinkTests.h */,
+				E2899AA117DD8A2400CC9314 /* TagLinkTests.m */,
+				E2899AA217DD8A2400CC9314 /* TagTests.h */,
+				E2899AA317DD8A2400CC9314 /* TagTests.m */,
+				E2899AA417DD8A2400CC9314 /* TemplateMemoDaoTests.h */,
+				E2899AA517DD8A2400CC9314 /* TemplateMemoDaoTests.m */,
+				E2899AA617DD8A2400CC9314 /* TemplateMemoDataSourceTests.h */,
+				E2899AA717DD8A2400CC9314 /* TemplateMemoDataSourceTests.m */,
+				E2899AA817DD8A2400CC9314 /* TemplateMemoTests.h */,
+				E2899AA917DD8A2400CC9314 /* TemplateMemoTests.m */,
+				E2899AAA17DD8A2400CC9314 /* TextViewHistoryTests.h */,
+				E2899AAB17DD8A2400CC9314 /* TextViewHistoryTests.m */,
+				E2899AAC17DD8A2400CC9314 /* UserDefaultsWrapperTests.h */,
+				E2899AAD17DD8A2400CC9314 /* UserDefaultsWrapperTests.m */,
 				E2EE3682175B4D590055D723 /* TemplateMemoAppTests.h */,
 				E2EE3683175B4D590055D723 /* TemplateMemoAppTests.m */,
 				E2EE3698175B69240055D723 /* iPhone */,
@@ -675,6 +804,8 @@
 				E2EE3695175B69060055D723 /* Utilities */,
 				E2EE3694175B68FF0055D723 /* Images */,
 				E2EE367D175B4D590055D723 /* Supporting Files */,
+				E22C1E7317E04A3E006425E3 /* FontTests.h */,
+				E22C1E7417E04A3E006425E3 /* FontTests.m */,
 			);
 			path = TemplateMemoAppTests;
 			sourceTree = "<group>";
@@ -683,7 +814,6 @@
 			isa = PBXGroup;
 			children = (
 				E2EE367E175B4D590055D723 /* TemplateMemoAppTests-Info.plist */,
-				E2EE367F175B4D590055D723 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -750,7 +880,6 @@
 			children = (
 				E21D643217CF0365009CB244 /* notes_32.png */,
 				E21D643317CF0365009CB244 /* notes_add_16.png */,
-				E217521E17CB79F9005389AE /* trash_16.png */,
 				E24EDA5017B0F3AF001D941E /* label_edit_16.png */,
 				E2972B5317AF78CF001C1994 /* arrow_sans_down_16.png */,
 				E2972B5417AF78CF001C1994 /* arrow_sans_left_16.png */,
@@ -774,6 +903,7 @@
 		E2EE3695175B69060055D723 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				E2695E4B17DD80280077D6AE /* SSZipArchive */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -896,7 +1026,6 @@
 				E21AEE3717B8CDB200530861 /* KeyboardButtonView.xib in Resources */,
 				E27A616317BB1774000201FD /* PICOL_32_readme.txt in Resources */,
 				E243FDFE17BF761F00F3773C /* TMMemoCellView.xib in Resources */,
-				E217521F17CB79F9005389AE /* trash_16.png in Resources */,
 				E28D84E217CC8225008277C6 /* bootstrap.min.css in Resources */,
 				E28D84EA17CC88E2008277C6 /* FMDB_LICENSE.txt in Resources */,
 				E219F6AE17CDC94600E7FFC4 /* MainStoryboard_iPad.storyboard in Resources */,
@@ -915,7 +1044,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E2EE3681175B4D590055D723 /* InfoPlist.strings in Resources */,
 				E2EE36B9175B94390055D723 /* InfoPlist.strings in Resources */,
 				E266F54517ADF4BB00000970 /* bokutachi.otf in Resources */,
 				E266F54717ADF4BB00000970 /* IPA_Font_License_Agreement_v1.0.txt in Resources */,
@@ -936,7 +1064,6 @@
 				E21AEE3817B8CDB200530861 /* KeyboardButtonView.xib in Resources */,
 				E27A616417BB1774000201FD /* PICOL_32_readme.txt in Resources */,
 				E243FDFF17BF761F00F3773C /* TMMemoCellView.xib in Resources */,
-				E217522017CB79F9005389AE /* trash_16.png in Resources */,
 				E28D84E317CC8225008277C6 /* bootstrap.min.css in Resources */,
 				E28D84EB17CC88E2008277C6 /* FMDB_LICENSE.txt in Resources */,
 				E219F6AF17CDC94600E7FFC4 /* MainStoryboard_iPad.storyboard in Resources */,
@@ -944,6 +1071,11 @@
 				E2911EBA17CE50B60017EE44 /* appLicence_en.html in Resources */,
 				E21D643517CF0365009CB244 /* notes_32.png in Resources */,
 				E21D643717CF0365009CB244 /* notes_add_16.png in Resources */,
+				E2695E5217DD806B0077D6AE /* IncorrectHeaders.zip in Resources */,
+				E2695E5417DD806B0077D6AE /* SymbolicLink.zip in Resources */,
+				E2695E5517DD806B0077D6AE /* TestArchive.zip in Resources */,
+				E2695E5617DD806B0077D6AE /* TestPasswordArchive.zip in Resources */,
+				E2695E5717DD806B0077D6AE /* Unicode.zip in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1105,6 +1237,27 @@
 				E21D644A17CF084F009CB244 /* unzip.c in Sources */,
 				E21D644C17CF084F009CB244 /* zip.c in Sources */,
 				E21D644E17CF084F009CB244 /* SSZipArchive.m in Sources */,
+				E2695E5317DD806B0077D6AE /* SSZipArchiveTests.m in Sources */,
+				E2899AAE17DD8A2400CC9314 /* DateUtilTests.m in Sources */,
+				E2899AAF17DD8A2400CC9314 /* FMDBWrapperTests.m in Sources */,
+				E2899AB017DD8A2400CC9314 /* FontDataSourceTests.m in Sources */,
+				E2899AB117DD8A2400CC9314 /* FontSizeDataSourceTests.m in Sources */,
+				E2899AB217DD8A2400CC9314 /* FontSizeTests.m in Sources */,
+				E2899AB417DD8A2400CC9314 /* MemoDaoTests.m in Sources */,
+				E2899AB517DD8A2400CC9314 /* MemoTests.m in Sources */,
+				E2899AB617DD8A2400CC9314 /* MemoUndoRedoStoreTests.m in Sources */,
+				E2899AB717DD8A2400CC9314 /* SettingDataSourceTests.m in Sources */,
+				E2899AB817DD8A2400CC9314 /* SettingInfoTests.m in Sources */,
+				E2899AB917DD8A2400CC9314 /* StackAdditionsTests.m in Sources */,
+				E2899ABA17DD8A2400CC9314 /* TagDaoTests.m in Sources */,
+				E2899ABB17DD8A2400CC9314 /* TagLinkTests.m in Sources */,
+				E2899ABC17DD8A2400CC9314 /* TagTests.m in Sources */,
+				E2899ABD17DD8A2400CC9314 /* TemplateMemoDaoTests.m in Sources */,
+				E2899ABE17DD8A2400CC9314 /* TemplateMemoDataSourceTests.m in Sources */,
+				E2899ABF17DD8A2400CC9314 /* TemplateMemoTests.m in Sources */,
+				E2899AC017DD8A2400CC9314 /* TextViewHistoryTests.m in Sources */,
+				E2899AC117DD8A2400CC9314 /* UserDefaultsWrapperTests.m in Sources */,
+				E22C1E7517E04A3E006425E3 /* FontTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1146,15 +1299,6 @@
 				E25899E217B3235E00522188 /* en */,
 			);
 			name = Localizable.strings;
-			sourceTree = "<group>";
-		};
-		E2EE367F175B4D590055D723 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E2EE3680175B4D590055D723 /* en */,
-				E2EE368E175B4D7C0055D723 /* ja */,
-			);
-			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 		E2EE36B6175B94390055D723 /* InfoPlist.strings */ = {
@@ -1291,6 +1435,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TemplateMemoApp/TemplateMemoApp-Prefix.pch";
 				INFOPLIST_FILE = "TemplateMemoAppTests/TemplateMemoAppTests-Info.plist";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
